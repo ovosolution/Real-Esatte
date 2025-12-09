@@ -1,0 +1,1 @@
+UPDATE gateways SET supported_currencies = '{"NGN": "NGN","GHS": "GHS","ZAR": "ZAR","USD": "USD","XOF": "XOF","KES": "KES"}' WHERE gateways.id = 7;
