@@ -6467,3 +6467,75 @@ label.required:after {
   gap: 12px;
   flex-wrap: wrap;
 }
+
+.pending__reviews__items {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 1px solid hsl(var(--black) / 0.1);
+  margin-bottom: 16px;
+}
+
+.pending__reviews__items__title {
+  font-size: 16px;
+  color: hsl(var(--title-color));
+}
+.pending__reviews__items__desc {
+  font-size: 14px;
+  color: hsl(var(--body-color));
+}
+
+.pending__reviews__title {
+  font-size: 16px;
+  font-weight: 400;
+  color: hsl(var(--title-color));
+  margin-bottom: 30px;
+}
+
+.pending__reviews {
+  border-radius: 14px;
+  border: 1px solid hsl(var(--black) / 0.1);
+  padding: 24px;
+}
+
+.listing-summary {
+  padding: 24px;
+  border: 1px solid hsl(var(--black) / 0.1);
+  border-radius: 14px;
+}
+.listing-item {
+  margin-bottom: 20px;
+}
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+.location-icon {
+  margin-right: 5px;
+  color: hsl(var(--primary));
+}
+.location-name {
+  font-size: 16px;
+  font-weight: 500;
+  flex-grow: 1;
+  color: hsl(var(--title-color));
+}
+.listing-count {
+  font-size: 14px;
+  color: hsl(var(--title-color));
+}
+.bar-container {
+  background-color: hsl(var(--black) / 0.1);
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.bar {
+  height: 100%;
+  background-color: hsl(var(--primary));
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}

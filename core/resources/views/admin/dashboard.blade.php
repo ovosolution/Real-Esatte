@@ -130,10 +130,129 @@
                 </div>
             </div>
         </div>
+        <div class="row mt-4">
+
+        <div class="col-lg-6">
+              <div class="pending__reviews">
+                   <p class="pending__reviews__title">Pending Reviews</p>
+                      <div class="pending__reviews__items">
+                          <div>
+                            <p class="pending__reviews__items__title">Sarah Johnson</p>
+                             <p class="pending__reviews__items__desc">Realtor Verification</p>
+                          </div>
+                           <div>
+                             <p>5 mins ago</p>
+                           </div>
+
+                      </div>
+                      <div class="pending__reviews__items">
+                          <div>
+                            <p class="pending__reviews__items__title">Sarah Johnson</p>
+                             <p class="pending__reviews__items__desc">Realtor Verification</p>
+                          </div>
+                           <div>
+                             <p>5 mins ago</p>
+                           </div>
+
+                      </div>
+                      <div class="pending__reviews__items">
+                          <div>
+                            <p class="pending__reviews__items__title">Sarah Johnson</p>
+                             <p class="pending__reviews__items__desc">Realtor Verification</p>
+                          </div>
+                           <div>
+                             <p>5 mins ago</p>
+                           </div>
+
+                      </div>
+                      <div class="pending__reviews__items">
+                          <div>
+                            <p class="pending__reviews__items__title">Sarah Johnson</p>
+                             <p class="pending__reviews__items__desc">Realtor Verification</p>
+                          </div>
+                           <div>
+                             <p>5 mins ago</p>
+                           </div>
+
+                      </div>
+                    </div>
+                </div>
+        <div class="col-lg-6">
+                  <div class="pending__reviews">
+                        <div class="listing-item">
+                            <div class="item-header">
+                                <span class="location-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M13.3334 6.66665C13.3334 9.99531 9.64069 13.462 8.40069 14.5326C8.28517 14.6195 8.14455 14.6665 8.00002 14.6665C7.85549 14.6665 7.71487 14.6195 7.59935 14.5326C6.35935 13.462 2.66669 9.99531 2.66669 6.66665C2.66669 5.25216 3.22859 3.8956 4.22878 2.89541C5.22898 1.89522 6.58553 1.33331 8.00002 1.33331C9.41451 1.33331 10.7711 1.89522 11.7713 2.89541C12.7715 3.8956 13.3334 5.25216 13.3334 6.66665Z" stroke="#1D4ED8" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M8 8.66669C9.10457 8.66669 10 7.77126 10 6.66669C10 5.56212 9.10457 4.66669 8 4.66669C6.89543 4.66669 6 5.56212 6 6.66669C6 7.77126 6.89543 8.66669 8 8.66669Z" stroke="#1D4ED8" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    </span>
+                                <span class="location-name">Lekki</span>
+                                <span class="listing-count">1245 listings</span>
+                            </div>
+                            <div class="bar-container">
+                               <div class="bar" style="width: 75%;"></div>
+                            </div>
+                        </div>
+    <div class="listing-item">
+        <div class="item-header">
+            <span class="location-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M13.3334 6.66665C13.3334 9.99531 9.64069 13.462 8.40069 14.5326C8.28517 14.6195 8.14455 14.6665 8.00002 14.6665C7.85549 14.6665 7.71487 14.6195 7.59935 14.5326C6.35935 13.462 2.66669 9.99531 2.66669 6.66665C2.66669 5.25216 3.22859 3.8956 4.22878 2.89541C5.22898 1.89522 6.58553 1.33331 8.00002 1.33331C9.41451 1.33331 10.7711 1.89522 11.7713 2.89541C12.7715 3.8956 13.3334 5.25216 13.3334 6.66665Z" stroke="#1D4ED8" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M8 8.66669C9.10457 8.66669 10 7.77126 10 6.66669C10 5.56212 9.10457 4.66669 8 4.66669C6.89543 4.66669 6 5.56212 6 6.66669C6 7.77126 6.89543 8.66669 8 8.66669Z" stroke="#1D4ED8" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+</span>
+            <span class="location-name">Victoria Island</span>
+            <span class="listing-count">987 listings</span>
+        </div>
+        <div class="bar-container">
+            <div class="bar" style="width: 60%;"></div>
+        </div>
+    </div>
+    <div class="listing-item">
+        <div class="item-header">
+            <span class="location-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M13.3334 6.66665C13.3334 9.99531 9.64069 13.462 8.40069 14.5326C8.28517 14.6195 8.14455 14.6665 8.00002 14.6665C7.85549 14.6665 7.71487 14.6195 7.59935 14.5326C6.35935 13.462 2.66669 9.99531 2.66669 6.66665C2.66669 5.25216 3.22859 3.8956 4.22878 2.89541C5.22898 1.89522 6.58553 1.33331 8.00002 1.33331C9.41451 1.33331 10.7711 1.89522 11.7713 2.89541C12.7715 3.8956 13.3334 5.25216 13.3334 6.66665Z" stroke="#1D4ED8" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M8 8.66669C9.10457 8.66669 10 7.77126 10 6.66669C10 5.56212 9.10457 4.66669 8 4.66669C6.89543 4.66669 6 5.56212 6 6.66669C6 7.77126 6.89543 8.66669 8 8.66669Z" stroke="#1D4ED8" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+</span>
+            <span class="location-name">Ajah</span>
+            <span class="listing-count">654 listings</span>
+        </div>
+        <div class="bar-container">
+            <div class="bar" style="width: 40%;"></div>
+        </div>
+    </div>
+    <div class="listing-item">
+        <div class="item-header">
+            <span class="location-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M13.3334 6.66665C13.3334 9.99531 9.64069 13.462 8.40069 14.5326C8.28517 14.6195 8.14455 14.6665 8.00002 14.6665C7.85549 14.6665 7.71487 14.6195 7.59935 14.5326C6.35935 13.462 2.66669 9.99531 2.66669 6.66665C2.66669 5.25216 3.22859 3.8956 4.22878 2.89541C5.22898 1.89522 6.58553 1.33331 8.00002 1.33331C9.41451 1.33331 10.7711 1.89522 11.7713 2.89541C12.7715 3.8956 13.3334 5.25216 13.3334 6.66665Z" stroke="#1D4ED8" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M8 8.66669C9.10457 8.66669 10 7.77126 10 6.66669C10 5.56212 9.10457 4.66669 8 4.66669C6.89543 4.66669 6 5.56212 6 6.66669C6 7.77126 6.89543 8.66669 8 8.66669Z" stroke="#1D4ED8" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+</span>
+            <span class="location-name">Ikoyi</span>
+            <span class="listing-count">431 listings</span>
+        </div>
+        <div class="bar-container">
+            <div class="bar" style="width: 25%;"></div>
+        </div>
+    </div>
+    <div class="listing-item">
+        <div class="item-header">
+            <span class="location-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M13.3334 6.66665C13.3334 9.99531 9.64069 13.462 8.40069 14.5326C8.28517 14.6195 8.14455 14.6665 8.00002 14.6665C7.85549 14.6665 7.71487 14.6195 7.59935 14.5326C6.35935 13.462 2.66669 9.99531 2.66669 6.66665C2.66669 5.25216 3.22859 3.8956 4.22878 2.89541C5.22898 1.89522 6.58553 1.33331 8.00002 1.33331C9.41451 1.33331 10.7711 1.89522 11.7713 2.89541C12.7715 3.8956 13.3334 5.25216 13.3334 6.66665Z" stroke="#1D4ED8" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M8 8.66669C9.10457 8.66669 10 7.77126 10 6.66669C10 5.56212 9.10457 4.66669 8 4.66669C6.89543 4.66669 6 5.56212 6 6.66669C6 7.77126 6.89543 8.66669 8 8.66669Z" stroke="#1D4ED8" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+</span>
+            <span class="location-name">Others</span>
+            <span class="listing-count">230 listings</span>
+        </div>
+        <div class="bar-container">
+            <div class="bar" style="width: 14%;"></div>
+        </div>
     </div>
 </div>
-
-
-
+        </div>
+        </div>
+    </div>
+</div>
 
 @endsection
