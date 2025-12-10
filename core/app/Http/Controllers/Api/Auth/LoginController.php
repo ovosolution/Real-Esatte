@@ -60,7 +60,7 @@ class LoginController extends Controller
             $response[] = 'Unauthorized user';
             return apiResponse("invalid_credential", "error", $response);
         }
-        
+
         $user        = $request->user();
         $tokenResult = $user->createToken('auth_token', ['user'])->plainTextToken;
         $this->authenticated($request, $user);
