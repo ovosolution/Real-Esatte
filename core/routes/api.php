@@ -41,6 +41,8 @@ Route::namespace('Api')->name('api.')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
 
         Route::post('user-data-submit', 'UserController@userDataSubmit');
+        Route::post('company-data-submit', 'UserController@companyDataSubmit');
+        Route::post('id-verification-data-submit', 'UserController@idVerificationDataSubmit');
 
         //authorization
         Route::middleware('registration.complete')->controller('AuthorizationController')->group(function () {

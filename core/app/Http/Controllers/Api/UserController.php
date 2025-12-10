@@ -10,11 +10,12 @@ use App\Models\DeviceToken;
 use App\Models\Form;
 use App\Models\NotificationLog;
 use App\Models\Transaction;
+use App\Rules\FileTypeValidate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
@@ -23,7 +24,7 @@ class UserController extends Controller
     {
         $notify[] = 'User Dashboard';
         return apiResponse("dashboard", "success", $notify, [
-            'user' => auth()->user()
+            'user' => auth()->user(),
         ]);
     }
 
@@ -36,17 +37,18 @@ class UserController extends Controller
             return apiResponse("already_completed", "error", $notify);
         }
 
-        $countryData  = (array)json_decode(file_get_contents(resource_path('views/partials/country.json')));
+        $countryData  = (array) json_decode(file_get_contents(resource_path('views/partials/country.json')));
         $countryCodes = implode(',', array_keys($countryData));
         $mobileCodes  = implode(',', array_column($countryData, 'dial_code'));
         $countries    = implode(',', array_column($countryData, 'country'));
-
 
         $validator = Validator::make($request->all(), [
             'country_code' => 'required|in:' . $countryCodes,
             'country'      => 'required|in:' . $countries,
             'mobile_code'  => 'required|in:' . $mobileCodes,
             'username'     => 'required|unique:users|min:6',
+            'email'        => 'required|email|unique:users',
+            'image'        => ['nullable', 'image', new FileTypeValidate(['jpg', 'jpeg', 'png'])],
             'mobile'       => ['required', 'regex:/^([0-9]*)$/', Rule::unique('users')->where('dial_code', $request->mobile_code)],
         ]);
 
@@ -54,16 +56,24 @@ class UserController extends Controller
             return apiResponse("validation_error", "error", $validator->errors()->all());
         }
 
-
         if (preg_match("/[^a-z0-9_]/", trim($request->username))) {
             $notify[] = 'No special character, space or capital letters in username';
             return apiResponse("validation_error", "error", $notify);
         }
 
+        if ($request->hasFile('image')) {
+            try {
+                $filename = fileUploader($request->image, getFilePath('userProfile'));
+            } catch (\Exception $exp) {
+                $notify[] = ['errors', 'Image could not be uploaded'];
+                return back()->withNotify($notify);
+            }
+        }
 
         $user->country_code = $request->country_code;
         $user->mobile       = $request->mobile;
         $user->username     = $request->username;
+        $user->image        = $filename;
 
         $user->address      = $request->address;
         $user->city         = $request->city;
@@ -77,9 +87,94 @@ class UserController extends Controller
 
         $notify[] = 'Profile completed successfully';
 
-        return apiResponse("profile_completed", "success", $notify, [
-            'user' => $user
+        return apiResponse("user_profile_completed", "success", $notify, [
+            'user'      => $user,
+            'imagePath' => getFilePath('userProfile'),
         ]);
+    }
+
+    public function companyDataSubmit(Request $request)
+    {
+        $user = auth()->user();
+
+        if ($user->company_complete == Status::YES) {
+            $notify[] = 'You\'ve already completed company profile';
+            return apiResponse("already_completed", "error", $notify);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'name'  => 'required',
+            'role'  => 'required',
+            'image' => ['nullable', 'image', new FileTypeValidate(['jpg', 'jpeg', 'png'])],
+        ]);
+
+        if ($validator->fails()) {
+            return apiResponse("validation_error", "error", $validator->errors()->all());
+        }
+
+        if ($request->hasFile('image')) {
+            try {
+                $filename = fileUploader($request->image, getFilePath('company'));
+            } catch (\Exception $exp) {
+                $notify[] = ['errors', 'Image could not be uploaded'];
+                return back()->withNotify($notify);
+            }
+        }
+
+        $user->company_name     = $request->name;
+        $user->company_role     = $request->role;
+        $user->company_image    = $filename;
+        $user->company_complete = Status::YES;
+        $user->save();
+
+        $notify[] = 'Company Profile completed successfully';
+
+        return apiResponse("company_profile_completed", "success", $notify, [
+            'user'      => $user,
+            'imagePath' => getFilePath('company'),
+        ]);
+
+    }
+
+    public function idVerificationDataSubmit(Request $request)
+    {
+        $user = auth()->user();
+
+        if ($user->id_verification_complete == Status::YES) {
+            $notify[] = 'You\'ve already completed ID verification';
+            return apiResponse("already_completed", "error", $notify);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'verification_type' => 'required|in: 1,2,3',
+            'image'             => ['required', 'image', new FileTypeValidate(['jpg', 'jpeg', 'png'])],
+        ]);
+
+        if ($validator->fails()) {
+            return apiResponse("validation_error", "error", $validator->errors()->all());
+        }
+
+        if ($request->hasFile('image')) {
+            try {
+                $filename = fileUploader($request->image, getFilePath('idVerification'));
+            } catch (\Exception $exp) {
+                $notify[] = ['errors', 'Image could not be uploaded'];
+                return back()->withNotify($notify);
+            }
+        }
+
+        $user->id_verification_type     = $request->verification_type;
+        $user->id_verification_image    = $filename;
+        $user->id_verification_complete = Status::YES;
+        $user->save();
+
+        $notify[] = 'ID verification completed successfully';
+
+        return apiResponse("profile_completed", "success", $notify, [
+            'user'      => $user,
+            'imagePath' => getFilePath('idVerification'),
+        ]);
+
     }
 
     public function kycForm()
@@ -96,7 +191,7 @@ class UserController extends Controller
         $form     = Form::where('act', 'kyc')->first();
         $notify[] = 'KYC field is below';
         return apiResponse("kyc_form", "success", $notify, [
-            'form' => $form->form_data
+            'form' => $form->form_data,
         ]);
     }
 
@@ -144,7 +239,7 @@ class UserController extends Controller
         $notify[] = 'Deposit data';
 
         return apiResponse("deposits", "success", $notify, [
-            'deposits' => $deposits
+            'deposits' => $deposits,
         ]);
     }
 
@@ -182,7 +277,7 @@ class UserController extends Controller
             'lastname'  => 'required',
         ], [
             'firstname.required' => 'The first name field is required',
-            'lastname.required'  => 'The last name field is required'
+            'lastname.required'  => 'The last name field is required',
         ]);
 
         if ($validator->fails()) {
@@ -211,7 +306,7 @@ class UserController extends Controller
 
         $validator = Validator::make($request->all(), [
             'current_password' => 'required',
-            'password'         => ['required', 'confirmed', $passwordValidation]
+            'password'         => ['required', 'confirmed', $passwordValidation],
         ]);
 
         if ($validator->fails()) {
@@ -230,7 +325,6 @@ class UserController extends Controller
             return apiResponse("not_match", "validation_error", $notify);
         }
     }
-
 
     public function addDeviceToken(Request $request)
     {
@@ -258,7 +352,6 @@ class UserController extends Controller
         $notify[] = 'Token saved successfully';
         return apiResponse("token_saved", "success", $notify);
     }
-
 
     public function show2faForm()
     {
@@ -334,7 +427,6 @@ class UserController extends Controller
         ]);
     }
 
-
     public function pushNotificationsRead($id)
     {
         $notification = NotificationLog::where('user_id', auth()->id())->where('sender', 'firebase')->find($id);
@@ -349,12 +441,11 @@ class UserController extends Controller
         return apiResponse("notification_read", "success", $notify);
     }
 
-
     public function userInfo()
     {
         $notify[] = 'User information';
         return apiResponse("user_info", "success", $notify, [
-            'user' => auth()->user()
+            'user' => auth()->user(),
         ]);
     }
 

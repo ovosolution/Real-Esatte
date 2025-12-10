@@ -118,6 +118,26 @@ Route::middleware('admin')->group(function () {
         Route::post('status/{id}', 'status')->name('status');
     });
 
+    Route::controller('PropertyController')->prefix('property')->name('property.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('store/{id?}', 'store')->name('store');
+    });
+
+    Route::controller('PlanController')->prefix('plan')->name('plan.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('store/{id?}', 'store')->name('store');
+    });
+
+    Route::controller('LocationController')->prefix('location')->name('location.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('store/{id?}', 'store')->name('store');
+    });
+
+    Route::controller('PropertyTypeController')->prefix('property_type')->name('property_type.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('store/{id?}', 'store')->name('store');
+    });
+
     // Language Manager
     Route::controller('LanguageController')->prefix('language')->name('language.')->group(function () {
         Route::get('/', 'langManage')->name('manage');
