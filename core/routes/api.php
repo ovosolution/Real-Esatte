@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
-*/
+ */
 
 Route::namespace('Api')->name('api.')->group(function () {
 
@@ -99,6 +99,13 @@ Route::namespace('Api')->name('api.')->group(function () {
                     Route::get('deposit/methods', 'methods');
                     Route::post('deposit/insert', 'depositInsert');
                     Route::post('app/payment/confirm', 'appPaymentConfirm');
+                });
+
+                Route::controller('PropertyController')->group(function () {
+                    Route::get('properties', 'index');
+                    Route::get('property/{id}', 'details');
+                    Route::post('save-property/{id?}', 'saveProperty');
+                    Route::get('saved-properties', 'savedProperties');
                 });
 
                 Route::controller('TicketController')->prefix('ticket')->group(function () {
