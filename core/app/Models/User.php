@@ -37,7 +37,7 @@ class User extends Authenticatable
 
 
     /**
-     * specified column for export with column manipulation 
+     * specified column for export with column manipulation
      *
      * @var array
      */
@@ -88,6 +88,11 @@ class User extends Authenticatable
     public function tickets()
     {
         return $this->hasMany(SupportTicket::class);
+    }
+
+    public function savedProperties()
+    {
+        return $this->hasMany(SavedProperty::class);
     }
 
     public function fullname(): Attribute

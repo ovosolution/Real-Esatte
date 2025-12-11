@@ -21,4 +21,9 @@ class Property extends Model
         return $this->hasMany(PropertyImage::class);
     }
 
+    public function savedProperties()
+    {
+        return $this->hasMany(SavedProperty::class);
+    }
+
 }
