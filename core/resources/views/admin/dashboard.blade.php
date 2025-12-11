@@ -740,7 +740,7 @@
             </div> --}}
 
             <!-- pricing card -->
-            <div class="row gy-4 justify-content-center">
+            {{-- <div class="row gy-4 justify-content-center">
                 <p class="pricing__title">cvailable Plans</p>
                 <div class="col-xxl-3 col-md-4 col-sm-6">
                     <div class="pricing__card">
@@ -926,7 +926,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
             <div class="row">
 
