@@ -1025,6 +1025,93 @@
                 </div>
             </div>
         </div>
+
+        <div class="row mt-5 justify-content-center">
+            <div class="col-lg-3">
+                <div class="role__card card">
+                    <span class="role__card__icon">
+                        <svg width="15" height="19" viewBox="0 0 15 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M14.1663 10.0004C14.1663 14.167 11.2497 16.2504 7.78301 17.4587C7.60148 17.5202 7.40429 17.5173 7.22467 17.4504C3.74967 16.2504 0.833008 14.167 0.833008 10.0004V4.16702C0.833008 3.94601 0.920805 3.73405 1.07709 3.57777C1.23337 3.42149 1.44533 3.33369 1.66634 3.33369C3.33301 3.33369 5.41634 2.33369 6.86634 1.06702C7.04289 0.916187 7.26747 0.833313 7.49967 0.833313C7.73188 0.833313 7.95646 0.916187 8.13301 1.06702C9.59134 2.34202 11.6663 3.33369 13.333 3.33369C13.554 3.33369 13.766 3.42149 13.9223 3.57777C14.0785 3.73405 14.1663 3.94601 14.1663 4.16702V10.0004Z"
+                                stroke="#9810FA" stroke-width="1.66667" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                        <h3 class="role__card__title">Super Admin</h3>
+                    </span>
+                    <p class="role__card__desc">Full system access including user management, property approvals,
+                        analytics, and settings.</p>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="role__card card">
+                    <span class="role__card__icon">
+                        <svg width="15" height="19" viewBox="0 0 15 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M14.1663 10.0004C14.1663 14.167 11.2497 16.2504 7.78301 17.4587C7.60148 17.5202 7.40429 17.5173 7.22467 17.4504C3.74967 16.2504 0.833008 14.167 0.833008 10.0004V4.16702C0.833008 3.94601 0.920805 3.73405 1.07709 3.57777C1.23337 3.42149 1.44533 3.33369 1.66634 3.33369C3.33301 3.33369 5.41634 2.33369 6.86634 1.06702C7.04289 0.916187 7.26747 0.833313 7.49967 0.833313C7.73188 0.833313 7.95646 0.916187 8.13301 1.06702C9.59134 2.34202 11.6663 3.33369 13.333 3.33369C13.554 3.33369 13.766 3.42149 13.9223 3.57777C14.0785 3.73405 14.1663 3.94601 14.1663 4.16702V10.0004Z"
+                                stroke="#155DFC" stroke-width="1.66667" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                        <h3 class="role__card__title">Moderator</h3>
+                    </span>
+                    <p class="role__card__desc">Can approve/reject realtors and properties, manage notifications, view
+                        analytics.</p>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="role__card card">
+                    <span class="role__card__icon">
+                        <svg width="15" height="19" viewBox="0 0 15 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M14.1663 10.0004C14.1663 14.167 11.2497 16.2504 7.78301 17.4587C7.60148 17.5202 7.40429 17.5173 7.22467 17.4504C3.74967 16.2504 0.833008 14.167 0.833008 10.0004V4.16702C0.833008 3.94601 0.920805 3.73405 1.07709 3.57777C1.23337 3.42149 1.44533 3.33369 1.66634 3.33369C3.33301 3.33369 5.41634 2.33369 6.86634 1.06702C7.04289 0.916187 7.26747 0.833313 7.49967 0.833313C7.73188 0.833313 7.95646 0.916187 8.13301 1.06702C9.59134 2.34202 11.6663 3.33369 13.333 3.33369C13.554 3.33369 13.766 3.42149 13.9223 3.57777C14.0785 3.73405 14.1663 3.94601 14.1663 4.16702V10.0004Z"
+                                stroke="#00A63E" stroke-width="1.66667" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                        <h3 class="role__card__title">Support Agent</h3>
+                    </span>
+                    <p class="role__card__desc">Can manage support tickets, view user details, and send notifications.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-lg-12">
+                <ul class="custom__nav nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill"
+                            data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home"
+                            aria-selected="true">Home</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill"
+                            data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile"
+                            aria-selected="false">Profile</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill"
+                            data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact"
+                            aria-selected="false">Contact</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-disabled-tab" data-bs-toggle="pill"
+                            data-bs-target="#pills-disabled" type="button" role="tab" aria-controls="pills-disabled"
+                            aria-selected="false" disabled>Disabled</button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
+                        aria-labelledby="pills-home-tab" tabindex="0">...</div>
+                    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab"
+                        tabindex="0">...</div>
+                    <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab"
+                        tabindex="0">...</div>
+                    <div class="tab-pane fade" id="pills-disabled" role="tabpanel" aria-labelledby="pills-disabled-tab"
+                        tabindex="0">...</div>
+                </div>
+            </div>
+
+        </div>
     </div>
 
     @endsection

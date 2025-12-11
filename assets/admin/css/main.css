@@ -10,7 +10,7 @@
   --black: 0 0% 0%;
   --light: 210 20% 98%;
   --dark: 215 28% 17%;
-  --body-color: 240 7% 48%;
+  --body-color: 216 15% 34%;
   --title-color: 0 0% 4%;
   --border-color: 0 0% 95%;
   --bg-color: 210 20% 98%;
@@ -6849,4 +6849,53 @@ label.required:after {
 
 .modal-header {
   border-bottom: none !important;
+}
+
+.role__card {
+  transition: 0.3s;
+  height: 100%;
+}
+
+.role__card:hover {
+  border: 1px solid hsl(var(--primary));
+}
+
+.role__card__icon {
+  display: flex !important;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.role__card__title {
+  font-size: 18px !important;
+  font-weight: 400 !important;
+  color: hsl(var(--title-color));
+  margin-bottom: 0;
+}
+
+.role__card__desc {
+  font-size: 14px;
+  font-weight: 400;
+  color: hsl(var(--body-color));
+}
+
+.custom__nav {
+  background-color: #ececf0;
+  border-radius: 50px;
+  padding: 4px;
+  margin-bottom: 0 !important;
+  gap: 10px;
+}
+
+.nav-link {
+  font-size: 14px;
+  font-weight: 400;
+  color: hsl(var(--black)) !important;
+  padding: 4px 8px !important;
+  border-radius: 50px !important;
+}
+
+.nav-link.active {
+  background-color: hsl(var(--white)) !important;
 }
