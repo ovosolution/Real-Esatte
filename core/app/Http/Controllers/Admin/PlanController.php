@@ -10,7 +10,7 @@ class PlanController extends Controller
 {
     public function index()
     {
-        return view('admin.plan.index');
+        return view('admin.plan.list');
     }
 
     public function store(Request $request, $id = null)
