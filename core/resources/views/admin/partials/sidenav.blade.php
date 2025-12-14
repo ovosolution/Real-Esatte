@@ -75,8 +75,8 @@
                         @lang('Analytics')
                     </a>
                 </li>
-                <li>
-                    <a href="#">
+                <li class="@if (request()->routeIs('admin.plan.index')) active @endif">
+                    <a href="{{ route('admin.plan.index') }}">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M16.6667 4.16666H3.33333C2.41286 4.16666 1.66667 4.91285 1.66667 5.83332V14.1667C1.66667 15.0871 2.41286 15.8333 3.33333 15.8333H16.6667C17.5871 15.8333 18.3333 15.0871 18.3333 14.1667V5.83332C18.3333 4.91285 17.5871 4.16666 16.6667 4.16666Z" stroke="currentColor" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
                             <path d="M1.66667 8.33334H18.3333" stroke="currentColor" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
@@ -93,12 +93,12 @@
                         @lang('Notifications')
                     </a>
                 </li>
-                <li>
-                    <a href="#">
+                <li class="@if (request()->routeIs('admin.ticket.index')) active @endif">
+                    <a href="{{ route('admin.ticket.index') }}">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M2.5 11.6667H5C5.44203 11.6667 5.86595 11.8423 6.17851 12.1548C6.49107 12.4674 6.66667 12.8913 6.66667 13.3333V15.8333C6.66667 16.2754 6.49107 16.6993 6.17851 17.0118C5.86595 17.3244 5.44203 17.5 5 17.5H4.16667C3.72464 17.5 3.30072 17.3244 2.98816 17.0118C2.67559 16.6993 2.5 16.2754 2.5 15.8333V10C2.5 8.01088 3.29018 6.10322 4.6967 4.6967C6.10322 3.29018 8.01088 2.5 10 2.5C11.9891 2.5 13.8968 3.29018 15.3033 4.6967C16.7098 6.10322 17.5 8.01088 17.5 10V15.8333C17.5 16.2754 17.3244 16.6993 17.0118 17.0118C16.6993 17.3244 16.2754 17.5 15.8333 17.5H15C14.558 17.5 14.134 17.3244 13.8215 17.0118C13.5089 16.6993 13.3333 16.2754 13.3333 15.8333V13.3333C13.3333 12.8913 13.5089 12.4674 13.8215 12.1548C14.134 11.8423 14.558 11.6667 15 11.6667H17.5" stroke="currentColor" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
-                        @lang('messages.welcome')
+                        @lang('Support')
                     </a>
                 </li>
                 <li>
