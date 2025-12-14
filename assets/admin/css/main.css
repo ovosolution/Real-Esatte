@@ -6886,6 +6886,7 @@ label.required:after {
   padding: 4px;
   margin-bottom: 0 !important;
   gap: 10px;
+  display: inline-flex !important;
 }
 
 .nav-link {
@@ -6899,3 +6900,54 @@ label.required:after {
 .nav-link.active {
   background-color: hsl(var(--white)) !important;
 }
+
+.user-management {
+  max-width: 185px;
+}
+
+.search-menu {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.search-box__wrap {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  justify-content: space-between;
+  background-color: hsl(var(--white));
+  padding: 24px;
+  border: 1px solid hsl(var(--black) / 0.1);
+  border-radius: 14px;
+}
+
+.search-menu__link {
+  border: 1px solid hsl(Var(--black) / 0.1);
+  color: hsl(vaR(--black));
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: 0.3s;
+  white-space: nowrap;
+}
+
+.search-menu__link:hover {
+  background-color: hsl(var(--black));
+  border: 1px solid hsl(Var(--black));
+  color: hsl(vaR(--white));
+}
+.search-box__wrap .form--control {
+  border: 1px solid #f9fafb !important;
+}
+
+.search-box__wrap .form--control:focus {
+  border-color: hsl(Var(--primary)) !important;
+}
+
+.btn-close:focus {
+  box-shadow: none !important;
+}
+
+/* vfgbd */
