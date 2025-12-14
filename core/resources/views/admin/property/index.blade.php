@@ -290,3 +290,9 @@
     </div>
 
 @endsection
+
+@push('breadcrumb-plugins')
+    <button type="button" class="btn  btn--primary addBtn">
+        <i class="las la-plus"></i> @lang('Add New')
+    </button>
+@endpush
