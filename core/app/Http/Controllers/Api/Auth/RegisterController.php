@@ -47,15 +47,20 @@ class RegisterController extends Controller
         }
 
         $validate     = Validator::make($data, [
-            'firstname' => 'required',
-            'lastname'  => 'required',
             'email'     => 'required|string|email|unique:users',
             'password'  => ['required', 'confirmed', $passwordValidation],
-            'agree'     => $agree
-        ], [
-            'firstname.required' => 'The first name field is required',
-            'lastname.required'  => 'The last name field is required'
         ]);
+
+        // $validate     = Validator::make($data, [
+        //     'firstname' => 'required',
+        //     'lastname'  => 'required',
+        //     'email'     => 'required|string|email|unique:users',
+        //     'password'  => ['required', 'confirmed', $passwordValidation],
+        //     'agree'     => $agree
+        // ], [
+        //     'firstname.required' => 'The first name field is required',
+        //     'lastname.required'  => 'The last name field is required'
+        // ]);
 
         return $validate;
     }
@@ -100,11 +105,11 @@ class RegisterController extends Controller
         }
         //User Create
         $user            = new User();
-        $user->firstname = $data['firstname'];
-        $user->lastname  = $data['lastname'];
+        // $user->firstname = $data['firstname'];
+        // $user->lastname  = $data['lastname'];
         $user->email     = strtolower($data['email']);
         $user->password  = Hash::make($data['password']);
-        $user->ref_by    = $referUser ? $referUser->id : 0;
+        // $user->ref_by    = $referUser ? $referUser->id : 0;
         $user->kv = gs('kv') ? Status::UNVERIFIED : Status::VERIFIED;
         $user->ev = gs('ev') ? Status::UNVERIFIED : Status::VERIFIED;
         $user->sv = gs('sv') ? Status::UNVERIFIED : Status::VERIFIED;

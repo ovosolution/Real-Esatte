@@ -1,20 +1,20 @@
 <?php
 
 use App\Constants\Status;
-use App\Lib\GoogleAuthenticator;
-use App\Models\Extension;
-use App\Models\Frontend;
-use App\Models\GeneralSetting;
-use Carbon\Carbon;
 use App\Lib\Captcha;
 use App\Lib\ClientInfo;
 use App\Lib\CurlRequest;
 use App\Lib\Export\ExportManager;
 use App\Lib\FileManager;
+use App\Lib\GoogleAuthenticator;
+use App\Models\Extension;
+use App\Models\Frontend;
+use App\Models\GeneralSetting;
 use App\Notify\Notify;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 function systemDetails()
 {
@@ -35,7 +35,10 @@ function slug($string)
 
 function verificationCode($length)
 {
-    if ($length == 0) return 0;
+    if ($length == 0) {
+        return 0;
+    }
+
     $min = pow(10, $length - 1);
     $max = (int) ($min - 1) . '9';
     return random_int($min, $max);
@@ -43,20 +46,22 @@ function verificationCode($length)
 
 function getNumber($length = 8)
 {
-    $characters = '1234567890';
+    $characters       = '1234567890';
     $charactersLength = strlen($characters);
-    $randomString = '';
+    $randomString     = '';
     for ($i = 0; $i < $length; $i++) {
         $randomString .= $characters[rand(0, $charactersLength - 1)];
     }
     return $randomString;
 }
 
-
 function activeTemplate($asset = false)
 {
     $template = session('template') ?? gs('active_template');
-    if ($asset) return 'assets/templates/' . $template . '/';
+    if ($asset) {
+        return 'assets/templates/' . $template . '/';
+    }
+
     return 'templates.' . $template . '.';
 }
 
@@ -99,9 +104,9 @@ function loadExtension($key)
 
 function getTrx($length = 12)
 {
-    $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789';
+    $characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789';
     $charactersLength = strlen($characters);
-    $randomString = '';
+    $randomString     = '';
     for ($i = 0; $i < $length; $i++) {
         $randomString .= $characters[rand(0, $charactersLength - 1)];
     }
@@ -119,7 +124,6 @@ function showAmount($amount, $decimal = null, $separate = true, $exceptZeros = f
     if (!$decimal) {
         $decimal = gs('allow_precision');
     }
-
 
     if ($separate && !$separator) {
         $separator = str_replace(['space', 'none'], [' ', ''], gs('thousand_separator'));
@@ -146,7 +150,6 @@ function showAmount($amount, $decimal = null, $separate = true, $exceptZeros = f
     return $printAmount;
 }
 
-
 function removeElement($array, $value)
 {
     return array_diff($array, (is_array($value) ? $value : array($value)));
@@ -162,18 +165,15 @@ function keyToTitle($text)
     return ucfirst(preg_replace("/[^A-Za-z0-9 ]/", ' ', $text));
 }
 
-
 function titleToKey($text)
 {
     return strtolower(str_replace(' ', '_', $text));
 }
 
-
 function strLimit($title = null, $length = 10)
 {
     return Str::limit($title, $length);
 }
-
 
 function getIpInfo()
 {
@@ -181,20 +181,18 @@ function getIpInfo()
     return $ipInfo;
 }
 
-
 function osBrowser()
 {
     $osBrowser = ClientInfo::osBrowser();
     return $osBrowser;
 }
 
-
 function getTemplates()
 {
     $param['purchasecode'] = env("PURCHASECODE");
-    $param['website'] = @$_SERVER['HTTP_HOST'] . @$_SERVER['REQUEST_URI'] . ' - ' . env("APP_URL");
-    $url = "#";
-    $response = CurlRequest::curlPostContent($url, $param);
+    $param['website']      = @$_SERVER['HTTP_HOST'] . @$_SERVER['REQUEST_URI'] . ' - ' . env("APP_URL");
+    $url                   = "#";
+    $response              = CurlRequest::curlPostContent($url, $param);
     if ($response) {
         return $response;
     } else {
@@ -202,10 +200,9 @@ function getTemplates()
     }
 }
 
-
 function getPageSections($arr = false)
 {
-    $jsonUrl = resource_path('views/') . str_replace('.', '/', activeTemplate()) . 'sections.json';
+    $jsonUrl  = resource_path('views/') . str_replace('.', '/', activeTemplate()) . 'sections.json';
     $sections = json_decode(file_get_contents($jsonUrl));
     if ($arr) {
         $sections = json_decode(file_get_contents($jsonUrl), true);
@@ -213,7 +210,6 @@ function getPageSections($arr = false)
     }
     return $sections;
 }
-
 
 function getImage($image, $size = null, $isAvatar = false)
 {
@@ -230,12 +226,11 @@ function getImage($image, $size = null, $isAvatar = false)
     return asset('assets/images/default.png');
 }
 
-
 function notify($user, $templateName, $shortCodes = null, $sendVia = null, $createLog = true, $pushImage = null)
 {
     $globalShortCodes = [
-        'site_name' => gs('site_name'),
-        'site_currency' => gs('cur_text'),
+        'site_name'       => gs('site_name'),
+        'site_currency'   => gs('cur_text'),
         'currency_symbol' => gs('cur_sym'),
     ];
 
@@ -245,20 +240,20 @@ function notify($user, $templateName, $shortCodes = null, $sendVia = null, $crea
 
     $shortCodes = array_merge($shortCodes ?? [], $globalShortCodes);
 
-    $notify = new Notify($sendVia);
+    $notify               = new Notify($sendVia);
     $notify->templateName = $templateName;
-    $notify->shortCodes = $shortCodes;
-    $notify->user = $user;
-    $notify->createLog = $createLog;
-    $notify->pushImage = $pushImage;
-    $notify->userColumn = isset($user->id) ? $user->getForeignKey() : 'user_id';
+    $notify->shortCodes   = $shortCodes;
+    $notify->user         = $user;
+    $notify->createLog    = $createLog;
+    $notify->pushImage    = $pushImage;
+    $notify->userColumn   = isset($user->id) ? $user->getForeignKey() : 'user_id';
     $notify->send();
 }
 
 function getPaginate($paginate = null)
 {
     if (!$paginate) {
-        $paginate = request()->paginate ??   gs('paginate_number');
+        $paginate = request()->paginate ?? gs('paginate_number');
     }
     return $paginate;
 }
@@ -277,32 +272,80 @@ function paginateLinks($data, $view = null)
     echo '<div class="pagination-wrapper w-100">' . $paginationHtml . '</div>';
 }
 
+function isApiRequest()
+{
+    return request()->is('api/*');
+}
+
+function responseManager(string $remark, string $message, string $responseType = 'error', array $responseData = [], array $igNoreOnApi = [])
+{
+    $isApi = isApiRequest();
+
+    if ($isApi) {
+        $notify[]     = $message;
+        $ignoreForApi = array_merge($igNoreOnApi, ['view', 'pageTitle']);
+        $responseData = array_diff_key(
+            $responseData,
+            array_flip($ignoreForApi)
+        );
+        $responseDataToSnake = array_combine(
+            array_map(function ($key) {
+                return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $key));
+            }, array_keys($responseData)),
+            array_values($responseData)
+        );
+        return apiResponse($remark, $responseType, $notify, $responseDataToSnake);
+    }
+
+    if (array_key_exists('view', $responseData)) {
+        return view($responseData['view'], $responseData);
+    }
+
+    $notify[] = [$responseType, $message];
+    return back()->withNotify($notify);
+}
+
+function getAdmin($column = null)
+{
+    $admin = isApiRequest() ? auth()->user() : auth('admin')->user();
+    if (is_null($column)) {
+        return $admin;
+    }
+
+    return $admin->$column;
+}
 
 function menuActive($routeName, $param = null, $className = 'active')
 {
 
     if (is_array($routeName)) {
         foreach ($routeName as $key => $value) {
-            if (request()->routeIs($value)) return $className;
+            if (request()->routeIs($value)) {
+                return $className;
+            }
+
         }
     } elseif (request()->routeIs($routeName)) {
         if ($param) {
             $routeParam = array_values(@request()->route()->parameters ?? []);
-            if (strtolower(@$routeParam[0]) == strtolower($param)) return $className;
-            else return;
+            if (strtolower(@$routeParam[0]) == strtolower($param)) {
+                return $className;
+            } else {
+                return;
+            }
+
         }
         return $className;
     }
 }
 
-
 function fileUploader($file, $location, $size = null, $old = null, $thumb = null, $filename = null)
 {
-    $fileManager = new FileManager($file);
-    $fileManager->path = $location;
-    $fileManager->size = $size;
-    $fileManager->old = $old;
-    $fileManager->thumb = $thumb;
+    $fileManager           = new FileManager($file);
+    $fileManager->path     = $location;
+    $fileManager->size     = $size;
+    $fileManager->old      = $old;
+    $fileManager->thumb    = $thumb;
     $fileManager->filename = $filename;
     $fileManager->upload();
     return $fileManager->filename;
@@ -370,7 +413,6 @@ function getDefaultLang()
     return config('app.local') ?? 'en';
 }
 
-
 function getContent($dataKeys, $singleQuery = false, $limit = null, $orderById = false)
 {
 
@@ -397,7 +439,7 @@ function verifyG2fa($user, $code, $secret = null)
     if (!$secret) {
         $secret = $user->tsc;
     }
-    $oneCode = $authenticator->getCode($secret);
+    $oneCode  = $authenticator->getCode($secret);
     $userCode = $code;
     if ($oneCode == $userCode) {
         $user->tv = Status::YES;
@@ -408,7 +450,6 @@ function verifyG2fa($user, $code, $secret = null)
     }
 }
 
-
 function urlPath($routeName, $routeParam = null)
 {
     if ($routeParam == null) {
@@ -417,10 +458,9 @@ function urlPath($routeName, $routeParam = null)
         $url = route($routeName, $routeParam);
     }
     $basePath = route('home');
-    $path = str_replace($basePath, '', $url);
+    $path     = str_replace($basePath, '', $url);
     return $path;
 }
-
 
 function showMobileNumber($number)
 {
@@ -433,7 +473,6 @@ function showEmailAddress($email)
     $endPosition = strpos($email, '@') - 1;
     return substr_replace($email, '***', 1, $endPosition);
 }
-
 
 function getRealIP()
 {
@@ -464,7 +503,6 @@ function getRealIP()
     return $ip;
 }
 
-
 function appendQuery($key, $value)
 {
     return request()->fullUrlWithQuery([$key => $value]);
@@ -488,7 +526,10 @@ function gs($key = null)
         $general = GeneralSetting::first();
         Cache::put('GeneralSetting', $general);
     }
-    if ($key) return @$general->$key;
+    if ($key) {
+        return @$general->$key;
+    }
+
     return $general;
 }
 function isImage($string)
@@ -507,11 +548,10 @@ function isHtml($string)
     }
 }
 
-
 function convertToReadableSize($size)
 {
     preg_match('/^(\d+)([KMG])$/', $size, $matches);
-    $size = (int)$matches[1];
+    $size = (int) $matches[1];
     $unit = $matches[2];
 
     if ($unit == 'G') {
@@ -529,7 +569,6 @@ function convertToReadableSize($size)
     return $size . $unit;
 }
 
-
 function frontendImage($sectionName, $image, $size = null, $seo = false)
 {
     if ($seo) {
@@ -541,12 +580,17 @@ function frontendImage($sectionName, $image, $size = null, $seo = false)
 function apiResponse(string $remark, string $status, array $message = [], array $data = [], $statusCode = 200): JsonResponse
 {
     $response = [
-        'remark'  => $remark,
-        'status'  => $status
+        'remark' => $remark,
+        'status' => $status,
     ];
 
-    if (count($message)) $response['message'] = $message;
-    if (count($data)) $response['data'] = $data;
+    if (count($message)) {
+        $response['message'] = $message;
+    }
+
+    if (count($data)) {
+        $response['data'] = $data;
+    }
 
     return response()->json($response, $statusCode);
 }
@@ -559,6 +603,35 @@ function exportData($baseQuery, $exportType, $modelName, $printPageSize = "A4 po
         $notify[] = ['error', $ex->getMessage()];
         return back()->withNotify($notify);
     }
+}
+
+function planDuration(int $days): string
+{
+    if ($days >= 365) {
+        $years         = intdiv($days, 365);
+        $remainingDays = $days % 365;
+
+        if ($remainingDays === 0) {
+            return $years . ' ' . ($years > 1 ? 'Years' : 'Year');
+        }
+
+        return $years . ' ' . ($years > 1 ? 'Years' : 'Year') . ' ' .
+        planDuration($remainingDays);
+    }
+
+    if ($days >= 30) {
+        $months        = intdiv($days, 30);
+        $remainingDays = $days % 30;
+
+        if ($remainingDays === 0) {
+            return $months . ' ' . ($months > 1 ? 'Months' : 'Month');
+        }
+
+        return $months . ' ' . ($months > 1 ? 'Months' : 'Month') . ' ' .
+            $remainingDays . ' ' . ($remainingDays > 1 ? 'Days' : 'Day');
+    }
+
+    return $days . ' ' . ($days > 1 ? 'Days' : 'Day');
 }
 
 function os(): array
@@ -577,7 +650,7 @@ function os(): array
 
 function supportedDateFormats(): array
 {
-    return  [
+    return [
         'Y-m-d',
         'd-m-Y',
         'd/m/Y',
@@ -586,22 +659,22 @@ function supportedDateFormats(): array
         'D, M j, Y',
         'l, F j, Y',
         'F j, Y',
-        'M j, Y'
+        'M j, Y',
     ];
 }
 function supportedTimeFormats(): array
 {
-    return  [
+    return [
         'H:i:s',
         'H:i',
         'h:i A',
         'g:i a',
-        'g:i:s a'
+        'g:i:s a',
     ];
 }
 function supportedThousandSeparator(): array
 {
-    return  [
+    return [
         ","     => "Comma",
         "."     => "Dot",
         "'"     => "Apostrophe",

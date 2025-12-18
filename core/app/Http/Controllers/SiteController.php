@@ -77,7 +77,7 @@ class SiteController extends Controller
         $ticket->priority = Status::PRIORITY_MEDIUM;
 
 
-        $ticket->ticket     = $random;
+        $ticket->ticket     = 'TKT-'.$random;
         $ticket->subject    = $request->subject;
         $ticket->last_reply = Carbon::now();
         $ticket->status     = Status::TICKET_OPEN;

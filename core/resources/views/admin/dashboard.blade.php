@@ -740,13 +740,13 @@
         </div>
 
             <!-- pricing card -->
-            {{-- <div class="row gy-4 justify-content-center">
+            <div class="row gy-4 justify-content-center">
                 <p class="pricing__title">cvailable Plans</p>
                 <div class="col-xxl-3 col-md-4 col-sm-6">
                     <div class="pricing__card">
                         <div class=" pricing__card__content d-flex align-items-center justify-content-between">
                             <p class="pricing__card__title m-0">Free Trial</p>
-                            <p clsass="pricing__card__tag">Free Trial</p>
+                            <p class="pricing__card__tag">Free Trial</p>
                         </div>
 
                     <div class="pricing__card__price">
@@ -769,7 +769,7 @@
                 <div class="pricing__card">
                     <div class=" pricing__card__content d-flex align-items-center justify-content-between">
                         <p class="pricing__card__title m-0">Free Trial</p>
-                        <p clsass="pricing__card__tag">Free Trial</p>
+
                     </div>
 
                     <div class="pricing__card__price">
@@ -788,7 +788,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xxl-3  col-md-4 col-sm-6">
+            {{-- <div class="col-xxl-3  col-md-4 col-sm-6">
                 <div class="pricing__card">
                     <div class=" pricing__card__content d-flex align-items-center justify-content-between">
                         <p class="pricing__card__title m-0">Free Trial</p>
