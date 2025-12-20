@@ -9,6 +9,7 @@ use App\Lib\GoogleAuthenticator;
 use App\Models\DeviceToken;
 use App\Models\Form;
 use App\Models\NotificationLog;
+use App\Models\Property;
 use App\Models\Transaction;
 use App\Rules\FileTypeValidate;
 use Illuminate\Http\Request;
@@ -22,9 +23,12 @@ class UserController extends Controller
 
     public function dashboard()
     {
+        $properties = Property::with('developer','location', 'propertyType', 'images')->active()->searchable(['title'])->orderBy('id', 'desc')->paginate();
+
         $notify[] = 'User Dashboard';
         return apiResponse("dashboard", "success", $notify, [
-            'user' => auth()->user(),
+            'user'       => auth()->user(),
+            'properties' => $properties,
         ]);
     }
 
@@ -101,13 +105,6 @@ class UserController extends Controller
 
     public function companyDataSubmit(Request $request)
     {
-        $user = auth()->user();
-
-        if ($user->company_complete == Status::YES) {
-            $notify[] = 'You\'ve already completed company profile';
-            return apiResponse("already_completed", "error", $notify);
-        }
-
         $validator = Validator::make($request->all(), [
             'name'    => 'required',
             'role'    => 'required',
@@ -118,6 +115,13 @@ class UserController extends Controller
 
         if ($validator->fails()) {
             return apiResponse("validation_error", "error", $validator->errors()->all());
+        }
+
+        $user = auth()->user();
+
+        if ($user->company_complete == Status::YES) {
+            $notify[] = 'You\'ve already completed company profile';
+            return apiResponse("already_completed", "error", $notify);
         }
 
         $filename = null;

@@ -25,13 +25,12 @@ trait AdminOperation
         $request->validate([
             'name'     => 'required|string|max:255',
             'email'    => 'required|string|email|max:255|unique:admins,email,' . $id,
-            'username' => 'required|string|max:255|unique:admins,username,' . $id,
             'password' => $id ? 'nullable' : 'required|string|min:6',
             'roles'    => 'nullable|array',
         ]);
 
         if ($id) {
-            $admin   = Admin::where('id', $id)->firstOrFailWithApi('admin');
+            $admin   = Admin::where('id', $id)->first();
             $message = "Admin updated successfully";
             $remark  = "admin-updated";
 
@@ -48,7 +47,7 @@ trait AdminOperation
 
         $admin->name     = $request->name;
         $admin->email    = $request->email;
-        $admin->username = $request->username;
+        // $admin->username = $request->username;
         $admin->save();
 
         if ($request->roles && count($request->roles)) {

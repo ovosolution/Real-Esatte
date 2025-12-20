@@ -28,17 +28,19 @@ Route::middleware('admin')->group(function () {
 
     // Users Manager
     Route::controller('ManageUsersController')->name('users.')->prefix('users')->group(function () {
-        Route::get('/', 'allUsers')->name('all');
-        Route::get('active', 'activeUsers')->name('active');
-        Route::get('pending', 'pendingUsers')->name('pending');
-        Route::get('banned', 'bannedUsers')->name('banned');
-        Route::get('email-verified', 'emailVerifiedUsers')->name('email.verified');
-        Route::get('email-unverified', 'emailUnverifiedUsers')->name('email.unverified');
-        Route::get('mobile-unverified', 'mobileUnverifiedUsers')->name('mobile.unverified');
-        Route::get('kyc-unverified', 'kycUnverifiedUsers')->name('kyc.unverified');
-        Route::get('kyc-pending', 'kycPendingUsers')->name('kyc.pending');
-        Route::get('mobile-verified', 'mobileVerifiedUsers')->name('mobile.verified');
-        Route::get('with-balance', 'usersWithBalance')->name('with.balance');
+        Route::middleware('permission:view users,admin')->group(function () {
+            Route::get('/', 'allUsers')->name('all');
+            Route::get('active', 'activeUsers')->name('active');
+            Route::get('pending', 'pendingUsers')->name('pending');
+            Route::get('banned', 'bannedUsers')->name('banned');
+            Route::get('email-verified', 'emailVerifiedUsers')->name('email.verified');
+            Route::get('email-unverified', 'emailUnverifiedUsers')->name('email.unverified');
+            Route::get('mobile-unverified', 'mobileUnverifiedUsers')->name('mobile.unverified');
+            Route::get('kyc-unverified', 'kycUnverifiedUsers')->name('kyc.unverified');
+            Route::get('kyc-pending', 'kycPendingUsers')->name('kyc.pending');
+            Route::get('mobile-verified', 'mobileVerifiedUsers')->name('mobile.verified');
+            Route::get('with-balance', 'usersWithBalance')->name('with.balance');
+        });
 
         Route::get('detail/{id}', 'detail')->name('detail');
         Route::get('kyc-data/{id}', 'kycDetails')->name('kyc.details');
@@ -112,7 +114,17 @@ Route::middleware('admin')->group(function () {
         // Assign role
         Route::get('list', 'list')->name('list');
         Route::post('store', 'save')->name('store');
+        Route::post('update/{id}', 'save')->name('update');
         Route::post('delete/{id}', 'delete')->name('delete');
+    });
+
+    // role & permission
+    Route::controller('RoleController')->name('role.')->prefix('role')->group(function () {
+        Route::get('list', 'list')->name('list')->middleware('permission:view roles,admin');
+        Route::post('create', 'save')->name('create')->middleware('permission:add role,admin');
+        Route::post('update/{id}', 'save')->name('update')->middleware('permission:edit role,admin');
+        Route::get('permission/{id}', 'permission')->name('permission')->middleware('permission:assign permissions,admin');
+        Route::post('permission/update/{id}', 'permissionUpdate')->name('permission.update')->middleware('permission:assign permissions,admin');
     });
 
     // extensions

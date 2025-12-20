@@ -8,7 +8,7 @@
                 <div class="col-lg-12">
                     <ul class="custom__nav nav user-management  nav-pills mb-3">
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link @if(request()->routeIs('admin.users.all')) active @endif" href="{{ route('admin.users.list') }}">@lang('Realtors')</a>
+                            <a class="nav-link @if(request()->routeIs(['admin.users.all', 'admin.users.active', 'admin.users.pending'])) active @endif" href="{{ route('admin.users.all') }}">@lang('Realtors')</a>
                         </li>
                         <li class="nav-item" role="presentation">
                             <a class="nav-link @if(request()->routeIs('admin.developer.index')) active @endif" href="{{ route('admin.developer.index') }}">@lang('Developers')</a>
@@ -158,8 +158,13 @@
                             <h4 class="mt-3 text-center text--warning">@lang('Are you sure to unban this user?')</h4>
                         </div>
                         <div class="form-group mt-3 d-flex justify-content-end gap-2">
-                            <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">@lang('No')</button>
-                            <button type="submit" class="btn btn--primary">@lang('Yes')</button>
+                            <button type="button" class="btn Reject__btn" data-bs-dismiss="modal">
+                                @lang('No')
+                            </button>
+
+                            <button type="submit" class="btn approve__btn">
+                                @lang('Yes')
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -220,7 +225,7 @@
 
                     <div class="verified-user-actions d-none">
                         <div class="d-flex gap-3 justify-content-center">
-                            <button type="button" class="btn btn--danger w-100 suspend-user-btn"><i class="las la-ban"></i> <span class="suspend-btn-text">@lang('Suspend')</span></button>
+                            <button type="button" class="btn Reject__btn suspend-user-btn"><i class="las la-ban"></i> <span class="suspend-btn-text">@lang('Suspend')</span></button>
                         </div>
                     </div>
                 </div>
@@ -282,10 +287,10 @@
                 }
 
                 if (user.status == 1) {
-                    modal.find('.suspend-user-btn').removeClass('btn--warning').addClass('btn--danger').find('.suspend-btn-text').text("@lang('Ban User')");
+                    modal.find('.suspend-user-btn').removeClass('approve__btn').addClass('Reject__btn').find('.suspend-btn-text').text("@lang('Ban User')");
                     modal.find('.suspend-user-btn i').removeClass('la-undo').addClass('la-ban');
                 } else {
-                    modal.find('.suspend-user-btn').removeClass('btn--danger').addClass('btn--warning').find('.suspend-btn-text').text("@lang('Unban User')");
+                    modal.find('.suspend-user-btn').removeClass('Reject__btn').addClass('approve__btn').find('.suspend-btn-text').text("@lang('Unban User')");
                     modal.find('.suspend-user-btn i').removeClass('la-ban').addClass('la-undo');
                 }
 

@@ -7,32 +7,34 @@
                 <div class="col-lg-12">
                     <ul class="custom__nav nav system-management  mb-3">
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link {{ request()->routeIs('admin.property.type.index') ? 'active' : '' }}" href="{{ route('admin.property.type.index') }}">@lang('Property Type')</a>
+                            <a class="nav-link {{ request()->routeIs('admin.list') ? 'active' : '' }}" href="{{ route('admin.list') }}">@lang('Team Management')</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link {{ request()->routeIs('admin.location.index') ? 'active' : '' }}" href="{{ route('admin.location.index') }}">@lang('Location')</a>
+                            <a class="nav-link {{ request()->routeIs('admin.password') ? 'active' : '' }}" href="{{ route('admin.password') }}">@lang('Security')</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link {{ request()->routeIs('admin.location.index') ? 'active' : '' }}" href="{{ route('admin.location.index') }}">@lang('Activity Logs')</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link {{ request()->routeIs('admin.role.list') ? 'active' : '' }}" href="{{ route('admin.role.list') }}">@lang('Role and Permissions')</a>
                         </li>
                     </ul>
+
                     <table class="table mt-4 table--responsive--md">
                         <thead>
                             <tr>
-                                <th>@lang('Location Name')</th>
-                                <th>@lang('Status')</th>
+                                <th>@lang('Role Name')</th>
                                 <th>@lang('Action')</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($locations as $location)
+                            @forelse ($roles as $role)
                                 <tr>
-                                    <td>{{ $location->name }}</td>
-                                    <td>
-                                        @php
-    echo $location->statusBadge;
-                                        @endphp
-                                    </td>
+                                    <td>{{ $role->name }}</td>
+
                                     <td>
                                         <div class="action-buttons">
-                                            <button type="button" class="action-btn edit-btn" data-resource="{{ $location }}">
+                                            <button type="button" class="action-btn edit-btn" data-resource="{{ $role }}">
                                                 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" x="0" y="0" viewBox="0 0 682.667 682.667" style="enable-background:new 0 0 512 512" xml:space="preserve" class="">
                                                     <g>
                                                         <defs>
@@ -48,14 +50,17 @@
                                                     </g>
                                                 </svg>
                                             </button>
-                                            <button type="button" class="action-btn confirmationBtn" data-question=" @lang('Are you sure to remove this location?')" data-action="{{ route('admin.location.delete', $location->id) }}">
+                                            <a class="btn btn--primary" href="{{ route('admin.role.permission', $role->id) }}">
+                                                @lang('Permissions')
+                                            </a>
+                                            {{-- <button type="button" class="action-btn confirmationBtn" data-question=" @lang('Are you sure to remove this location?')" data-action="{{ route('admin.location.delete', $role->id) }}">
                                                 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class="">
                                                     <g>
                                                         <path d="M424 64h-88V48c0-26.467-21.533-48-48-48h-64c-26.467 0-48 21.533-48 48v16H88c-22.056 0-40 17.944-40 40v56c0 8.836 7.164 16 16 16h8.744l13.823 290.283C87.788 491.919 108.848 512 134.512 512h242.976c25.665 0 46.725-20.081 47.945-45.717L439.256 176H448c8.836 0 16-7.164 16-16v-56c0-22.056-17.944-40-40-40zM208 48c0-8.822 7.178-16 16-16h64c8.822 0 16 7.178 16 16v16h-96zM80 104c0-4.411 3.589-8 8-8h336c4.411 0 8 3.589 8 8v40H80zm313.469 360.761A15.98 15.98 0 0 1 377.488 480H134.512a15.98 15.98 0 0 1-15.981-15.239L104.78 176h302.44z" fill="#ff0000" opacity="1" data-original="#000000" class=""></path>
                                                         <path d="M256 448c8.836 0 16-7.164 16-16V224c0-8.836-7.164-16-16-16s-16 7.164-16 16v208c0 8.836 7.163 16 16 16zM336 448c8.836 0 16-7.164 16-16V224c0-8.836-7.164-16-16-16s-16 7.164-16 16v208c0 8.836 7.163 16 16 16zM176 448c8.836 0 16-7.164 16-16V224c0-8.836-7.164-16-16-16s-16 7.164-16 16v208c0 8.836 7.163 16 16 16z" fill="#ff0000" opacity="1" data-original="#000000" class=""></path>
                                                     </g>
                                                 </svg>
-                                            </button>
+                                            </button> --}}
                                         </div>
                                     </td>
                                 </tr>
@@ -67,11 +72,7 @@
                 </div>
             </div>
         </div>
-        @if ($locations->hasPages())
-            <div class="mt-3">
-                {{ paginateLinks($locations) }}
-            </div>
-        @endif
+
     </div>
 
 @endsection
@@ -89,8 +90,8 @@
         </div>
 
         <div class="col-lg-auto">
-            <button type="button" class="btn btn--primary add-location-btn">
-                <i class="las la-plus"></i> @lang('Add Location')
+            <button type="button" class="btn btn--primary add-role-btn">
+                <i class="las la-plus"></i> @lang('Add Role')
             </button>
         </div>
     </div>
@@ -101,33 +102,25 @@
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content property-modal">
             <div class="modal-header border-0 pb-0">
-                <h5 class="modal-title" id="addModalLabel">@lang('Add Location Type')</h5>
+                <h5 class="modal-title" id="addModalLabel">@lang('Add Role')</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
-            <form action="{{ route('admin.location.store') }}" method="post">
+            <form action="{{ route('admin.role.create') }}" method="post">
                 @csrf
-                <input type="hidden" name="id" class="location-id">
+                <input type="hidden" name="id" class="role-id">
                 <div class="modal-body pt-3">
                     <div class="row g-3">
                         <div class="col-12">
-                            <label class="form--label required">@lang('Location Name')</label>
-                            <input type="text" class="form--control form-control location-name" name="name" value="{{ old('name') }}" placeholder="@lang('e.g., Apartment')">
-                        </div>
-                        <div class="col-md-6 status-wrapper d-none">
-                            <label class="form--label required">@lang('Status')</label>
-                            <div class="form-check form-switch">
-                                <input type="hidden" name="status" value="0">
-                                <input class="form-check-input" type="checkbox" name="status" value="1" role="switch" id="flexSwitchCheckDefault">
-                                <label class="form-check-label" for="flexSwitchCheckDefault">@lang('Enable or disable location')</label>
-                            </div>
+                            <label class="form--label required">@lang('Role Name')</label>
+                            <input type="text" class="form--control form-control role-name" name="name" value="{{ old('name') }}" placeholder="@lang('e.g., Admin')">
                         </div>
                     </div>
                 </div>
 
                 <div class="modal-footer border-0">
                     <button type="button" class="btn Reject__btn" data-bs-dismiss="modal">@lang('Cancel')</button>
-                    <button type="submit" class="btn approve__btn submit-btn">@lang('Save Location')</button>
+                    <button type="submit" class="btn approve__btn submit-btn">@lang('Save role')</button>
                 </div>
             </form>
         </div>
@@ -146,11 +139,11 @@
             const title = modal.find('#addModalLabel');
             const submitBtn = modal.find('.submit-btn');
 
-            $('.add-location-btn').on('click', function () {
+            $('.add-role-btn').on('click', function () {
                 form.trigger('reset');
-                form.attr('action', "{{ route('admin.location.store') }}");
-                title.text("@lang('Add Location')");
-                submitBtn.text("@lang('Save Location')");
+                form.attr('action', "{{ route('admin.role.create') }}");
+                title.text("@lang('Add Role')");
+                submitBtn.text("@lang('Save Role')");
 
                 statusWrapper.addClass('d-none');
                 checkbox.prop('checked', true);
@@ -159,21 +152,14 @@
             });
 
             $('.edit-btn').on('click', function () {
-                const location = $(this).data('resource');
+                const role = $(this).data('resource');
                 form.trigger('reset');
-                form.attr('action', "{{ route('admin.location.store', ':id') }}".replace(':id', location.id));
-                title.text("@lang('Edit location Type')");
-                submitBtn.text("@lang('Update location')");
-                modal.find('.location-id').val(location.id);
-                modal.find('.location-name').val(location.name);
+                form.attr('action', "{{ route('admin.role.update', ':id') }}".replace(':id', role.id));
+                title.text("@lang('Edit Role Type')");
+                submitBtn.text("@lang('Update Role')");
+                modal.find('.role-id').val(role.id);
+                modal.find('.role-name').val(role.name);
 
-                statusWrapper.removeClass('d-none');
-
-                if (location.status == 1) {
-                    checkbox.prop('checked', true);
-                } else {
-                    checkbox.prop('checked', false);
-                }
                 modal.modal('show');
             });
         })(jQuery);

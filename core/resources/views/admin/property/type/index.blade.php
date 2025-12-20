@@ -27,7 +27,7 @@
                                     <td>{{ $propertyType->name }}</td>
                                     <td>
                                         @php
-                                            echo $propertyType->statusBadge;
+    echo $propertyType->statusBadge;
                                         @endphp
                                     </td>
                                     <td>
@@ -127,8 +127,8 @@
                 </div>
 
                 <div class="modal-footer border-0">
-                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">@lang('Cancel')</button>
-                    <button type="submit" class="btn btn--primary submit-btn">@lang('Save Property')</button>
+                    <button type="button" class="btn Reject__btn" data-bs-dismiss="modal">@lang('Cancel')</button>
+                    <button type="submit" class="btn approve__btn submit-btn">@lang('Save Property')</button>
                 </div>
             </form>
         </div>

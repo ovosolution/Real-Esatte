@@ -38,12 +38,12 @@
                                 <tr>
                                     <td>{{ __($property->title) }}</td>
                                     <td>{{ __($property->location->name) }}</td>
-                                    <td>{{ $property->latitude . '.' . $property->longitude }}</td>
+                                    <td>{{ $property->latitude . ', ' . $property->longitude }}</td>
                                     <td>{{ showAmount($property->price) }}</td>
                                     <td>{{ __($property?->propertyType?->name) }}</td>
                                     <td>
                                         @php
-                                            echo $property->statusBadge;
+    echo $property->statusBadge;
                                         @endphp
                                     </td>
                                     <td>
@@ -159,20 +159,20 @@
 
                         <div class="col-md-6">
                             <label class="form--label">@lang('Bedrooms')</label>
-                            <input type="number" class="form--control form-control" name="bedrooms">
+                            <input type="number" class="form--control form-control" name="bedrooms" value="{{ old('bedrooms') }}">
                         </div>
 
                         <div class="col-md-6">
                             <label class="form--label">@lang('Bathrooms')</label>
-                            <input type="number" class="form--control form-control" name="bathrooms">
+                            <input type="number" class="form--control form-control" name="bathrooms" value="{{ old('bathrooms') }}">
                         </div>
 
                         <div class="col-md-6">
                             <label class="form--label">@lang('Developer / Agency')</label>
                             <select name="developer_id" class="form-select select2">
-                                <option value="">@lang('Select Developer')</option>
+                                <option value="" disabled selected>@lang('Select Developer')</option>
                                 @foreach ($developers as $developer)
-                                    <option value="{{ $developer->id }}" {{ old('developer_id', @$property->developer_id) == $developer->id ? 'selected' : '' }}>
+                                    <option value="{{ $developer->id }}" {{ old('developer_id')}}>
                                         {{ $developer->name }}
                                     </option>
                                 @endforeach
@@ -183,30 +183,49 @@
                         <div class="col-md-6">
                             <label class="form--label required">@lang('Area / Location')</label>
                             <select name="location_id" class="form-select select2">
+                                <option value="" disabled selected>@lang('Select Location')</option>
                                 @foreach ($locations as $location)
-                                    <option value="{{ $location->id }}">{{ $location->name }}</option>
+                                    <option value="{{ $location->id }}" {{ old('location_id') }}>{{ $location->name }}</option>
                                 @endforeach
                             </select>
                         </div>
 
                         <div class="col-12">
                             <label class="form--label required">@lang('Full Address')</label>
-                            <input type="text" class="form--control form-control" name="address">
+                            <input type="text" class="form--control form-control" name="address" value="{{ old('address') }}">
                         </div>
 
                         <div class="col-md-6">
                             <label class="form--label">@lang('Latitude')</label>
-                            <input type="text" class="form--control form-control" name="latitude">
+                            <input type="text" class="form--control form-control" name="latitude" value="{{ old('latitude') }}">
                         </div>
 
                         <div class="col-md-6">
                             <label class="form--label">@lang('Longitude')</label>
-                            <input type="text" class="form--control form-control" name="longitude">
+                            <input type="text" class="form--control form-control" name="longitude" value="{{ old('longitude') }}">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form--label required">@lang('Construction Status')</label>
+                            <select name="construction_status" class="form-select select2">
+                                <option value=""disabled selected>@lang('Set Construction Status')</option>
+                                <option value=1>@lang('Available')</option>
+                                <option value=2>@lang('Under Construction')</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form--label required">@lang('Listing Type')</label>
+                            <select name="listing_type" class="form-select select2">
+                                <option value=""disabled selected>@lang('Set Listing Type')</option>
+                                <option value=1>@lang('Sale')</option>
+                                <option value=2>@lang('Rent')</option>
+                            </select>
                         </div>
 
                         <div class="col-12">
                             <label class="form--label">@lang('Description')</label>
-                            <textarea name="description" rows="3" class="form--control form-control"></textarea>
+                            <textarea name="description" rows="3" class="form--control form-control" value="{{ old('description') }}"></textarea>
                         </div>
 
                         <div class="col-12">
@@ -297,6 +316,24 @@
                             <label class="form--label">@lang('Longitude')</label>
                             <input type="text" class="form--control form-control" name="longitude">
                         </div>
+                        <div class="col-md-6">
+                            <label class="form--label required">@lang('Construction Status')</label>
+                            <select name="construction_status" class="form-select select2">
+                                <option value="" disabled selected>@lang('Set Construction Status')</option>
+                                <option value=1>@lang('Available')</option>
+                                <option value=2>@lang('Under Construction')</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form--label required">@lang('Listing Type')</label>
+                            <select name="listing_type" class="form-select select2">
+                                <option value="" disabled selected>@lang('Set Listing Type')</option>
+                                <option value=1>@lang('Sale')</option>
+                                <option value=2>@lang('Rent')</option>
+                            </select>
+                        </div>
+
                         <div class="col-12">
                             <label class="form--label">@lang('Description')</label>
                             <textarea name="description" rows="3" class="form--control form-control"></textarea>
@@ -362,6 +399,16 @@
                         <small class="text-muted d-block">@lang('Added Date')</small>
                         <span class="fw-bold property-date"></span>
                     </div>
+                    <div class="col-6 col-md-4">
+                        <small class="text-muted d-block">@lang('Construction Status')</small>
+                        <span class="fw-bold property-construction-status"></span>
+                    </div>
+
+                    <div class="col-6 col-md-4">
+                        <small class="text-muted d-block">@lang('Listing Type')</small>
+                        <span class="fw-bold property-listing-type"></span>
+                    </div>
+
                 </div>
 
                 <div class="p-3 bg--light rounded mb-4">
@@ -414,6 +461,9 @@
                 modal.find('input[name=latitude]').val(resource.latitude);
                 modal.find('input[name=longitude]').val(resource.longitude);
                 modal.find('textarea[name=description]').val(resource.description);
+                modal.find('select[name=construction_status]').val(resource.construction_status).change();
+                modal.find('select[name=listing_type]').val(resource.listing_type).change();
+
 
                 if (resource.status == 1) {
                     checkbox.prop('checked', true);
@@ -442,6 +492,15 @@
                 modal.find('.latitude-text').text(resource.latitude);
                 modal.find('.longitude-text').text(resource.longitude);
                 modal.find('.description-text').text(resource.description);
+
+                modal.find('.property-construction-status').text(
+                    resource.construction_status == 1 ? '@lang("Available")' : '@lang("Under Construction")'
+                );
+
+                modal.find('.property-listing-type').text(
+                    resource.listing_type == 1 ? '@lang("Sale")' : '@lang("Rent")'
+                );
+
 
                 var imageHtml = '';
                 var path = "{{ asset(getFilePath('property')) }}";

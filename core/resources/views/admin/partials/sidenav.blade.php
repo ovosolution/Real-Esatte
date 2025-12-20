@@ -14,7 +14,6 @@
 
             <span class="sidebar-menu__close header-dropdown__icon">
                 <i class="fa-solid fa-xmark"></i>
-
             </span>
         </div>
 
@@ -30,7 +29,12 @@
                         </svg>@lang('Dashboard')
                     </a>
                 </li>
-                <li class="@if (request()->routeIs('admin.users.all')) active @endif">
+
+                @php
+                    $admin=auth('admin')->user();
+                @endphp
+                @if ($admin->can("view users"))
+                <li class="@if (request()->routeIs('admin.users.*')) active @endif">
                     <a href="{{ route('admin.users.all') }}">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M13.3333 17.5V15.8333C13.3333 14.9493 12.9821 14.1014 12.357 13.4763C11.7319 12.8512 10.8841 12.5 10 12.5H5C4.11595 12.5 3.2681 12.8512 2.64298 13.4763C2.01786 14.1014 1.66667 14.9493 1.66667 15.8333V17.5" stroke="currentColor" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
@@ -41,6 +45,7 @@
                         @lang('Users')
                     </a>
                 </li>
+                @endif
                 <li class="@if (request()->routeIs('admin.property.index')) active @endif">
                     <a href="{{ route('admin.property.index') }}">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">

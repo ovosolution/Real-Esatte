@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 @php
-    $authAdminId = auth('admin')->id();
+$authAdminId = auth('admin')->id();
 @endphp
 @section('panel')
 
@@ -18,6 +18,9 @@
                         </li>
                         <li class="nav-item" role="presentation">
                             <a class="nav-link {{ request()->routeIs('admin.location.index') ? 'active' : '' }}" href="{{ route('admin.location.index') }}">@lang('Activity Logs')</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link {{ request()->routeIs('admin.role.list') ? 'active' : '' }}" href="{{ route('admin.role.list') }}">@lang('Role and Permissions')</a>
                         </li>
                     </ul>
 
@@ -54,16 +57,20 @@
                                     <td>{{ showDateTime($admin->created_at) }}</td>
                                     <td>
                                         <div class="action-buttons">
-                                            <button type="button" class="action-btn view-btn" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="View" data-user="{{ json_encode($admin) }}">
-                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M1.37468 8.232C1.31912 8.08232 1.31912 7.91767 1.37468 7.768C1.91581 6.4559 2.83435 5.33402 4.01386 4.5446C5.19336 3.75517 6.58071 3.33374 8.00001 3.33374C9.41932 3.33374 10.8067 3.75517 11.9862 4.5446C13.1657 5.33402 14.0842 6.4559 14.6253 7.768C14.6809 7.91767 14.6809 8.08232 14.6253 8.232C14.0842 9.54409 13.1657 10.666 11.9862 11.4554C10.8067 12.2448 9.41932 12.6663 8.00001 12.6663C6.58071 12.6663 5.19336 12.2448 4.01386 11.4554C2.83435 10.666 1.91581 9.54409 1.37468 8.232Z" stroke="#0A0A0A" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round" />
-                                                    <path d="M8 10C9.10457 10 10 9.10457 10 8C10 6.89543 9.10457 6 8 6C6.89543 6 6 6.89543 6 8C6 9.10457 6.89543 10 8 10Z" stroke="#0A0A0A" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round" />
+                                            <button type="button" class="action-btn edit-btn" data-resource="{{ $admin }}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" x="0" y="0" viewBox="0 0 682.667 682.667" style="enable-background:new 0 0 512 512" xml:space="preserve" class="">
+                                                    <g>
+                                                        <defs>
+                                                            <clipPath id="a" clipPathUnits="userSpaceOnUse">
+                                                                <path d="M0 512h512V0H0Z" fill="#000000" opacity="1" data-original="#000000"></path>
+                                                            </clipPath>
+                                                        </defs>
+                                                        <g clip-path="url(#a)" transform="matrix(1.33333 0 0 -1.33333 0 682.667)">
+                                                            <path d="M0 0h-220c-22.092 0-40-17.908-40-40v-320c0-22.092 17.908-40 40-40h320c22.092 0 40 17.908 40 40v220" style="stroke-width:30;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1" transform="translate(275 415)" fill="none" stroke="#000000" stroke-width="30" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="none" stroke-opacity="" data-original="#000000"></path>
+                                                            <path d="m0 0-226.274-226.273-70.711-14.143 14.142 70.711L-56.569 56.569c7.81 7.81 20.474 7.81 28.284 0L0 28.284C7.81 20.474 7.81 7.811 0 0Z" style="stroke-width:30;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1" transform="translate(491.143 434.573)" fill="none" stroke="#000000" stroke-width="30" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="none" stroke-opacity="" data-original="#000000"></path>
+                                                            <path d="m0 0 56.568-56.568" style="stroke-width:30;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1" transform="translate(406.29 462.857)" fill="none" stroke="#000000" stroke-width="30" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="none" stroke-opacity="" data-original="#000000"></path>
+                                                        </g>
                                                     </g>
-                                                    <defs>
-                                                        <clipPath id="clip0_726_1961">
-                                                            <rect width="16" height="16" fill="white" />
-                                                        </clipPath>
-                                                    </defs>
                                                 </svg>
                                             </button>
 
@@ -84,56 +91,6 @@
                         </tbody>
                     </table>
                 </div>
-
-
-                {{-- <x-admin.ui.card>
-                    <x-admin.ui.card.body :paddingZero=true>
-                        <x-admin.ui.table.layout :renderTableFilter="false">
-                            <x-admin.ui.table>
-                                <x-admin.ui.table.header>
-                                    <tr>
-                                        <th>@lang('Name')</th>
-                                        <th>@lang('Email')</th>
-                                        <th>@lang('Username')</th>
-                                        <th>@lang('Status')</th>
-                                        <th>@lang('Role')</th>
-                                        <th>@lang('Action')</th>
-                                    </tr>
-                                </x-admin.ui.table.header>
-                                <x-admin.ui.table.body>
-                                    @forelse($admins as $admin)
-                                    <tr>
-                                        <td>{{ __($admin->name) }}</td>
-                                        <td>{{ __($admin->email) }}</td>
-                                        <td>{{ __($admin->username) }}</td>
-                                        <td>
-                                            <x-admin.other.status_switch :status="$admin->status" :action="route('admin.status.change', $admin->id)" title="admin" />
-                                        </td>
-                                        <td>
-                                            <div>
-                                                @forelse ($admin->roles as $role)
-                                                <span class="badge badge--primary">{{ __($role->name) }}</span>
-                                                @empty
-                                                <span class="badge badge--dark">@lang('Unassigned')</span>
-                                                @endforelse
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="d-flex gap-2 flex-wrap justify-content-end">
-                                                @if (($admin->id == Status::SUPPER_ADMIN_ID && $admin->id == $authAdminId) || $admin->id != Status::SUPPER_ADMIN_ID)
-                                                <x-admin.ui.btn.edit tag="btn" :data-admin="$admin" />
-                                                @endif
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    @empty
-                                    <x-admin.ui.table.empty_message />
-                                    @endforelse
-                                </x-admin.ui.table.body>
-                            </x-admin.ui.table>
-                        </x-admin.ui.table.layout>
-                    </x-admin.ui.card.body>
-                </x-admin.ui.card> --}}
             </div>
         </div>
     </div>
@@ -156,33 +113,38 @@
 
                             <div class="col-md-6">
                                 <label class="form--label required">@lang('Name')</label>
-                                <input type="text" class="form--control form-control" name="name" value="{{ old('name') }}" required>
-                            </div>
+                                <input type="text" class="form--control form-control admin-name" name="name" required>
 
-                            <div class="col-md-6">
-                                <label class="form--label required">@lang('Username')</label>
-                                <input type="text" class="form--control form-control" name="username" value="{{ old('username') }}" required>
+                                {{-- <input type="text" class="form--control form-control" name="name" value="{{ old('name') }}" required> --}}
                             </div>
 
                             <div class="col-md-6">
                                 <label class="form--label required">@lang('Email')</label>
-                                <input type="email" class="form--control form-control" name="email" value="{{ old('email') }}" required>
+                                <input type="email" class="form--control form-control admin-email" name="email" required>
+                                {{-- <input type="email" class="form--control form-control" name="email" value="{{ old('email') }}" required> --}}
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-6 password-field">
+                                <label class="form--label required">@lang('Password')</label>
+                                <input type="password" class="form--control form-control admin-password" name="password" minlength="6">
+                            </div>
+
+
+                            {{-- <div class="col-md-6">
                                 <label class="form--label required">@lang('Password')</label>
                                 <input type="password" class="form--control form-control" name="password" minlength="6" required>
-                            </div>
+                            </div> --}}
 
-                            <div class="col-12">
+                            <div class="col-6">
                                 <label class="form--label required">@lang('Role')</label>
-                                <select name="roles[]" class="form-select select2" multiple required>
-                                    @foreach ($roles as $role)
-                                        <option value="{{ $role->id }}">
-                                            {{ __($role->name) }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                {{-- <select name="roles[]" class="form-select select2" multiple required> --}}
+                                    <select name="roles[]" class="form-select select2 admin-role" multiple required>
+                                        @foreach ($roles as $role)
+                                            <option value="{{ $role->id }}">
+                                                {{ __($role->name) }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                             </div>
 
                         </div>
@@ -202,52 +164,6 @@
             </div>
         </div>
     </div>
-
-
-    {{-- <x-admin.ui.modal id="modal">
-        <x-admin.ui.modal.header>
-            <h4 class="modal-title">@lang('Add Admin')</h4>
-            <button type="button" class="btn-close close" data-bs-dismiss="modal" aria-label="Close">
-                <i class="las la-times"></i>
-            </button>
-        </x-admin.ui.modal.header>
-        <x-admin.ui.modal.body>
-            <form method="POST" action="">
-                @csrf
-                <div class="form-group">
-                    <label>@lang('Name')</label>
-                    <input type="text" class="form-control" name="name" required value="{{ old('name') }}">
-                </div>
-                <div class="form-group">
-                    <label>@lang('Username')</label>
-                    <input type="text" class="form-control" name="username" required value="{{ old('username') }}">
-                </div>
-                <div class="form-group">
-                    <label>@lang('Email')</label>
-                    <input type="email" class="form-control" name="email" required value="{{ old('email') }}">
-                </div>
-                <div class="form-group">
-                    <label>@lang('Password')</label>
-                    <input type="password" class="form-control" name="password" required min="6">
-                </div>
-                <div class="form-group">
-                    <label>@lang('Role')</label>
-                    <select name="roles[]" class="form-control select2 admin-role" multiple>
-                        <option value="" disabled>@lang('Select One')</option>
-                        @foreach ($roles as $role)
-                        <option value="{{ $role->id }}">
-                            {{ __($role->name) }}
-                        </option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="form-group">
-                    <x-admin.ui.btn.modal />
-                </div>
-            </form>
-        </x-admin.ui.modal.body>
-    </x-admin.ui.modal> --}}
-
 
     <x-confirmation-modal />
 @endsection
@@ -289,6 +205,22 @@
                 $form.trigger('reset');
                 $form.attr('action', action);
                 $modal.find('.admin-role').val([]);
+                select2Initialize();
+                $modal.modal('show');
+            });
+
+            $('.edit-btn').on('click', function () {
+                const action = "{{ route('admin.update', ':id') }}";
+                const admin = $(this).data('resource');
+                const roleId = admin.roles.map((role) => role.id);
+
+                $modal.find('.modal-title').text("@lang('Edit Admin')");
+                $form.trigger('reset');
+                $modal.find('.admin-name').val(admin.name);
+                $modal.find('.admin-email').val(admin.email);
+                $modal.find('input[name=password]').attr('required', false).parent().addClass('d-none');
+                $modal.find('.admin-role').val(roleId);
+                $form.attr('action', action.replace(':id', admin.id));
                 select2Initialize();
                 $modal.modal('show');
             });
