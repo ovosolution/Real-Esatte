@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 @section('panel')
     @php
-        $existingPermissionIds = (clone $existingPermissions)->pluck('id')->toArray();
+$existingPermissionIds = (clone $existingPermissions)->pluck('id')->toArray();
     @endphp
     <div class="row">
         <div class="col-12">
@@ -20,9 +20,9 @@
                             </div>
                             @foreach ($permissions->groupBy('group_name') as $k => $permission)
                                 @php
-                                    $groupExistingpermissionCount = $existingPermissions
-                                        ->where('group_name', $k)
-                                        ->count();
+    $groupExistingpermissionCount = $existingPermissions
+        ->where('group_name', $k)
+        ->count();
                                 @endphp
                                 <div class="col-xl-4 col-xxl-3 col-md-4 col-sm-6">
                                     <div class="border border-1 d-flex  p-3 h-100 flex-column rounded group-permission-list">
@@ -82,7 +82,17 @@
 @endpush
 
 @push('breadcrumb-plugins')
-    <x-back_btn route="{{ route('admin.role.list') }}" />
+    <div class="row d-flex align-items-center justify-content-between">
+        <div class="col-lg-auto">
+            <div class="dashboard-body__heading__wrap">
+                <div class="dashboard-body__heading">
+                    <h3 class="dashboard-body__title">@lang('Permission Management')</h3>
+                    <p class="dashboard-body__desc">@lang('Manage all permissions')</p>
+                </div>
+                <span class="breadcrumb-icon navigation-bar"><i class="fa-solid fa-bars"></i></span>
+            </div>
+        </div>
+    </div>
 @endpush
 
 @push('style')
