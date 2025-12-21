@@ -53,36 +53,36 @@ Route::namespace('Api')->name('api.')->group(function () {
             Route::post('verify-g2fa', 'g2faVerification');
         });
 
+        Route::controller('UserController')->group(function () {
+
+            Route::get('dashboard', 'dashboard');
+            Route::post('profile-setting', 'submitProfile');
+            Route::post('change-password', 'submitPassword');
+
+            Route::get('user-info', 'userInfo');
+            //KYC
+            Route::get('kyc-form', 'kycForm');
+            Route::post('kyc-submit', 'kycSubmit');
+
+            //Report
+            Route::any('deposit/history', 'depositHistory');
+            Route::get('transactions', 'transactions');
+
+            Route::post('add-device-token', 'addDeviceToken');
+            Route::get('push-notifications', 'pushNotifications');
+            Route::post('push-notifications/read/{id}', 'pushNotificationsRead');
+
+            //2FA
+            Route::get('twofactor', 'show2faForm');
+            Route::post('twofactor/enable', 'create2fa');
+            Route::post('twofactor/disable', 'disable2fa');
+
+            Route::post('delete-account', 'deleteAccount');
+        });
+
         Route::middleware(['check.status'])->group(function () {
 
             Route::middleware('registration.complete')->group(function () {
-
-                Route::controller('UserController')->group(function () {
-
-                    Route::get('dashboard', 'dashboard');
-                    Route::post('profile-setting', 'submitProfile');
-                    Route::post('change-password', 'submitPassword');
-
-                    Route::get('user-info', 'userInfo');
-                    //KYC
-                    Route::get('kyc-form', 'kycForm');
-                    Route::post('kyc-submit', 'kycSubmit');
-
-                    //Report
-                    Route::any('deposit/history', 'depositHistory');
-                    Route::get('transactions', 'transactions');
-
-                    Route::post('add-device-token', 'addDeviceToken');
-                    Route::get('push-notifications', 'pushNotifications');
-                    Route::post('push-notifications/read/{id}', 'pushNotificationsRead');
-
-                    //2FA
-                    Route::get('twofactor', 'show2faForm');
-                    Route::post('twofactor/enable', 'create2fa');
-                    Route::post('twofactor/disable', 'disable2fa');
-
-                    Route::post('delete-account', 'deleteAccount');
-                });
 
                 // Withdraw
                 Route::controller('WithdrawController')->group(function () {

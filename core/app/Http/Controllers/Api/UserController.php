@@ -9,6 +9,7 @@ use App\Lib\GoogleAuthenticator;
 use App\Models\DeviceToken;
 use App\Models\Form;
 use App\Models\NotificationLog;
+use App\Models\Property;
 use App\Models\Transaction;
 use App\Rules\FileTypeValidate;
 use Illuminate\Http\Request;
@@ -22,9 +23,12 @@ class UserController extends Controller
 
     public function dashboard()
     {
+        $properties = Property::with('developer','location', 'propertyType', 'images')->active()->searchable(['title'])->orderBy('id', 'desc')->paginate();
+
         $notify[] = 'User Dashboard';
         return apiResponse("dashboard", "success", $notify, [
-            'user' => auth()->user(),
+            'user'       => auth()->user(),
+            'properties' => $properties,
         ]);
     }
 
@@ -32,10 +36,10 @@ class UserController extends Controller
     {
         $user = auth()->user();
 
-        if ($user->profile_complete == Status::YES) {
-            $notify[] = 'You\'ve already completed your profile';
-            return apiResponse("already_completed", "error", $notify);
-        }
+        // if ($user->profile_complete == Status::YES) {
+        //     $notify[] = 'You\'ve already completed your profile';
+        //     return apiResponse("already_completed", "error", $notify);
+        // }
 
         $countryData  = (array) json_decode(file_get_contents(resource_path('views/partials/country.json')));
         $countryCodes = implode(',', array_keys($countryData));
@@ -44,10 +48,8 @@ class UserController extends Controller
 
         $validator = Validator::make($request->all(), [
             'country_code' => 'required|in:' . $countryCodes,
-            'country'      => 'required|in:' . $countries,
             'mobile_code'  => 'required|in:' . $mobileCodes,
-            'username'     => 'required|unique:users|min:6',
-            'email'        => 'required|email|unique:users',
+            'fullname'     => 'required',
             'image'        => ['nullable', 'image', new FileTypeValidate(['jpg', 'jpeg', 'png'])],
             'mobile'       => ['required', 'regex:/^([0-9]*)$/', Rule::unique('users')->where('dial_code', $request->mobile_code)],
         ]);
@@ -61,6 +63,8 @@ class UserController extends Controller
             return apiResponse("validation_error", "error", $notify);
         }
 
+        $filename = null;
+
         if ($request->hasFile('image')) {
             try {
                 $filename = fileUploader($request->image, getFilePath('userProfile'));
@@ -70,18 +74,24 @@ class UserController extends Controller
             }
         }
 
-        $user->country_code = $request->country_code;
-        $user->mobile       = $request->mobile;
-        $user->username     = $request->username;
-        $user->image        = $filename;
+        $fullname = trim($request->fullname);
 
-        $user->address      = $request->address;
-        $user->city         = $request->city;
-        $user->state        = $request->state;
-        $user->zip          = $request->zip;
-        $user->country_name = @$request->country;
-        $user->dial_code    = $request->mobile_code;
+        $parts = preg_split('/\s+/', $fullname);
 
+        $user->firstname = $parts[0];
+        $user->lastname  = count($parts) > 1
+        ? implode(' ', array_slice($parts, 1))
+        : null;
+
+        $user->country_code     = $request->country_code;
+        $user->mobile           = $request->mobile;
+        $user->image            = $filename;
+        $user->address          = $request->address;
+        $user->city             = $request->city;
+        $user->state            = $request->state;
+        $user->zip              = $request->zip;
+        $user->country_name     = @$request->country;
+        $user->dial_code        = $request->mobile_code;
         $user->profile_complete = Status::YES;
         $user->save();
 
@@ -95,6 +105,18 @@ class UserController extends Controller
 
     public function companyDataSubmit(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'name'    => 'required',
+            'role'    => 'required',
+            'address' => 'required',
+            'website' => 'required',
+            'image'   => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx,gif',
+        ]);
+
+        if ($validator->fails()) {
+            return apiResponse("validation_error", "error", $validator->errors()->all());
+        }
+
         $user = auth()->user();
 
         if ($user->company_complete == Status::YES) {
@@ -102,16 +124,7 @@ class UserController extends Controller
             return apiResponse("already_completed", "error", $notify);
         }
 
-        $validator = Validator::make($request->all(), [
-            'name'  => 'required',
-            'role'  => 'required',
-            'image' => ['nullable', 'image', new FileTypeValidate(['jpg', 'jpeg', 'png'])],
-        ]);
-
-        if ($validator->fails()) {
-            return apiResponse("validation_error", "error", $validator->errors()->all());
-        }
-
+        $filename = null;
         if ($request->hasFile('image')) {
             try {
                 $filename = fileUploader($request->image, getFilePath('company'));
@@ -123,6 +136,8 @@ class UserController extends Controller
 
         $user->company_name     = $request->name;
         $user->company_role     = $request->role;
+        $user->company_address  = $request->address;
+        $user->company_website  = $request->website;
         $user->company_image    = $filename;
         $user->company_complete = Status::YES;
         $user->save();
@@ -147,7 +162,7 @@ class UserController extends Controller
 
         $validator = Validator::make($request->all(), [
             'verification_type' => 'required|in: 1,2,3',
-            'image'             => ['required', 'image', new FileTypeValidate(['jpg', 'jpeg', 'png'])],
+            'image'             => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx,gif',
         ]);
 
         if ($validator->fails()) {

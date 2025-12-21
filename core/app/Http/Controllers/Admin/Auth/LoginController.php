@@ -16,7 +16,7 @@ class LoginController extends Controller
     | redirecting them to your home screen. The controller uses a trait
     | to conveniently provide its functionality to your applications.
     |
-    */
+     */
 
     use AuthenticatesUsers;
 
@@ -50,7 +50,7 @@ class LoginController extends Controller
 
     public function username()
     {
-        return 'username';
+        return 'email';
     }
 
     public function login(Request $request)
@@ -60,12 +60,10 @@ class LoginController extends Controller
 
         $request->session()->regenerateToken();
 
-        if(!verifyCaptcha()){
-            $notify[] = ['error','Invalid captcha provided'];
+        if (!verifyCaptcha()) {
+            $notify[] = ['error', 'Invalid captcha provided'];
             return back()->withNotify($notify);
         }
-
-
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
@@ -88,11 +86,11 @@ class LoginController extends Controller
         return $this->sendFailedLoginResponse($request);
     }
 
-
     public function logout(Request $request)
     {
         $this->guard('admin')->logout();
         $request->session()->invalidate();
         return $this->loggedOut($request) ?: redirect($this->redirectTo);
     }
+
 }

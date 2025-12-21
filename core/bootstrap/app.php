@@ -1,26 +1,27 @@
 <?php
 
+use App\Http\Middleware\ActiveTemplateMiddleware;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\CheckStatus;
+use App\Http\Middleware\Demo;
 use App\Http\Middleware\KycMiddleware;
+use App\Http\Middleware\LanguageMiddleware;
 use App\Http\Middleware\MaintenanceMode;
 use App\Http\Middleware\RedirectIfAdmin;
+use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\RedirectIfNotAdmin;
 use App\Http\Middleware\RegistrationStep;
+use App\Http\Middleware\VerifyCsrfToken;
+use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
-use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
-use Illuminate\Session\Middleware\StartSession;
-use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Illuminate\Routing\Middleware\SubstituteBindings;
-use App\Http\Middleware\LanguageMiddleware;
-use App\Http\Middleware\ActiveTemplateMiddleware;
-use App\Http\Middleware\Demo;
-use App\Http\Middleware\RedirectIfAuthenticated;
-use App\Http\Middleware\VerifyCsrfToken;
+use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\Route;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Spatie\Permission\Middleware\PermissionMiddleware;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -60,17 +61,18 @@ return Application::configure(basePath: dirname(__DIR__))
             VerifyCsrfToken::class,
         ]);
         $middleware->alias([
-            'admin'       => RedirectIfNotAdmin::class,
-            'admin.guest' => RedirectIfAdmin::class,
+            'admin'                 => RedirectIfNotAdmin::class,
+            'admin.guest'           => RedirectIfAdmin::class,
 
             'maintenance'           => MaintenanceMode::class,
             'registration.complete' => RegistrationStep::class,
             'demo'                  => Demo::class,
 
-            'auth'         => Authenticate::class,
-            'check.status' => CheckStatus::class,
-            'kyc'          => KycMiddleware::class,
-            'guest'        => RedirectIfAuthenticated::class,
+            'auth'                  => Authenticate::class,
+            'check.status'          => CheckStatus::class,
+            'kyc'                   => KycMiddleware::class,
+            'guest'                 => RedirectIfAuthenticated::class,
+            'permission'            => PermissionMiddleware::class,
         ]);
         $middleware->validateCsrfTokens(
             except: ['user/deposit', 'ipn*']
@@ -85,7 +87,7 @@ return Application::configure(basePath: dirname(__DIR__))
                     return apiResponse('not_found', 'error', [$e->getMessage()], statusCode: 404);
                 }
 
-                //for authenticated 
+                //for authenticated
                 if ($e->getMessage() === 'Unauthenticated.') {
                     $notify[] = 'Unauthorized request';
                     return apiResponse('unauthenticated', 'error', $notify, statusCode: 401);

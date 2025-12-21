@@ -126,7 +126,18 @@ class User extends Authenticatable
     // SCOPES
     public function scopeActive($query)
     {
-        return $query->where('status', Status::USER_ACTIVE)->where('ev', Status::VERIFIED)->where('sv', Status::VERIFIED);
+        return $query->where('status', Status::USER_ACTIVE)->where('is_verified', Status::VERIFIED);
+        // return $query->where('status', Status::USER_ACTIVE)->where('ev', Status::VERIFIED)->where('sv', Status::VERIFIED);
+    }
+
+    public function scopePending($query)
+    {
+        return $query->where('status', Status::USER_ACTIVE)->where('profile_complete', Status::COMPLETE)->where('company_complete', Status::COMPLETE)->where('id_verification_complete', Status::COMPLETE)->where('is_verified', Status::UNVERIFIED);
+    }
+
+    public function scopeRejected($query)
+    {
+        return $query->where('status', Status::REJECTED);
     }
 
     public function scopeBanned($query)

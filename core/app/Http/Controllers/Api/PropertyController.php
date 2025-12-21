@@ -11,7 +11,9 @@ class PropertyController extends Controller
     public function index()
     {
         $properties = Property::active()->searchable(['title'])->orderBy('id', 'desc')->get();
-        return apiResponse("properties", "success", ['active properties'], $properties);
+        return apiResponse("properties", "success", ['active properties'], [
+            'properties' => $properties,
+        ]);
     }
 
     public function details($id)

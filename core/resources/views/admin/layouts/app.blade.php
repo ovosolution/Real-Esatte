@@ -5,7 +5,7 @@
     <section class="dashboard__area">
         <div class="container-fluid">
             {{-- <!-- @include('admin.partials.topnav') --> --}}
-            <div class="dashboard__area-header flex-wrap gap-2">
+            <div class="dashboard__area-header gap-2">
                 {{-- <!-- <h3 class="page-title">{{ __($pageTitle) }}</h3> --> --}}
                 <div class="breadcrumb-plugins">
                     @stack('breadcrumb-plugins')

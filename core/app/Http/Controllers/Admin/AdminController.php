@@ -6,19 +6,17 @@ use App\Constants\Status;
 use App\Http\Controllers\Controller;
 use App\Models\AdminNotification;
 use App\Models\Deposit;
-use App\Models\SupportTicket;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\UserLogin;
 use App\Models\Withdrawal;
-use App\Rules\FileTypeValidate;
+use App\Traits\AdminOperation;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
-
+    use AdminOperation;
     public function dashboard()
     {
 
@@ -54,7 +52,6 @@ class AdminController extends Controller
         $pageTitle = 'Dashboard';
         $admin     = auth('admin')->user();
 
-
         $userLogin = UserLogin::selectRaw('browser, COUNT(*) as total')
             ->groupBy('browser')
             ->orderBy('total', 'desc')
@@ -70,34 +67,6 @@ class AdminController extends Controller
         return view('admin.profile', compact('pageTitle', 'admin'));
     }
 
-    public function profileUpdate(Request $request)
-    {
-        $request->validate([
-            'name'  => 'required|max:40',
-            'email' => 'required|email',
-            'image' => ['nullable', 'image', new FileTypeValidate(['jpg', 'jpeg', 'png'])]
-        ]);
-
-        $user = auth('admin')->user();
-
-        if ($request->hasFile('image')) {
-            try {
-                $old         = $user->image;
-                $user->image = fileUploader($request->image, getFilePath('adminProfile'), getFileSize('adminProfile'), $old);
-            } catch (\Exception $exp) {
-                $notify[] = ['error', 'Couldn\'t upload your image'];
-                return back()->withNotify($notify);
-            }
-        }
-
-        $user->name  = $request->name;
-        $user->email = $request->email;
-        $user->save();
-
-        $notify[] = ['success', 'Profile updated successfully'];
-        return to_route('admin.profile')->withNotify($notify);
-    }
-
     public function password()
     {
         $pageTitle = 'Change Password';
@@ -105,23 +74,6 @@ class AdminController extends Controller
         return view('admin.password', compact('pageTitle', 'admin'));
     }
 
-    public function passwordUpdate(Request $request)
-    {
-        $request->validate([
-            'old_password' => 'required',
-            'password'     => 'required|min:6|confirmed',
-        ]);
-
-        $user = auth('admin')->user();
-        if (!Hash::check($request->old_password, $user->password)) {
-            $notify[] = ['error', 'Password doesn\'t match!!'];
-            return back()->withNotify($notify);
-        }
-        $user->password = Hash::make($request->password);
-        $user->save();
-        $notify[] = ['success', 'Password changed successfully.'];
-        return to_route('admin.password')->withNotify($notify);
-    }
 
     public function depositAndWithdrawReport(Request $request)
     {
@@ -148,7 +100,7 @@ class AdminController extends Controller
             ->groupBy('date')
             ->get();
 
-        $data       = [];
+        $data = [];
 
         for ($i = 0; $i < $timePeriod->take; $i++) {
             $date       = $today->copy()->$carbonMethod($i)->format($timePeriod->php_date_format);
@@ -160,7 +112,7 @@ class AdminController extends Controller
 
             $data[$date] = [
                 'deposited_amount' => $depositAmount,
-                'withdrawn_amount' => $withdrawalAmount
+                'withdrawn_amount' => $withdrawalAmount,
             ];
         }
         return response()->json($data);
@@ -172,12 +124,12 @@ class AdminController extends Controller
         $today             = Carbon::today();
         $timePeriodDetails = $this->timePeriodDetails($today);
 
-        $timePeriod        = (object) $timePeriodDetails[$request->time_period ?? 'daily'];
-        $carbonMethod      = $timePeriod->carbon_method;
-        $starDate          = $today->copy()->$carbonMethod($timePeriod->take);
-        $endDate           = $today->copy();
+        $timePeriod   = (object) $timePeriodDetails[$request->time_period ?? 'daily'];
+        $carbonMethod = $timePeriod->carbon_method;
+        $starDate     = $today->copy()->$carbonMethod($timePeriod->take);
+        $endDate      = $today->copy();
 
-        $plusTransactions   = Transaction::where('trx_type', '+')
+        $plusTransactions = Transaction::where('trx_type', '+')
             ->whereDate('created_at', '>=', $starDate)
             ->whereDate('created_at', '<=', $endDate)
             ->selectRaw('DATE_FORMAT(created_at, "' . $timePeriod->sql_date_format . '") as date,SUM(amount) as amount')
@@ -185,7 +137,7 @@ class AdminController extends Controller
             ->groupBy('date')
             ->get();
 
-        $minusTransactions  = Transaction::where('trx_type', '-')
+        $minusTransactions = Transaction::where('trx_type', '-')
             ->whereDate('created_at', '>=', $starDate)
             ->whereDate('created_at', '<=', $endDate)
             ->selectRaw('DATE_FORMAT(created_at, "' . $timePeriod->sql_date_format . '") as date,SUM(amount) as amount')
@@ -196,7 +148,7 @@ class AdminController extends Controller
         $data = [];
 
         for ($i = 0; $i < $timePeriod->take; $i++) {
-            $date       = $today->copy()->$carbonMethod($i)->format($timePeriod->php_date_format);
+            $date             = $today->copy()->$carbonMethod($i)->format($timePeriod->php_date_format);
             $plusTransaction  = $plusTransactions->where('date', $date)->first();
             $minusTransaction = $minusTransactions->where('date', $date)->first();
 
@@ -205,7 +157,7 @@ class AdminController extends Controller
 
             $data[$date] = [
                 'plus_amount'  => $plusAmount,
-                'minus_amount' => $minusAmount
+                'minus_amount' => $minusAmount,
             ];
         }
 
@@ -220,7 +172,6 @@ class AdminController extends Controller
         $pageTitle       = 'All Notifications';
         return view('admin.notifications', compact('pageTitle', 'notifications', 'hasUnread', 'hasNotification'));
     }
-
 
     public function notificationRead($id)
     {
@@ -238,7 +189,7 @@ class AdminController extends Controller
     public function readAllNotification()
     {
         AdminNotification::where('is_read', Status::NO)->update([
-            'is_read' => Status::YES
+            'is_read' => Status::YES,
         ]);
         $notify[] = ['success', 'Notifications read successfully'];
         return back()->withNotify($notify);
@@ -269,8 +220,8 @@ class AdminController extends Controller
             $endDateDateForCustom = $today->copy();
         }
 
-        return  [
-            'daily'   => [
+        return [
+            'daily'      => [
                 'sql_date_format' => "%d %b,%Y",
                 'php_date_format' => "d M,Y",
                 'take'            => 15,
@@ -278,7 +229,7 @@ class AdminController extends Controller
                 'start_date'      => $today->copy()->subDays(15),
                 'end_date'        => $today->copy(),
             ],
-            'monthly' => [
+            'monthly'    => [
                 'sql_date_format' => "%b,%Y",
                 'php_date_format' => "M,Y",
                 'take'            => 12,
@@ -286,7 +237,7 @@ class AdminController extends Controller
                 'start_date'      => $today->copy()->subMonths(12),
                 'end_date'        => $today->copy(),
             ],
-            'yearly'  => [
+            'yearly'     => [
                 'sql_date_format' => '%Y',
                 'php_date_format' => 'Y',
                 'take'            => 12,
@@ -294,7 +245,7 @@ class AdminController extends Controller
                 'start_date'      => $today->copy()->subYears(12),
                 'end_date'        => $today->copy(),
             ],
-            'date_range'   => [
+            'date_range' => [
                 'sql_date_format' => "%d %b,%Y",
                 'php_date_format' => "d M,Y",
                 'take'            => (int) Carbon::parse($startDateForCustom)->diffInDays(Carbon::parse($endDateDateForCustom)),
@@ -320,4 +271,5 @@ class AdminController extends Controller
         header("Content-Type: " . $mimetype);
         return readfile($filePath);
     }
+
 }

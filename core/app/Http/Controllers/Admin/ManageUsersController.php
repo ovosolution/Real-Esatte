@@ -11,9 +11,9 @@ use App\Models\Transaction;
 use App\Models\User;
 use App\Models\UserLogin;
 use App\Models\Withdrawal;
+use App\Rules\FileTypeValidate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Rules\FileTypeValidate;
 
 class ManageUsersController extends Controller
 {
@@ -25,6 +25,7 @@ class ManageUsersController extends Controller
             return $this->callExportData($baseQuery);
         }
         $users = $baseQuery->paginate(getPaginate());
+
         return view('admin.users.list', compact('pageTitle', 'users', 'widget'));
     }
 
@@ -36,7 +37,21 @@ class ManageUsersController extends Controller
         if (request()->export) {
             return $this->callExportData($baseQuery);
         }
-        
+
+        $users = $baseQuery->paginate(getPaginate());
+        return view('admin.users.list', compact('pageTitle', 'users', 'widget'));
+    }
+
+
+    public function pendingUsers()
+    {
+        $pageTitle = 'Pending Users';
+        extract($this->userData("pending"));
+
+        if (request()->export) {
+            return $this->callExportData($baseQuery);
+        }
+
         $users = $baseQuery->paginate(getPaginate());
         return view('admin.users.list', compact('pageTitle', 'users', 'widget'));
     }
@@ -106,7 +121,6 @@ class ManageUsersController extends Controller
         return view('admin.users.list', compact('pageTitle', 'users', 'widget'));
     }
 
-
     public function mobileUnverifiedUsers()
     {
         $pageTitle = 'Mobile Unverified Users';
@@ -148,9 +162,15 @@ class ManageUsersController extends Controller
 
     protected function userData($scope = 'query')
     {
-        $baseQuery  = User::$scope()->searchable(['email', 'username', 'firstname', 'lastname'])->dateFilter()->filter(['status'])->orderBy('id', getOrderBy());
-        
-        $countQuery = User::query();
+        $baseQuery = User::$scope()->searchable(['email', 'username', 'firstname', 'lastname'])->dateFilter()->filter(['status'])->orderBy('id', getOrderBy());
+
+        if (request()->status == 'verified') {
+            $baseQuery->where('is_verified', 1);
+        } elseif (request()->status == 'pending') {
+            $baseQuery->where('is_verified', 0);
+        }
+
+        $countQuery      = User::query();
         $widget['all']   = (clone $countQuery)->count();
         $widget['today'] = (clone $countQuery)->whereDate('created_at', now())->count();
         $widget['week']  = (clone $countQuery)->whereDate('created_at', ">=", now()->subDays(7))->count();
@@ -158,7 +178,7 @@ class ManageUsersController extends Controller
 
         return [
             'baseQuery' => $baseQuery,
-            'widget'    => $widget
+            'widget'    => $widget,
         ];
     }
 
@@ -198,7 +218,7 @@ class ManageUsersController extends Controller
     public function kycReject(Request $request, $id)
     {
         $request->validate([
-            'reason' => 'required'
+            'reason' => 'required',
         ]);
 
         $user                       = User::findOrFail($id);
@@ -207,19 +227,18 @@ class ManageUsersController extends Controller
         $user->save();
 
         notify($user, 'KYC_REJECT', [
-            'reason' => $request->reason
+            'reason' => $request->reason,
         ]);
 
         $notify[] = ['success', 'KYC rejected successfully'];
         return to_route('admin.users.kyc.pending')->withNotify($notify);
     }
 
-
     public function update(Request $request, $id)
     {
         $user         = User::findOrFail($id);
         $countryData  = json_decode(file_get_contents(resource_path('views/partials/country.json')));
-        $countryArray = (array)$countryData;
+        $countryArray = (array) $countryData;
         $countries    = implode(',', array_keys($countryArray));
 
         $countryCode = $request->country;
@@ -289,7 +308,6 @@ class ManageUsersController extends Controller
         $amount = $request->amount;
         $trx    = getTrx();
 
-
         $transaction = new Transaction();
 
         if ($request->act == 'add') {
@@ -328,7 +346,7 @@ class ManageUsersController extends Controller
             'trx'          => $trx,
             'amount'       => showAmount($amount, currencyFormat: false),
             'remark'       => $request->remark,
-            'post_balance' => showAmount($user->balance, currencyFormat: false)
+            'post_balance' => showAmount($user->balance, currencyFormat: false),
         ]);
         $notify[] = ['success', $message];
         return back()->withNotify($notify);
@@ -345,7 +363,7 @@ class ManageUsersController extends Controller
         $user = User::findOrFail($id);
         if ($user->status == Status::USER_ACTIVE) {
             $request->validate([
-                'reason' => 'required|string|max:255'
+                'reason' => 'required|string|max:255',
             ]);
             $user->status     = Status::USER_BAN;
             $user->ban_reason = $request->reason;
@@ -400,7 +418,14 @@ class ManageUsersController extends Controller
             session()->forget('SEND_NOTIFICATION');
         }
 
-        return view('admin.users.notification_all', compact('pageTitle', 'users', 'notifyToUser'));
+        $baseQuery = NotificationLog::orderBy('id', 'desc')->searchable(['user:username'])->filter(['user_id'])->dateFilter();
+        if (request()->export) {
+            return exportData($baseQuery, request()->export, "NotificationLog");
+        }
+        $logs = $baseQuery->with('user')->paginate(getPaginate());
+        // return view('admin.reports.notification_history', compact('pageTitle', 'logs'));
+
+        return view('admin.users.notification_all', compact('pageTitle', 'users', 'notifyToUser', 'logs'));
     }
 
     public function sendNotificationAll(Request $request)
@@ -429,7 +454,6 @@ class ManageUsersController extends Controller
         return (new UserNotificationSender())->notificationToAll($request);
     }
 
-
     public function countBySegment($methodName)
     {
 
@@ -444,7 +468,7 @@ class ManageUsersController extends Controller
         return response()->json([
             'success' => true,
             'users'   => $users,
-            'more'    => $users->hasMorePages()
+            'more'    => $users->hasMorePages(),
         ]);
     }
 
@@ -456,8 +480,30 @@ class ManageUsersController extends Controller
         return view('admin.reports.notification_history', compact('pageTitle', 'logs', 'user'));
     }
 
+    public function approveUser($id)
+    {
+        $user = User::findOrFail($id);
+        $user->is_verified = 1;
+        $user->save();
+
+        notify($user, 'ACCOUNT_APPROVE', []);
+        $notify[] = ['success', 'User approved successfully'];
+        return back()->withNotify($notify);
+    }
+
+    public function rejectUser($id)
+    {
+        $user = User::findOrFail($id);
+        $user->is_verified = 0;
+        $user->save();
+
+        notify($user, 'ACCOUNT_REJECT', []);
+        $notify[] = ['success', 'User rejected successfully'];
+        return back()->withNotify($notify);
+    }
+
     private function callExportData($baseQuery)
     {
-       return exportData($baseQuery, request()->export, "user", "A4 landscape");
+        return exportData($baseQuery, request()->export, "user", "A4 landscape");
     }
 }
