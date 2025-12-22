@@ -6820,6 +6820,7 @@ label.required:after {
 .Verification__form {
   padding: 16px;
   padding-right: 96px;
+  background-color: #f3f3f5 !important;
 }
 
 .Verification__form::placeholder {
