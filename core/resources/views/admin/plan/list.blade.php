@@ -9,7 +9,7 @@
         <div class="row gy-4 justify-content-center plans-wrapper">
 
             @foreach ($plans as $key => $plan)
-            <div class="col-xxl-3 col-md-4 col-sm-6">
+            <div class="col-xxl-4 col-md-4 col-sm-6">
                 <div
                     class="pricing__card plan-item {{ $key == 0 ? 'active' : '' }}"
                     data-name="{{ ucfirst($plan->name) }}"
@@ -106,7 +106,7 @@
         </div>
 
         <div class="row mt-5 justify-content-center">
-            <div class="col-lg-9">
+            <div class="col-lg-12">
                 <div class="role__card card">
                     <h5 class="mb-3">@lang('Premium Features')</h5>
 
@@ -118,6 +118,17 @@
         </div>
 
         <div class="row mt-5 justify-content-center">
+            <div class="col-lg-3">
+                <div class="role__card card">
+                    <span class="role__card__icon">
+                        <h3 class="role__card__title">@lang('Free Trial Users')</h3>
+                    </span>
+                    <span>
+                        <h3 class="role__card__price">100</h3>
+                    </span>
+                    <p class="role__card__desc">44% @lang('of total')</p>
+                </div>
+            </div>
             <div class="col-lg-3">
                 <div class="role__card card">
                     <span class="role__card__icon">
@@ -198,11 +209,11 @@
 <div class="row d-flex align-items-center justify-content-between">
     <div class="col-lg-auto">
         <div class="dashboard-body__heading__wrap">
+            <span class="breadcrumb-icon navigation-bar"><i class="fa-solid fa-bars"></i></span>
             <div class="dashboard-body__heading">
                 <h3 class="dashboard-body__title">@lang('Subscription Management')</h3>
                 <p class="dashboard-body__desc">@lang('Manage payment plans and user subscriptions')</p>
             </div>
-            <span class="breadcrumb-icon navigation-bar"><i class="fa-solid fa-bars"></i></span>
         </div>
     </div>
     <div class="col-lg-auto">

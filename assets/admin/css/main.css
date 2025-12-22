@@ -1020,8 +1020,8 @@ a:hover {
 /* ================================= Card Css End =========================== */
 /* ================================= Form Css Start =========================== */
 .form--label {
-  margin-bottom: 8px;
-  font-size: 0.9375rem;
+  margin-bottom: 4px;
+  font-size: 14px;
   color: hsl(var(--title-color)) !important;
   font-weight: 600;
   background-color: hsl(var(--white));
@@ -1117,13 +1117,12 @@ select {
 /* Form Control Start */
 .form--control,
 .form-control {
-  border-radius: var(--border-radios);
+  border-radius: 8px;
   font-weight: 400;
   outline: none;
   width: 100%;
   padding: 9px 20px;
-  background-color: #f9fafb;
-  border: 1px solid hsl(var(--black) / 0.2);
+  background-color: #f3f3f5;
   color: hsl(var(--black));
   line-height: 1.5;
   outline: 1px solid transparent;
@@ -1317,6 +1316,7 @@ select {
 textarea.form--control,
 textarea.form-control {
   height: 130px;
+  background-color: #f3f3f5 !important;
 }
 
 /* Autofill Css End */
@@ -1366,7 +1366,7 @@ input[type="number"] {
   margin-bottom: 5px;
   border-radius: 40px;
   width: 45px;
-  height: 20px;
+  height: 18px !important;
   cursor: pointer;
 }
 
@@ -1518,10 +1518,11 @@ input[type="number"] {
 /* ======================  select2 Style Customization Start  ======================*/
 .selection {
   width: 100%;
-  border: 1px solid hsl(var(--black) / 0.2);
+  background-color: #f3f3f5;
   height: 44px;
   border-radius: var(--border-radios);
   padding-left: 5px;
+  border-radius: 8px;
 }
 
 @media screen and (max-width: 575px) {
@@ -1569,6 +1570,10 @@ input[type="number"] {
   display: flex;
   flex-wrap: wrap;
   row-gap: 10px;
+}
+
+.select2-container--default .select2-selection--single {
+  background-color: transparent !important;
 }
 
 .select2-selection--single,
@@ -1704,6 +1709,8 @@ input[type="number"] {
   border: 1px solid hsl(var(--primary));
   border-radius: var(--border-radios) !important;
   margin-top: -5px;
+  border-radius: 8px !important;
+  overflow: hidden;
 }
 
 .select2-container--default
@@ -4721,7 +4728,7 @@ body:has(.account) {
 
 label.required:after {
   content: "*";
-  color: hsl(var(--danger));
+  color: hsl(var(--black));
   margin-left: 2px;
 }
 
@@ -6446,15 +6453,19 @@ label.required:after {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 32px;
+  gap: 24px;
 }
 .navigation-bar {
-  display: none;
   border: 1px solid hsl(var(--black) / 0.1);
   background-color: hsl(var(--white));
   height: 40px;
   width: 40px;
-  padding: 8px 12px;
+  display: none;
+  justify-content: center;
+  align-items: center;
   border-radius: 10px;
+  line-height: 1;
+  padding: 12px;
 }
 
 @media screen and (max-width: 1199px) {
@@ -7104,15 +7115,10 @@ label.required:after {
 }
 
 .pricing__list__wrap {
-  display: flex !important;
-}
-
-.pricing__list__wrap {
   padding-left: 0 !important;
-  display: flex;
-  max-width: 230px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 10px 80px;
-  flex-wrap: wrap;
 }
 
 .subscription__button {
@@ -7145,6 +7151,23 @@ label.required:after {
   border-radius: 8px;
 }
 
-.verified-user-actions{
+.verified-user-actions {
   width: 100%;
+}
+
+.google__info {
+  color: hsl(var(--black));
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.form__tip {
+  background-color: #eef2ff;
+  color: hsl(var(--primary));
+  padding: 13px;
+  border: 1px solid #bedbff;
+  border-radius: 10px;
+}
+.dashboard__area-inner .card-header {
+  background-color: transparent !important;
 }
