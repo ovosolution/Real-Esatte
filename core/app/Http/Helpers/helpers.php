@@ -7,6 +7,7 @@ use App\Lib\CurlRequest;
 use App\Lib\Export\ExportManager;
 use App\Lib\FileManager;
 use App\Lib\GoogleAuthenticator;
+use App\Models\AdminActivity;
 use App\Models\Extension;
 use App\Models\Frontend;
 use App\Models\GeneralSetting;
@@ -303,6 +304,26 @@ function responseManager(string $remark, string $message, string $responseType =
 
     $notify[] = [$responseType, $message];
     return back()->withNotify($notify);
+}
+
+function adminActivity(string $remark, mixed $activityMessage = null, $target = null)
+{
+    $admin = auth('admin')->user();
+
+    if (!$admin) {
+        return;
+    }
+
+    if (is_null($activityMessage)) {
+        $activityMessage = 'The ' . strtolower(keyToTitle($remark)) . ' successfully';
+    }
+
+    $activity           = new AdminActivity();
+    $activity->admin_id = $admin->id;
+    $activity->remark   = strtolower($remark);
+    $activity->activity = $activityMessage;
+    $activity->target = $target;
+    $activity->save();
 }
 
 function getAdmin($column = null)

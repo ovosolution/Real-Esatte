@@ -42,7 +42,6 @@ class ManageUsersController extends Controller
         return view('admin.users.list', compact('pageTitle', 'users', 'widget'));
     }
 
-
     public function pendingUsers()
     {
         $pageTitle = 'Pending Users';
@@ -482,9 +481,11 @@ class ManageUsersController extends Controller
 
     public function approveUser($id)
     {
-        $user = User::findOrFail($id);
+        $user              = User::findOrFail($id);
         $user->is_verified = 1;
         $user->save();
+
+        adminActivity('user-approved', 'Approved realtor verification', $user->firstname . ' ' . $user->lastname);
 
         notify($user, 'ACCOUNT_APPROVE', []);
         $notify[] = ['success', 'User approved successfully'];
@@ -493,9 +494,11 @@ class ManageUsersController extends Controller
 
     public function rejectUser($id)
     {
-        $user = User::findOrFail($id);
+        $user              = User::findOrFail($id);
         $user->is_verified = 0;
         $user->save();
+
+        adminActivity('user-rejected', 'Rejected realtor verification', $user->firstname . ' ' . $user->lastname);
 
         notify($user, 'ACCOUNT_REJECT', []);
         $notify[] = ['success', 'User rejected successfully'];

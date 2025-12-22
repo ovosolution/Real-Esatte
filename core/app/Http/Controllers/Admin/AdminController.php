@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Constants\Status;
 use App\Http\Controllers\Controller;
+use App\Models\AdminActivity;
 use App\Models\AdminNotification;
 use App\Models\Deposit;
 use App\Models\Transaction;
@@ -270,6 +271,19 @@ class AdminController extends Controller
         header('Content-Disposition: attachment; filename="' . $title);
         header("Content-Type: " . $mimetype);
         return readfile($filePath);
+    }
+
+    public function analytics()
+    {
+        $pageTitle = 'Analytics';
+        return view('admin.analytics', compact('pageTitle'));
+    }
+
+    public function activities()
+    {
+        $pageTitle = 'Admin Activities';
+        $activities = AdminActivity::with('admin')->orderBy('id','desc')->paginate(getPaginate());
+        return view('admin.activity_logs', compact('pageTitle','activities'));
     }
 
 }

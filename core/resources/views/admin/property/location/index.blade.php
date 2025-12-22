@@ -5,14 +5,9 @@
         <div class="dashboard-body__card">
             <div class="row gy-4">
                 <div class="col-lg-12">
-                    <ul class="custom__nav nav system-management  mb-3">
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link {{ request()->routeIs('admin.property.type.index') ? 'active' : '' }}" href="{{ route('admin.property.type.index') }}">@lang('Property Type')</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link {{ request()->routeIs('admin.location.index') ? 'active' : '' }}" href="{{ route('admin.location.index') }}">@lang('Location')</a>
-                        </li>
-                    </ul>
+
+                    @include('admin.property.system')
+
                     <table class="table mt-4 table--responsive--md">
                         <thead>
                             <tr>
@@ -27,7 +22,7 @@
                                     <td>{{ $location->name }}</td>
                                     <td>
                                         @php
-    echo $location->statusBadge;
+                                            echo $location->statusBadge;
                                         @endphp
                                     </td>
                                     <td>

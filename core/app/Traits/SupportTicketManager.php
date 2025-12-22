@@ -341,6 +341,8 @@ trait SupportTicketManager
         $ticket->status = Status::TICKET_CLOSE;
         $ticket->save();
 
+        adminActivity('ticket-closed', 'Resolved support ticket', $ticket->ticket);
+
         if ($this->apiRequest) {
             $notify[] = 'Ticket closed successfully';
             return apiResponse("ticket_closed", "error", $notify);

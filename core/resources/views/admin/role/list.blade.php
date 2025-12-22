@@ -5,20 +5,8 @@
         <div class="dashboard-body__card">
             <div class="row gy-4">
                 <div class="col-lg-12">
-                    <ul class="custom__nav nav system-management  mb-3">
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link {{ request()->routeIs('admin.list') ? 'active' : '' }}" href="{{ route('admin.list') }}">@lang('Team Management')</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link {{ request()->routeIs('admin.password') ? 'active' : '' }}" href="{{ route('admin.password') }}">@lang('Security')</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link {{ request()->routeIs('admin.location.index') ? 'active' : '' }}" href="{{ route('admin.location.index') }}">@lang('Activity Logs')</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link {{ request()->routeIs('admin.role.list') ? 'active' : '' }}" href="{{ route('admin.role.list') }}">@lang('Role and Permissions')</a>
-                        </li>
-                    </ul>
+
+                    @include('admin.settings_header')
 
                     <table class="table mt-4 table--responsive--md">
                         <thead>
