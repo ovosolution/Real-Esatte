@@ -28,6 +28,23 @@
     $(this).toggleClass("active");
   });
 
+  // pricing card check==============
+
+  document.querySelectorAll(".pricing__card").forEach((card) => {
+    card.addEventListener("click", function (e) {
+      if (e.target.closest("button")) return;
+      document.querySelectorAll(".pricing__card").forEach((item) => {
+        item.classList.remove("active");
+        const checkbox = item.querySelector(".form-check-input");
+        if (checkbox) checkbox.checked = false;
+      });
+      const checkbox = this.querySelector(".form-check-input");
+      checkbox.checked = true;
+      this.classList.add("active");
+    });
+  });
+
+  // pricing card check==============
   // Sidebar Icon & Overlay js
   $(".navigation-bar").on("click", function () {
     $(".sidebar-menu").addClass("show-sidebar");

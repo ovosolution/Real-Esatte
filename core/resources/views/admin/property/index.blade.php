@@ -1,123 +1,123 @@
 @extends('admin.layouts.app')
 @section('panel')
 
-    <div class="dashboard-body">
-        <div class="dashboard-body__card">
-            <div class="row gy-4">
-                <div class="col-lg-12">
-                    <div class="search-box__wrap mt-4">
-                        <div class="search-box w-100">
-                            <form>
-                                <input type="search" class="form-control form--control w-100 h-36" name="search" value="{{ request()->search }}" placeholder="@lang('Search...')">
-                            </form>
-                        </div>
-                        <div class="search-menu">
-                            <a class="search-menu__link @if (request()->routeIs('admin.property.index')) active @endif" href="{{ route('admin.property.index') }}">@lang('All')</a>
-                            <a class="search-menu__link @if (request()->routeIs('admin.property.active')) active @endif" href="{{ route('admin.property.active') }}">@lang('Active')</a>
-                            <a class="search-menu__link @if(request()->routeIs('admin.property.inactive')) active @endif" href="{{ route('admin.property.inactive') }}">@lang('Inactive')</a>
-                        </div>
+<div class="dashboard-body">
+    <div class="dashboard-body__card">
+        <div class="row gy-4">
+            <div class="col-lg-12">
+                <div class="search-box__wrap mt-4">
+                    <div class="search-box w-100">
+                        <form>
+                            <input type="search" class="form-control form--control w-100 h-36" name="search" value="{{ request()->search }}" placeholder="@lang('Search...')">
+                        </form>
+                    </div>
+                    <div class="search-menu">
+                        <a class="search-menu__link @if (request()->routeIs('admin.property.index')) active @endif" href="{{ route('admin.property.index') }}">@lang('All')</a>
+                        <a class="search-menu__link @if (request()->routeIs('admin.property.active')) active @endif" href="{{ route('admin.property.active') }}">@lang('Active')</a>
+                        <a class="search-menu__link @if(request()->routeIs('admin.property.inactive')) active @endif" href="{{ route('admin.property.inactive') }}">@lang('Inactive')</a>
                     </div>
                 </div>
+            </div>
 
-                <div class="col-lg-12">
-                    <table class="table mt-4 table--responsive--md">
-                        <thead>
-                            <tr>
-                                <th>@lang('Title')</th>
-                                <th>@lang('Location')</th>
-                                <th>@lang('Coordinates')</th>
-                                <th>@lang('Price')</th>
-                                <th>@lang('Type')</th>
-                                <th>@lang('Status')</th>
-                                <th>@lang('Actions')</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+            <div class="col-lg-12">
+                <table class="table mt-4 table--responsive--md">
+                    <thead>
+                        <tr>
+                            <th>@lang('Title')</th>
+                            <th>@lang('Location')</th>
+                            <th>@lang('Coordinates')</th>
+                            <th>@lang('Price')</th>
+                            <th>@lang('Type')</th>
+                            <th>@lang('Status')</th>
+                            <th>@lang('Actions')</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-                            @forelse ($properties as $property)
-                                <tr>
-                                    <td>{{ __($property->title) }}</td>
-                                    <td>{{ __($property->location->name) }}</td>
-                                    <td>{{ $property->latitude . ', ' . $property->longitude }}</td>
-                                    <td>{{ showAmount($property->price) }}</td>
-                                    <td>{{ __($property?->propertyType?->name) }}</td>
-                                    <td>
-                                        @php
-    echo $property->statusBadge;
-                                        @endphp
-                                    </td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button type="button" class="action-btn view-btn" data-resource="{{ $property }}">
-                                                @lang('View')
-                                            </button>
-                                            <button type="button" class="action-btn edit-btn" data-resource="{{ $property }}">
-                                                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" x="0" y="0" viewBox="0 0 682.667 682.667" style="enable-background:new 0 0 512 512" xml:space="preserve" class="">
-                                                    <g>
-                                                        <defs>
-                                                            <clipPath id="a" clipPathUnits="userSpaceOnUse">
-                                                                <path d="M0 512h512V0H0Z" fill="#000000" opacity="1" data-original="#000000"></path>
-                                                            </clipPath>
-                                                        </defs>
-                                                        <g clip-path="url(#a)" transform="matrix(1.33333 0 0 -1.33333 0 682.667)">
-                                                            <path d="M0 0h-220c-22.092 0-40-17.908-40-40v-320c0-22.092 17.908-40 40-40h320c22.092 0 40 17.908 40 40v220" style="stroke-width:30;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1" transform="translate(275 415)" fill="none" stroke="#000000" stroke-width="30" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="none" stroke-opacity="" data-original="#000000"></path>
-                                                            <path d="m0 0-226.274-226.273-70.711-14.143 14.142 70.711L-56.569 56.569c7.81 7.81 20.474 7.81 28.284 0L0 28.284C7.81 20.474 7.81 7.811 0 0Z" style="stroke-width:30;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1" transform="translate(491.143 434.573)" fill="none" stroke="#000000" stroke-width="30" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="none" stroke-opacity="" data-original="#000000"></path>
-                                                            <path d="m0 0 56.568-56.568" style="stroke-width:30;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1" transform="translate(406.29 462.857)" fill="none" stroke="#000000" stroke-width="30" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="none" stroke-opacity="" data-original="#000000"></path>
-                                                        </g>
-                                                    </g>
-                                                </svg>
-                                            </button>
-                                            <button type="button" class="action-btn delete-btn confirmationBtn" data-question=" @lang('Are you sure to remove this property?')" data-action="{{ route('admin.property.delete', $property->id) }}">
-                                                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class="">
-                                                    <g>
-                                                        <path d="M424 64h-88V48c0-26.467-21.533-48-48-48h-64c-26.467 0-48 21.533-48 48v16H88c-22.056 0-40 17.944-40 40v56c0 8.836 7.164 16 16 16h8.744l13.823 290.283C87.788 491.919 108.848 512 134.512 512h242.976c25.665 0 46.725-20.081 47.945-45.717L439.256 176H448c8.836 0 16-7.164 16-16v-56c0-22.056-17.944-40-40-40zM208 48c0-8.822 7.178-16 16-16h64c8.822 0 16 7.178 16 16v16h-96zM80 104c0-4.411 3.589-8 8-8h336c4.411 0 8 3.589 8 8v40H80zm313.469 360.761A15.98 15.98 0 0 1 377.488 480H134.512a15.98 15.98 0 0 1-15.981-15.239L104.78 176h302.44z" fill="#ff0000" opacity="1" data-original="#000000" class=""></path>
-                                                        <path d="M256 448c8.836 0 16-7.164 16-16V224c0-8.836-7.164-16-16-16s-16 7.164-16 16v208c0 8.836 7.163 16 16 16zM336 448c8.836 0 16-7.164 16-16V224c0-8.836-7.164-16-16-16s-16 7.164-16 16v208c0 8.836 7.163 16 16 16zM176 448c8.836 0 16-7.164 16-16V224c0-8.836-7.164-16-16-16s-16 7.164-16 16v208c0 8.836 7.163 16 16 16z" fill="#ff0000" opacity="1" data-original="#000000" class=""></path>
-                                                    </g>
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="100%" class="text-center">{{ __($emptyMessage) }}</td>
-                                </tr>
-                            @endforelse
+                        @forelse ($properties as $property)
+                        <tr>
+                            <td>{{ __($property->title) }}</td>
+                            <td>{{ __($property->location->name) }}</td>
+                            <td>{{ $property->latitude . ', ' . $property->longitude }}</td>
+                            <td>{{ showAmount($property->price) }}</td>
+                            <td>{{ __($property?->propertyType?->name) }}</td>
+                            <td>
+                                @php
+                                echo $property->statusBadge;
+                                @endphp
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button type="button" class="action-btn view-btn" data-resource="{{ $property }}">
+                                        @lang('View')
+                                    </button>
+                                    <button type="button" class="action-btn edit-btn" data-resource="{{ $property }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" x="0" y="0" viewBox="0 0 682.667 682.667" style="enable-background:new 0 0 512 512" xml:space="preserve" class="">
+                                            <g>
+                                                <defs>
+                                                    <clipPath id="a" clipPathUnits="userSpaceOnUse">
+                                                        <path d="M0 512h512V0H0Z" fill="#000000" opacity="1" data-original="#000000"></path>
+                                                    </clipPath>
+                                                </defs>
+                                                <g clip-path="url(#a)" transform="matrix(1.33333 0 0 -1.33333 0 682.667)">
+                                                    <path d="M0 0h-220c-22.092 0-40-17.908-40-40v-320c0-22.092 17.908-40 40-40h320c22.092 0 40 17.908 40 40v220" style="stroke-width:30;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1" transform="translate(275 415)" fill="none" stroke="#000000" stroke-width="30" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="none" stroke-opacity="" data-original="#000000"></path>
+                                                    <path d="m0 0-226.274-226.273-70.711-14.143 14.142 70.711L-56.569 56.569c7.81 7.81 20.474 7.81 28.284 0L0 28.284C7.81 20.474 7.81 7.811 0 0Z" style="stroke-width:30;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1" transform="translate(491.143 434.573)" fill="none" stroke="#000000" stroke-width="30" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="none" stroke-opacity="" data-original="#000000"></path>
+                                                    <path d="m0 0 56.568-56.568" style="stroke-width:30;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1" transform="translate(406.29 462.857)" fill="none" stroke="#000000" stroke-width="30" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="none" stroke-opacity="" data-original="#000000"></path>
+                                                </g>
+                                            </g>
+                                        </svg>
+                                    </button>
+                                    <button type="button" class="action-btn delete-btn confirmationBtn" data-question=" @lang('Are you sure to remove this property?')" data-action="{{ route('admin.property.delete', $property->id) }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class="">
+                                            <g>
+                                                <path d="M424 64h-88V48c0-26.467-21.533-48-48-48h-64c-26.467 0-48 21.533-48 48v16H88c-22.056 0-40 17.944-40 40v56c0 8.836 7.164 16 16 16h8.744l13.823 290.283C87.788 491.919 108.848 512 134.512 512h242.976c25.665 0 46.725-20.081 47.945-45.717L439.256 176H448c8.836 0 16-7.164 16-16v-56c0-22.056-17.944-40-40-40zM208 48c0-8.822 7.178-16 16-16h64c8.822 0 16 7.178 16 16v16h-96zM80 104c0-4.411 3.589-8 8-8h336c4.411 0 8 3.589 8 8v40H80zm313.469 360.761A15.98 15.98 0 0 1 377.488 480H134.512a15.98 15.98 0 0 1-15.981-15.239L104.78 176h302.44z" fill="#ff0000" opacity="1" data-original="#000000" class=""></path>
+                                                <path d="M256 448c8.836 0 16-7.164 16-16V224c0-8.836-7.164-16-16-16s-16 7.164-16 16v208c0 8.836 7.163 16 16 16zM336 448c8.836 0 16-7.164 16-16V224c0-8.836-7.164-16-16-16s-16 7.164-16 16v208c0 8.836 7.163 16 16 16zM176 448c8.836 0 16-7.164 16-16V224c0-8.836-7.164-16-16-16s-16 7.164-16 16v208c0 8.836 7.163 16 16 16z" fill="#ff0000" opacity="1" data-original="#000000" class=""></path>
+                                            </g>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="100%" class="text-center">{{ __($emptyMessage) }}</td>
+                        </tr>
+                        @endforelse
 
-                        </tbody>
-                    </table>
-                </div>
+                    </tbody>
+                </table>
             </div>
         </div>
-        @if ($properties->hasPages())
-            <div class="mt-3">
-                {{ paginateLinks($properties) }}
-            </div>
-        @endif
     </div>
+    @if ($properties->hasPages())
+    <div class="mt-3">
+        {{ paginateLinks($properties) }}
+    </div>
+    @endif
+</div>
 
-    <x-confirmation-modal />
+<x-confirmation-modal />
 @endsection
 
 
 @push('breadcrumb-plugins')
-    <div class="row d-flex align-items-center justify-content-between">
-        <div class="col-lg-auto">
-            <div class="dashboard-body__heading__wrap">
-                <div class="dashboard-body__heading">
-                    <h3 class="dashboard-body__title">@lang('Property Management')</h3>
-                    <p class="dashboard-body__desc">@lang('Add and manage property listings with accurate coordinates')</p>
-                </div>
-                <span class="breadcrumb-icon navigation-bar"><i class="fa-solid fa-bars"></i></span>
+<div class="row d-flex align-items-center justify-content-between">
+    <div class="col-lg-auto">
+        <div class="dashboard-body__heading__wrap">
+            <div class="dashboard-body__heading">
+                <h3 class="dashboard-body__title">@lang('Property Management')</h3>
+                <p class="dashboard-body__desc">@lang('Add and manage property listings with accurate coordinates')</p>
             </div>
-        </div>
-
-        <div class="col-lg-auto">
-            <button type="button" class="btn btn--primary add-btn">
-                <i class="las la-plus"></i> @lang('Add New Property')
-            </button>
+            <span class="breadcrumb-icon navigation-bar"><i class="fa-solid fa-bars"></i></span>
         </div>
     </div>
+
+    <div class="col-lg-auto">
+        <button type="button" class="btn btn--primary add-btn">
+            <i class="las la-plus"></i> @lang('Add New Property')
+        </button>
+    </div>
+</div>
 @endpush
 
 
@@ -147,7 +147,7 @@
                             <select name="property_type_id" class="form-select select2">
                                 <option value="" selected disabled>@lang('Select Property Type')</option>
                                 @foreach ($propertyTypes as $propertyType)
-                                    <option value="{{ $propertyType->id }}">{{ $propertyType->name }}</option>
+                                <option value="{{ $propertyType->id }}">{{ $propertyType->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -172,9 +172,9 @@
                             <select name="developer_id" class="form-select select2">
                                 <option value="" disabled selected>@lang('Select Developer')</option>
                                 @foreach ($developers as $developer)
-                                    <option value="{{ $developer->id }}" {{ old('developer_id')}}>
-                                        {{ $developer->name }}
-                                    </option>
+                                <option value="{{ $developer->id }}" {{ old('developer_id')}}>
+                                    {{ $developer->name }}
+                                </option>
                                 @endforeach
                             </select>
 
@@ -185,7 +185,7 @@
                             <select name="location_id" class="form-select select2">
                                 <option value="" disabled selected>@lang('Select Location')</option>
                                 @foreach ($locations as $location)
-                                    <option value="{{ $location->id }}" {{ old('location_id') }}>{{ $location->name }}</option>
+                                <option value="{{ $location->id }}" {{ old('location_id') }}>{{ $location->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -208,7 +208,7 @@
                         <div class="col-md-6">
                             <label class="form--label required">@lang('Construction Status')</label>
                             <select name="construction_status" class="form-select select2">
-                                <option value=""disabled selected>@lang('Set Construction Status')</option>
+                                <option value="" disabled selected>@lang('Set Construction Status')</option>
                                 <option value=1>@lang('Available')</option>
                                 <option value=2>@lang('Under Construction')</option>
                             </select>
@@ -217,7 +217,7 @@
                         <div class="col-md-6">
                             <label class="form--label required">@lang('Listing Type')</label>
                             <select name="listing_type" class="form-select select2">
-                                <option value=""disabled selected>@lang('Set Listing Type')</option>
+                                <option value="" disabled selected>@lang('Set Listing Type')</option>
                                 <option value=1>@lang('Sale')</option>
                                 <option value=2>@lang('Rent')</option>
                             </select>
@@ -270,7 +270,7 @@
                             <label class="form--label required">@lang('Property Type')</label>
                             <select name="property_type_id" class="form-select select2">
                                 @foreach ($propertyTypes as $propertyType)
-                                    <option value="{{ $propertyType->id }}">{{ $propertyType->name }}</option>
+                                <option value="{{ $propertyType->id }}">{{ $propertyType->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -291,7 +291,7 @@
                             <select name="developer_id" class="form-select select2">
                                 <option value="">@lang('Select Developer')</option>
                                 @foreach ($developers as $developer)
-                                    <option value="{{ $developer->id }}">{{ $developer->name }}</option>
+                                <option value="{{ $developer->id }}">{{ $developer->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -300,7 +300,7 @@
                             <label class="form--label required">@lang('Area / Location')</label>
                             <select name="location_id" class="form-select select2">
                                 @foreach ($locations as $location)
-                                    <option value="{{ $location->id }}">{{ $location->name }}</option>
+                                <option value="{{ $location->id }}">{{ $location->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -435,89 +435,89 @@
 </div>
 
 @push('script')
-    <script>
-        (function ($) {
-            "use strict";
+<script>
+    (function($) {
+        "use strict";
 
-            $(".add-btn").on('click', function (e) {
-                e.preventDefault();
-                $("#addModal").modal('show');
-            });
+        $(".add-btn").on('click', function(e) {
+            e.preventDefault();
+            $("#addModal").modal('show');
+        });
 
-            $('.edit-btn').on('click', function () {
-                var modal = $('#editModal');
-                var resource = $(this).data('resource');
-                var checkbox = modal.find('input[type="checkbox"][name="status"]');
-                var action = "{{ route('admin.property.store') }}/" + resource.id;
-                modal.find('form').attr('action', action);
-                modal.find('input[name=title]').val(resource.title);
-                modal.find('select[name=property_type_id]').val(resource.property_type_id).change();
-                modal.find('input[name=price]').val(resource.price);
-                modal.find('input[name=bedrooms]').val(resource.bedrooms);
-                modal.find('input[name=bathrooms]').val(resource.bathrooms);
-                modal.find('select[name=developer_id]').val(resource.developer_id).trigger('change');
-                modal.find('select[name=location_id]').val(resource.location_id).change();
-                modal.find('input[name=address]').val(resource.address);
-                modal.find('input[name=latitude]').val(resource.latitude);
-                modal.find('input[name=longitude]').val(resource.longitude);
-                modal.find('textarea[name=description]').val(resource.description);
-                modal.find('select[name=construction_status]').val(resource.construction_status).change();
-                modal.find('select[name=listing_type]').val(resource.listing_type).change();
-
-
-                if (resource.status == 1) {
-                    checkbox.prop('checked', true);
-                } else {
-                    checkbox.prop('checked', false);
-                }
-
-                modal.modal('show');
-            });
-
-            $('.view-btn').on('click', function () {
-                var modal = $('#viewModal');
-                var resource = $(this).data('resource');
-
-                modal.find('.property-title').text(resource.title);
-                modal.find('.property-address').text(resource.address);
-                modal.find('.property-price').text("{{ gs('cur_sym') }}" + parseFloat(resource.price).toFixed(2));
-
-                modal.find('.property-type').text(resource.property_type ? resource.property_type.name : '-');
-                modal.find('.property-developer').text(resource.developer ? resource.developer.name : '-');
-                modal.find('.property-bedrooms').text(resource.bedrooms);
-                modal.find('.property-bathrooms').text(resource.bathrooms);
-                modal.find('.property-location').text(resource.location ? resource.location.name : '-');
-                modal.find('.property-date').text(resource.created_at.substring(0, 10));
-
-                modal.find('.latitude-text').text(resource.latitude);
-                modal.find('.longitude-text').text(resource.longitude);
-                modal.find('.description-text').text(resource.description);
-
-                modal.find('.property-construction-status').text(
-                    resource.construction_status == 1 ? '@lang("Available")' : '@lang("Under Construction")'
-                );
-
-                modal.find('.property-listing-type').text(
-                    resource.listing_type == 1 ? '@lang("Sale")' : '@lang("Rent")'
-                );
+        $('.edit-btn').on('click', function() {
+            var modal = $('#editModal');
+            var resource = $(this).data('resource');
+            var checkbox = modal.find('input[type="checkbox"][name="status"]');
+            var action = "{{ route('admin.property.store') }}/" + resource.id;
+            modal.find('form').attr('action', action);
+            modal.find('input[name=title]').val(resource.title);
+            modal.find('select[name=property_type_id]').val(resource.property_type_id).change();
+            modal.find('input[name=price]').val(resource.price);
+            modal.find('input[name=bedrooms]').val(resource.bedrooms);
+            modal.find('input[name=bathrooms]').val(resource.bathrooms);
+            modal.find('select[name=developer_id]').val(resource.developer_id).trigger('change');
+            modal.find('select[name=location_id]').val(resource.location_id).change();
+            modal.find('input[name=address]').val(resource.address);
+            modal.find('input[name=latitude]').val(resource.latitude);
+            modal.find('input[name=longitude]').val(resource.longitude);
+            modal.find('textarea[name=description]').val(resource.description);
+            modal.find('select[name=construction_status]').val(resource.construction_status).change();
+            modal.find('select[name=listing_type]').val(resource.listing_type).change();
 
 
-                var imageHtml = '';
-                var path = "{{ asset(getFilePath('property')) }}";
+            if (resource.status == 1) {
+                checkbox.prop('checked', true);
+            } else {
+                checkbox.prop('checked', false);
+            }
 
-                if (resource.images && resource.images.length > 0) {
-                    resource.images.forEach(function (img) {
-                        var fullPath = path + '/' + img.image;
-                        imageHtml += `<div class="col-6"><img src="${fullPath}" class="img-fluid rounded w-100" style="height: 200px; object-fit: cover;" alt="Property Image"></div>`;
-                    });
-                } else {
-                    imageHtml = '<div class="col-12 text-center text-muted">@lang("No images available")</div>';
-                }
-                modal.find('.property-images').html(imageHtml);
+            modal.modal('show');
+        });
 
-                modal.modal('show');
-            });
+        $('.view-btn').on('click', function() {
+            var modal = $('#viewModal');
+            var resource = $(this).data('resource');
 
-        })(jQuery);
-    </script>
+            modal.find('.property-title').text(resource.title);
+            modal.find('.property-address').text(resource.address);
+            modal.find('.property-price').text("{{ gs('cur_sym') }}" + parseFloat(resource.price).toFixed(2));
+
+            modal.find('.property-type').text(resource.property_type ? resource.property_type.name : '-');
+            modal.find('.property-developer').text(resource.developer ? resource.developer.name : '-');
+            modal.find('.property-bedrooms').text(resource.bedrooms);
+            modal.find('.property-bathrooms').text(resource.bathrooms);
+            modal.find('.property-location').text(resource.location ? resource.location.name : '-');
+            modal.find('.property-date').text(resource.created_at.substring(0, 10));
+
+            modal.find('.latitude-text').text(resource.latitude);
+            modal.find('.longitude-text').text(resource.longitude);
+            modal.find('.description-text').text(resource.description);
+
+            modal.find('.property-construction-status').text(
+                resource.construction_status == 1 ? '@lang("Available")' : '@lang("Under Construction")'
+            );
+
+            modal.find('.property-listing-type').text(
+                resource.listing_type == 1 ? '@lang("Sale")' : '@lang("Rent")'
+            );
+
+
+            var imageHtml = '';
+            var path = "{{ asset(getFilePath('property')) }}";
+
+            if (resource.images && resource.images.length > 0) {
+                resource.images.forEach(function(img) {
+                    var fullPath = path + '/' + img.image;
+                    imageHtml += `<div class="col-6"><img src="${fullPath}" class="img-fluid rounded w-100" style="height: 200px; object-fit: cover;" alt="Property Image"></div>`;
+                });
+            } else {
+                imageHtml = '<div class="col-12 text-center text-muted">@lang("No images available")</div>';
+            }
+            modal.find('.property-images').html(imageHtml);
+
+            modal.modal('show');
+        });
+
+    })(jQuery);
+</script>
 @endpush
