@@ -1128,6 +1128,9 @@ select {
   outline: 1px solid transparent;
 }
 
+
+
+
 [data-theme="dark"] .form--control,
 [data-theme="dark"] .form-control {
   color: hsl(var(--black) / 0.8);
@@ -1179,8 +1182,10 @@ select {
 
 .form--control:focus,
 .form-control:focus {
-  border-color: hsl(var(--primary));
-  outline-color: hsl(var(--primary));
+    border-color: hsl(var(--primary)) !important;
+    background-color: #f3f3f5 !important;
+    outline: 1px solid hsl(var(--primary)) !important;
+
 }
 
 [data-theme="dark"] .form--control:focus,

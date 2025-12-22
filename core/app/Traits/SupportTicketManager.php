@@ -32,7 +32,7 @@ trait SupportTicketManager
         if ($this->apiRequest) {
             $notify[] = 'Support ticket data';
             return apiResponse("tickets", "success", $notify, [
-                'tickets' => $supports
+                'tickets' => $supports,
             ]);
         }
         return view("Template::$this->userType" . '.support.index', compact('supports', 'pageTitle'));
@@ -80,8 +80,8 @@ trait SupportTicketManager
         $ticket->last_reply = Carbon::now();
         $ticket->status     = Status::TICKET_OPEN;
         $ticket->priority   = $request->priority;
+        $ticket->department = $request->department;
         $ticket->save();
-
 
         $message->support_ticket_id = $ticket->id;
         $message->message           = $request->message;
@@ -107,11 +107,10 @@ trait SupportTicketManager
         if ($this->apiRequest) {
             $notify[] = 'Ticket opened successfully';
             return apiResponse("ticket_open", "success", $notify, [
-                'ticket' => $ticket
+                'ticket' => $ticket,
             ]);
         }
         $notify[] = ['success', 'Ticket opened successfully'];
-
 
         return to_route($this->redirectLink, $ticket->ticket)->withNotify($notify);
     }
@@ -166,7 +165,6 @@ trait SupportTicketManager
 
         return view("Template::$this->userType" . '.support.view', compact('myTicket', 'messages', 'pageTitle', 'user', 'layout'));
     }
-
 
     public function replyTicket(Request $request, $id)
     {
@@ -248,7 +246,7 @@ trait SupportTicketManager
             $notify[] = 'Ticket replied successfully';
             return apiResponse("ticket_replied", "success", $notify, [
                 'ticket'  => $ticket,
-                'message' => $message
+                'message' => $message,
             ]);
         }
 
@@ -261,7 +259,7 @@ trait SupportTicketManager
     {
         $path = getFilePath('ticket');
 
-        foreach ($this->files as  $file) {
+        foreach ($this->files as $file) {
             try {
                 $attachment                     = new SupportAttachment();
                 $attachment->support_message_id = $messageId;
@@ -294,9 +292,9 @@ trait SupportTicketManager
                     }
                 },
             ],
-            'subject'  => 'required_without:ticket_reply|max:255',
-            'priority' => 'required_without:ticket_reply|in:1,2,3',
-            'message'  => 'required',
+            'subject'     => 'required_without:ticket_reply|max:255',
+            'priority'    => 'required_without:ticket_reply|in:1,2,3',
+            'message'     => 'required',
         ];
     }
 

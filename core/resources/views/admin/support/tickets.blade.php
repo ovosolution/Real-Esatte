@@ -25,7 +25,7 @@
                             <th>@lang('Ticket ID')</th>
                             <th>@lang('User')</th>
                             <th>@lang('Subject')</th>
-                            <th>@lang('Category')</th>
+                            <th>@lang('Department')</th>
                             <th>@lang('Priority')</th>
                             <th>@lang('Status')</th>
                             <th>@lang('Created')</th>
