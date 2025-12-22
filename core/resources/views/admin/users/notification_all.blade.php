@@ -1,613 +1,615 @@
 @extends('admin.layouts.app')
 @section('panel')
-@php
-$sessionData = session('SEND_NOTIFICATION') ?? [];
-$viaName = $sessionData['via'] ?? 'email';
-$viaText = @$sessionData['via'] == 'push' ? 'Push notification ' : ucfirst($viaName);
-@endphp
+    @php
+    $sessionData = session('SEND_NOTIFICATION') ?? [];
+    $viaName = $sessionData['via'] ?? 'email';
+    $viaText = @$sessionData['via'] == 'push' ? 'Push notification ' : ucfirst($viaName);
+    @endphp
 
-<div class="dashboard-body">
-    <div class="dashboard-body__card">
-        @empty(!$sessionData)
-        <div class="notification-data-and-loader">
-            <div class="row  mb-4 justify-content-center">
-                <div class="col-sm-7">
-                    <div class="row gy-4 justify-content-center">
-                        @include('admin.users.notification_widget')
+    <div class="dashboard-body">
+        <div class="dashboard-body__card">
+            @empty(!$sessionData)
+            <div class="notification-data-and-loader">
+                <div class="row  mb-4 justify-content-center">
+                    <div class="col-sm-7">
+                        <div class="row gy-4 justify-content-center">
+                            @include('admin.users.notification_widget')
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        @endempty
+            @endempty
 
-        <div class="row gy-4 @empty(!$sessionData) d-none @endempty">
-            <!-- Left Side: Create Notification Form -->
-            <div class="col-lg-6">
-                <div class="card-body card">
-                    <h5 class="card-title mb-4">@lang('Create Notification')</h5>
-                    <form class="notify-form" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <div class="form-group">
-                            <label class="form-label">@lang('Title')</label>
-                            <input type="text" class="form-control" name="subject"
-                                placeholder="@lang('Enter notification title...')"
-                                value="{{ old('subject', @$sessionData['subject']) }}">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">@lang('Message')</label>
-                            <textarea class="form-control" name="message" rows="4"
-                                placeholder="@lang('Enter your message...')">{{ old('message', @$sessionData['message']) }}</textarea>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label class="form-label">@lang('Target Audience')</label>
-                                    <select class="form-control form--control select2 select2-100" name="being_sent_to"
-                                        required>
-                                        @foreach ($notifyToUser as $key => $toUser)
-                                        <option value="{{ $key }}" @selected(old('being_sent_to',
-                                            @$sessionData['being_sent_to'])==$key)>
-                                            {{ __($toUser) }}
-                                        </option>
-                                        @endforeach
-                                    </select>
-                                    <div class="input-append mt-2"></div>
-                                    <small class="text--info d-none userCountText mt-2 d-block">
-                                        <i class="las la-info-circle"></i> <strong class="userCount">0</strong>
-                                        @lang('active users found')
-                                    </small>
-                                </div>
+            <div class="row gy-4 @empty(!$sessionData) d-none @endempty">
+                <!-- Left Side: Create Notification Form -->
+                <div class="col-lg-6">
+                    <div class="card-body card">
+                        <h5 class="card-title mb-4">@lang('Create Notification')</h5>
+                        <form class="notify-form" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="form-group">
+                                <label class="form-label">@lang('Title')</label>
+                                <input type="text" class="form-control" name="subject"
+                                    placeholder="@lang('Enter notification title...')"
+                                    value="{{ old('subject', @$sessionData['subject']) }}">
                             </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label class="form-label">@lang('Delivery Type')</label>
-                                    <select class="form-control form--control select2 select2-100" name="via" required>
-                                        <option value="email" @selected($viaName=='email' )>@lang('Email')</option>
-                                        <option value="sms" @selected($viaName=='sms' )>@lang('SMS')</option>
-                                        <option value="push" @selected($viaName=='push' )>@lang('In-app Banner (Push)')
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="form-group push-notification-file d-none">
-                            <label class="form-label">@lang('Image') <small
-                                    class="text-muted">(@lang('Optional'))</small></label>
-                            <input type="file" class="form-control" name="image" accept=".png,.jpg,.jpeg">
-                        </div>
-
-                        <!-- Advanced Settings (Collapsible or just inline) -->
-                        <div class="row border-top pt-3 mt-3">
-                            <p class="text-muted mb-3"><small>@lang('Sending Configuration')</small></p>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="form-label small">@lang('Start From ID')</label>
-                                    <input class="form-control form-control-sm" name="start"
-                                        value="{{ old('start', @$sessionData['start'] ?? 1) }}" type="number" required>
-                                </div>
+                            <div class="form-group">
+                                <label class="form-label">@lang('Message')</label>
+                                <textarea class="form-control" name="message" rows="4"
+                                    placeholder="@lang('Enter your message...')">{{ old('message', @$sessionData['message']) }}</textarea>
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="form-label small">@lang('Per Batch')</label>
-                                    <div class="input-group">
-                                        <input class="form-control form-control-sm" name="batch"
-                                            value="{{ old('batch', @$sessionData['batch'] ?? 500) }}" type="number"
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="form-label">@lang('Target Audience')</label>
+                                        <select class="form-control form--control select2 select2-100" name="being_sent_to"
                                             required>
-                                        <span class="input-group-text">@lang('USER')</span>
+                                            @foreach ($notifyToUser as $key => $toUser)
+                                            <option value="{{ $key }}" @selected(
+            old(
+                'being_sent_to',
+                @$sessionData['being_sent_to']
+            ) == $key
+        )>
+                                                {{ __($toUser) }}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                        <div class="input-append mt-2"></div>
+                                        <small class="text--info d-none userCountText mt-2 d-block">
+                                            <i class="las la-info-circle"></i> <strong class="userCount">0</strong>
+                                            @lang('active users found')
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="form-label">@lang('Delivery Type')</label>
+                                        <select class="form-control form--control select2 select2-100" name="via" required>
+                                            <option value="email" @selected($viaName == 'email')>@lang('Email')</option>
+                                            <option value="sms" @selected($viaName == 'sms')>@lang('SMS')</option>
+                                            <option value="push" @selected($viaName == 'push')>@lang('In-app Banner (Push)')
+                                            </option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="form-label small">@lang('Cooling Period')</label>
-                                    <div class="input-group">
-                                        <input class="form-control form-control-sm" name="cooling_time"
-                                            value="{{ old('cooling_time', @$sessionData['cooling_time'] ?? 5) }}"
-                                            type="number" required>
-                                        <span class="input-group-text">@lang('SEC')</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="d-flex gap-3 mt-4">
-                            <button type="submit" class="btn btn--primary flex-grow-1"><i
-                                    class="las la-paper-plane"></i> @lang('Send Now')</button>
-                            <button type="button" class="btn btn-outline--primary flex-grow-1" disabled title="Coming Soon"><i
-                                    class="las la-calendar"></i> @lang('Schedule')</button>
-                        </div>
-                    </form>
+                            <div class="form-group push-notification-file d-none">
+                                <label class="form-label">@lang('Image') <small
+                                        class="text-muted">(@lang('Optional'))</small></label>
+                                <input type="file" class="form-control" name="image" accept=".png,.jpg,.jpeg">
+                            </div>
+
+                            <!-- Advanced Settings (Collapsible or just inline) -->
+                            <div class="row border-top pt-3 mt-3">
+                                <p class="text-muted mb-3"><small>@lang('Sending Configuration')</small></p>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-label small">@lang('Start From ID')</label>
+                                        <input class="form-control form-control-sm" name="start"
+                                            value="{{ old('start', @$sessionData['start'] ?? 1) }}" type="number" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-label small">@lang('Per Batch')</label>
+                                        <div class="input-group">
+                                            <input class="form-control form-control-sm" name="batch"
+                                                value="{{ old('batch', @$sessionData['batch'] ?? 500) }}" type="number"
+                                                required>
+                                            <span class="input-group-text">@lang('USER')</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-label small">@lang('Cooling Period')</label>
+                                        <div class="input-group">
+                                            <input class="form-control form-control-sm" name="cooling_time"
+                                                value="{{ old('cooling_time', @$sessionData['cooling_time'] ?? 5) }}"
+                                                type="number" required>
+                                            <span class="input-group-text">@lang('SEC')</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-3 mt-4">
+                                <button type="submit" class="btn btn--primary flex-grow-1"><i
+                                        class="las la-paper-plane"></i> @lang('Send Now')</button>
+                                <button type="button" class="btn btn-outline--primary flex-grow-1" disabled title="Coming Soon"><i
+                                        class="las la-calendar"></i> @lang('Schedule')</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Right Side: Preview -->
-            <div class="col-lg-6">
-                <div class="card dashboard-body__card h-100 bg-light">
-                    <h5 class="card-title mb-4">@lang('Preview')</h5>
-                    <div class="border-0">
-                        <div class="card-body p-0">
-                            <div class="notification__title">
+                <!-- Right Side: Preview -->
+                <div class="col-lg-6">
+                    <div class="card dashboard-body__card h-100 bg-light">
+                        <h5 class="card-title mb-4">@lang('Preview')</h5>
+                        <div class="border-0">
+                            <div class="card-body p-0">
+                                <div class="notification__title">
 
-                                <h6 class="mb-2 preview-title">@lang('Notification Title')</h6>
-                                <p class="text-muted small mb-4 preview-message">@lang('Your notification message will
-                                    appear here...')</p>
-                            </div>
-
-                            <div class=" pt-3">
-                                <div class="d-flex justify-content-between mb-3">
-                                    <small class="text-muted d-block">@lang('Audience'):</small>
-                                    <span class="fw-bold small preview-audience">@lang('All Users')</span>
+                                    <h6 class="mb-2 preview-title">@lang('Notification Title')</h6>
+                                    <p class="text-muted small mb-4 preview-message">@lang('Your notification message will
+                                        appear here...')</p>
                                 </div>
-                                <div class="d-flex justify-content-between">
-                                    <small class="text-muted d-block">@lang('Delivery'):</small>
-                                    <span class="fw-bold small preview-audience">@lang('Email')</span>
+
+                                <div class=" pt-3">
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <small class="text-muted d-block">@lang('Audience'):</small>
+                                        <span class="fw-bold small preview-audience">@lang('All Users')</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <small class="text-muted d-block">@lang('Delivery'):</small>
+                                        <span class="fw-bold small preview-audience">@lang('Email')</span>
+                                    </div>
                                 </div>
-                                <!-- <div class="">
-                                    <small class="text-muted d-block delivery">@lang('Delivery'):</small>
-                                    <span class="badge badge--primary preview-delivery">@lang('Email')</span>
-                                </div> -->
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
 
-
-        <div class="row gy-4">
-            <div class="col-lg-12">
-                <table class="table mt-4
-                     table--responsive--md">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Company</th>
-                            <th>Status</th>
-                            <th>Tier</th>
-                            <th>Joined</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Sarah Johnson</td>
-                            <td>sarah.j@realty.com</td>
-                            <td>Prime Properties</td>
-                            <td><span class="badge badge--success"> Verified</span></td>
-                            <td>Pro</td>
-                            <td>2024-10-15</td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button type="button" class="action-btn edit-btn" data-bs-toggle="tooltip"
-                                        data-bs-placement="top" data-bs-title="Edit"><svg width="16" height="16"
-                                            viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <g clip-path="url(#clip0_726_1961)">
-                                                <path
-                                                    d="M1.37468 8.232C1.31912 8.08232 1.31912 7.91767 1.37468 7.768C1.91581 6.4559 2.83435 5.33402 4.01386 4.5446C5.19336 3.75517 6.58071 3.33374 8.00001 3.33374C9.41932 3.33374 10.8067 3.75517 11.9862 4.5446C13.1657 5.33402 14.0842 6.4559 14.6253 7.768C14.6809 7.91767 14.6809 8.08232 14.6253 8.232C14.0842 9.54409 13.1657 10.666 11.9862 11.4554C10.8067 12.2448 9.41932 12.6663 8.00001 12.6663C6.58071 12.6663 5.19336 12.2448 4.01386 11.4554C2.83435 10.666 1.91581 9.54409 1.37468 8.232Z"
-                                                    stroke="#0A0A0A" stroke-width="1.33333" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                                <path
-                                                    d="M8 10C9.10457 10 10 9.10457 10 8C10 6.89543 9.10457 6 8 6C6.89543 6 6 6.89543 6 8C6 9.10457 6.89543 10 8 10Z"
-                                                    stroke="#0A0A0A" stroke-width="1.33333" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_726_1961">
-                                                    <rect width="16" height="16" fill="white" />
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-                                    </button>
-                                    <button type="button" class="action-btn delete-btn" data-bs-toggle="tooltip"
-                                        data-bs-placement="top" data-bs-title="Delete"><svg width="16" height="16"
-                                            viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <g clip-path="url(#clip0_726_1965)">
-                                                <path d="M3.28589 3.28598L12.7132 12.714" stroke="#E7000B"
-                                                    stroke-width="1.33333" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                                <path
-                                                    d="M7.99992 14.6667C11.6818 14.6667 14.6666 11.6819 14.6666 8.00001C14.6666 4.31811 11.6818 1.33334 7.99992 1.33334C4.31802 1.33334 1.33325 4.31811 1.33325 8.00001C1.33325 11.6819 4.31802 14.6667 7.99992 14.6667Z"
-                                                    stroke="#E7000B" stroke-width="1.33333" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_726_1965">
-                                                    <rect width="16" height="16" fill="white" />
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-                                    </button>
-
-                                    <button type="button" class="action-btn delete-btn" data-bs-toggle="tooltip"
-                                        data-bs-placement="top" data-bs-title="Delete"><svg width="16" height="16"
-                                            viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <g clip-path="url(#clip0_726_1993)">
-                                                <path
-                                                    d="M7.99992 14.6666C11.6818 14.6666 14.6666 11.6819 14.6666 7.99998C14.6666 4.31808 11.6818 1.33331 7.99992 1.33331C4.31802 1.33331 1.33325 4.31808 1.33325 7.99998C1.33325 11.6819 4.31802 14.6666 7.99992 14.6666Z"
-                                                    stroke="#E7000B" stroke-width="1.33333" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                                <path d="M10 6L6 10" stroke="#E7000B" stroke-width="1.33333"
-                                                    stroke-linecap="round" stroke-linejoin="round" />
-                                                <path d="M6 6L10 10" stroke="#E7000B" stroke-width="1.33333"
-                                                    stroke-linecap="round" stroke-linejoin="round" />
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_726_1993">
-                                                    <rect width="16" height="16" fill="white" />
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>Michael Okafor</td>
-                            <td>michael.o@homes.ng</td>
-                            <td>Okafor Homes</td>
-                            <td><span class="badge badge--success">Pending</span></td>
-                            <td>Free Trial</td>
-                            <td>2024-11-08</td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button type="button" class="action-btn edit-btn" data-bs-toggle="tooltip"
-                                        data-bs-placement="top" data-bs-title="Edit"><svg width="16" height="16"
-                                            viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <g clip-path="url(#clip0_726_1961)">
-                                                <path
-                                                    d="M1.37468 8.232C1.31912 8.08232 1.31912 7.91767 1.37468 7.768C1.91581 6.4559 2.83435 5.33402 4.01386 4.5446C5.19336 3.75517 6.58071 3.33374 8.00001 3.33374C9.41932 3.33374 10.8067 3.75517 11.9862 4.5446C13.1657 5.33402 14.0842 6.4559 14.6253 7.768C14.6809 7.91767 14.6809 8.08232 14.6253 8.232C14.0842 9.54409 13.1657 10.666 11.9862 11.4554C10.8067 12.2448 9.41932 12.6663 8.00001 12.6663C6.58071 12.6663 5.19336 12.2448 4.01386 11.4554C2.83435 10.666 1.91581 9.54409 1.37468 8.232Z"
-                                                    stroke="#0A0A0A" stroke-width="1.33333" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                                <path
-                                                    d="M8 10C9.10457 10 10 9.10457 10 8C10 6.89543 9.10457 6 8 6C6.89543 6 6 6.89543 6 8C6 9.10457 6.89543 10 8 10Z"
-                                                    stroke="#0A0A0A" stroke-width="1.33333" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_726_1961">
-                                                    <rect width="16" height="16" fill="white" />
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-                                    </button>
-                                    <button type="button" class="action-btn delete-btn" data-bs-toggle="tooltip"
-                                        data-bs-placement="top" data-bs-title="Delete"><svg width="16" height="16"
-                                            viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <g clip-path="url(#clip0_726_1965)">
-                                                <path d="M3.28589 3.28598L12.7132 12.714" stroke="#E7000B"
-                                                    stroke-width="1.33333" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                                <path
-                                                    d="M7.99992 14.6667C11.6818 14.6667 14.6666 11.6819 14.6666 8.00001C14.6666 4.31811 11.6818 1.33334 7.99992 1.33334C4.31802 1.33334 1.33325 4.31811 1.33325 8.00001C1.33325 11.6819 4.31802 14.6667 7.99992 14.6667Z"
-                                                    stroke="#E7000B" stroke-width="1.33333" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_726_1965">
-                                                    <rect width="16" height="16" fill="white" />
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>Amara Eze</td>
-                            <td>amara@luxuryestates.ng</td>
-                            <td>Luxury Estates Ltd</td>
-                            <td><span class="badge badge--success"> Verified</span></td>
-                            <td>Pro</td>
-                            <td>2024-09-22</td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button type="button" class="action-btn edit-btn" data-bs-toggle="tooltip"
-                                        data-bs-placement="top" data-bs-title="Edit"><svg width="16" height="16"
-                                            viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <g clip-path="url(#clip0_726_1961)">
-                                                <path
-                                                    d="M1.37468 8.232C1.31912 8.08232 1.31912 7.91767 1.37468 7.768C1.91581 6.4559 2.83435 5.33402 4.01386 4.5446C5.19336 3.75517 6.58071 3.33374 8.00001 3.33374C9.41932 3.33374 10.8067 3.75517 11.9862 4.5446C13.1657 5.33402 14.0842 6.4559 14.6253 7.768C14.6809 7.91767 14.6809 8.08232 14.6253 8.232C14.0842 9.54409 13.1657 10.666 11.9862 11.4554C10.8067 12.2448 9.41932 12.6663 8.00001 12.6663C6.58071 12.6663 5.19336 12.2448 4.01386 11.4554C2.83435 10.666 1.91581 9.54409 1.37468 8.232Z"
-                                                    stroke="#0A0A0A" stroke-width="1.33333" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                                <path
-                                                    d="M8 10C9.10457 10 10 9.10457 10 8C10 6.89543 9.10457 6 8 6C6.89543 6 6 6.89543 6 8C6 9.10457 6.89543 10 8 10Z"
-                                                    stroke="#0A0A0A" stroke-width="1.33333" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_726_1961">
-                                                    <rect width="16" height="16" fill="white" />
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-                                    </button>
-                                    <button type="button" class="action-btn delete-btn" data-bs-toggle="tooltip"
-                                        data-bs-placement="top" data-bs-title="Delete"><svg width="16" height="16"
-                                            viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <g clip-path="url(#clip0_726_1965)">
-                                                <path d="M3.28589 3.28598L12.7132 12.714" stroke="#E7000B"
-                                                    stroke-width="1.33333" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                                <path
-                                                    d="M7.99992 14.6667C11.6818 14.6667 14.6666 11.6819 14.6666 8.00001C14.6666 4.31811 11.6818 1.33334 7.99992 1.33334C4.31802 1.33334 1.33325 4.31811 1.33325 8.00001C1.33325 11.6819 4.31802 14.6667 7.99992 14.6667Z"
-                                                    stroke="#E7000B" stroke-width="1.33333" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_726_1965">
-                                                    <rect width="16" height="16" fill="white" />
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>David Williams</td>
-                            <td>d.williams@urbanspaces.com</td>
-                            <td>Urban Spaces</td>
-                            <td><span class="badge badge--success"> Verified</span></td>
-                            <td>Basic</td>
-                            <td>2024-08-11</td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button type="button" class="action-btn edit-btn" data-bs-toggle="tooltip"
-                                        data-bs-placement="top" data-bs-title="Edit"><svg width="16" height="16"
-                                            viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <g clip-path="url(#clip0_726_1961)">
-                                                <path
-                                                    d="M1.37468 8.232C1.31912 8.08232 1.31912 7.91767 1.37468 7.768C1.91581 6.4559 2.83435 5.33402 4.01386 4.5446C5.19336 3.75517 6.58071 3.33374 8.00001 3.33374C9.41932 3.33374 10.8067 3.75517 11.9862 4.5446C13.1657 5.33402 14.0842 6.4559 14.6253 7.768C14.6809 7.91767 14.6809 8.08232 14.6253 8.232C14.0842 9.54409 13.1657 10.666 11.9862 11.4554C10.8067 12.2448 9.41932 12.6663 8.00001 12.6663C6.58071 12.6663 5.19336 12.2448 4.01386 11.4554C2.83435 10.666 1.91581 9.54409 1.37468 8.232Z"
-                                                    stroke="#0A0A0A" stroke-width="1.33333" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                                <path
-                                                    d="M8 10C9.10457 10 10 9.10457 10 8C10 6.89543 9.10457 6 8 6C6.89543 6 6 6.89543 6 8C6 9.10457 6.89543 10 8 10Z"
-                                                    stroke="#0A0A0A" stroke-width="1.33333" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_726_1961">
-                                                    <rect width="16" height="16" fill="white" />
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-                                    </button>
-                                    <button type="button" class="action-btn delete-btn" data-bs-toggle="tooltip"
-                                        data-bs-placement="top" data-bs-title="Delete"><svg width="16" height="16"
-                                            viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <g clip-path="url(#clip0_726_1965)">
-                                                <path d="M3.28589 3.28598L12.7132 12.714" stroke="#E7000B"
-                                                    stroke-width="1.33333" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                                <path
-                                                    d="M7.99992 14.6667C11.6818 14.6667 14.6666 11.6819 14.6666 8.00001C14.6666 4.31811 11.6818 1.33334 7.99992 1.33334C4.31802 1.33334 1.33325 4.31811 1.33325 8.00001C1.33325 11.6819 4.31802 14.6667 7.99992 14.6667Z"
-                                                    stroke="#E7000B" stroke-width="1.33333" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_726_1965">
-                                                    <rect width="16" height="16" fill="white" />
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>Sarah Johnson</td>
-                            <td>sarah.j@realty.com</td>
-                            <td>Prime Properties</td>
-                            <td><span class="badge badge--success"> Verified</span></td>
-                            <td>Pro</td>
-                            <td>2024-10-15</td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button type="button" class="action-btn edit-btn" data-bs-toggle="tooltip"
-                                        data-bs-placement="top" data-bs-title="Edit"><svg width="16" height="16"
-                                            viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <g clip-path="url(#clip0_726_1961)">
-                                                <path
-                                                    d="M1.37468 8.232C1.31912 8.08232 1.31912 7.91767 1.37468 7.768C1.91581 6.4559 2.83435 5.33402 4.01386 4.5446C5.19336 3.75517 6.58071 3.33374 8.00001 3.33374C9.41932 3.33374 10.8067 3.75517 11.9862 4.5446C13.1657 5.33402 14.0842 6.4559 14.6253 7.768C14.6809 7.91767 14.6809 8.08232 14.6253 8.232C14.0842 9.54409 13.1657 10.666 11.9862 11.4554C10.8067 12.2448 9.41932 12.6663 8.00001 12.6663C6.58071 12.6663 5.19336 12.2448 4.01386 11.4554C2.83435 10.666 1.91581 9.54409 1.37468 8.232Z"
-                                                    stroke="#0A0A0A" stroke-width="1.33333" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                                <path
-                                                    d="M8 10C9.10457 10 10 9.10457 10 8C10 6.89543 9.10457 6 8 6C6.89543 6 6 6.89543 6 8C6 9.10457 6.89543 10 8 10Z"
-                                                    stroke="#0A0A0A" stroke-width="1.33333" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_726_1961">
-                                                    <rect width="16" height="16" fill="white" />
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-                                    </button>
-
-                                    <button type="button" class="action-btn delete-btn" data-bs-toggle="tooltip"
-                                        data-bs-placement="top" data-bs-title="Delete"><svg width="16" height="16"
-                                            viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <g clip-path="url(#clip0_726_1965)">
-                                                <path d="M3.28589 3.28598L12.7132 12.714" stroke="#E7000B"
-                                                    stroke-width="1.33333" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                                <path
-                                                    d="M7.99992 14.6667C11.6818 14.6667 14.6666 11.6819 14.6666 8.00001C14.6666 4.31811 11.6818 1.33334 7.99992 1.33334C4.31802 1.33334 1.33325 4.31811 1.33325 8.00001C1.33325 11.6819 4.31802 14.6667 7.99992 14.6667Z"
-                                                    stroke="#E7000B" stroke-width="1.33333" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_726_1965">
-                                                    <rect width="16" height="16" fill="white" />
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-                                    </button>
-
-                                    <button type="button" class="action-btn delete-btn" data-bs-toggle="tooltip"
-                                        data-bs-placement="top" data-bs-title="Delete"><svg width="16" height="16"
-                                            viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <g clip-path="url(#clip0_726_1993)">
-                                                <path
-                                                    d="M7.99992 14.6666C11.6818 14.6666 14.6666 11.6819 14.6666 7.99998C14.6666 4.31808 11.6818 1.33331 7.99992 1.33331C4.31802 1.33331 1.33325 4.31808 1.33325 7.99998C1.33325 11.6819 4.31802 14.6666 7.99992 14.6666Z"
-                                                    stroke="#E7000B" stroke-width="1.33333" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                                <path d="M10 6L6 10" stroke="#E7000B" stroke-width="1.33333"
-                                                    stroke-linecap="round" stroke-linejoin="round" />
-                                                <path d="M6 6L10 10" stroke="#E7000B" stroke-width="1.33333"
-                                                    stroke-linecap="round" stroke-linejoin="round" />
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_726_1993">
-                                                    <rect width="16" height="16" fill="white" />
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>Chioma Nwankwo</td>
-                            <td>chioma@topview.ng</td>
-                            <td>Top View Realty</td>
-                            <td><span class="badge badge--success"> Verified</span></td>
-                            <td>Free Trial</td>
-                            <td>2024-11-10</td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button type="button" class="action-btn edit-btn" data-bs-toggle="tooltip"
-                                        data-bs-placement="top" data-bs-title="Edit"><svg width="16" height="16"
-                                            viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <g clip-path="url(#clip0_726_1961)">
-                                                <path
-                                                    d="M1.37468 8.232C1.31912 8.08232 1.31912 7.91767 1.37468 7.768C1.91581 6.4559 2.83435 5.33402 4.01386 4.5446C5.19336 3.75517 6.58071 3.33374 8.00001 3.33374C9.41932 3.33374 10.8067 3.75517 11.9862 4.5446C13.1657 5.33402 14.0842 6.4559 14.6253 7.768C14.6809 7.91767 14.6809 8.08232 14.6253 8.232C14.0842 9.54409 13.1657 10.666 11.9862 11.4554C10.8067 12.2448 9.41932 12.6663 8.00001 12.6663C6.58071 12.6663 5.19336 12.2448 4.01386 11.4554C2.83435 10.666 1.91581 9.54409 1.37468 8.232Z"
-                                                    stroke="#0A0A0A" stroke-width="1.33333" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                                <path
-                                                    d="M8 10C9.10457 10 10 9.10457 10 8C10 6.89543 9.10457 6 8 6C6.89543 6 6 6.89543 6 8C6 9.10457 6.89543 10 8 10Z"
-                                                    stroke="#0A0A0A" stroke-width="1.33333" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_726_1961">
-                                                    <rect width="16" height="16" fill="white" />
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-                                    </button>
-                                    <button type="button" class="action-btn delete-btn" data-bs-toggle="tooltip"
-                                        data-bs-placement="top" data-bs-title="Delete"><svg width="16" height="16"
-                                            viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <g clip-path="url(#clip0_726_1965)">
-                                                <path d="M3.28589 3.28598L12.7132 12.714" stroke="#E7000B"
-                                                    stroke-width="1.33333" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                                <path
-                                                    d="M7.99992 14.6667C11.6818 14.6667 14.6666 11.6819 14.6666 8.00001C14.6666 4.31811 11.6818 1.33334 7.99992 1.33334C4.31802 1.33334 1.33325 4.31811 1.33325 8.00001C1.33325 11.6819 4.31802 14.6667 7.99992 14.6667Z"
-                                                    stroke="#E7000B" stroke-width="1.33333" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_726_1965">
-                                                    <rect width="16" height="16" fill="white" />
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-
-                    </tbody>
-                </table>
-            </div>
-
-        </div>
-
-
-        <!-- Bottom: Notification History (Static/Mockup for now as per plan) -->
-        <!-- <div class="row mt-4">
-            <div class="col-12">
-                <div class="dashboard-body__card">
-                    <h5 class="card-title mb-4">@lang('Notification History')</h5>
-                    <div class="table-responsive">
-                        <table class="table table--responsive--md">
-                            <thead>
-                                <tr>
-                                    <th>@lang('Title')</th>
-                                    <th>@lang('Audience')</th>
-                                    <th>@lang('Type')</th>
-                                    <th>@lang('Sent Date')</th>
-                                    <th>@lang('Recipients')</th>
-                                    <th>@lang('Status')</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($logs as $log)
-                                <tr>
-                                    <td>
-                                        <x-admin.other.user_info :user="$log->user" />
-                                    </td>
-                                    <td>
-                                        {{ showDateTime($log->created_at) }}
-                                        <br>
-                                        {{ diffForHumans($log->created_at) }}
-                                    </td>
-                                    <td>
-                                        <span class="fw-bold">{{ keyToTitle($log->notification_type) }}</span> <br>
-                                        @lang('via') {{ __($log->sender) }}
-                                    </td>
-                                    <td>
-                                        @if ($log->subject)
-                                        {{ __($log->subject) }}
-                                        @else
-                                        @lang('N/A')
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if ($log->notification_type == 'email')
-                                        <button class="btn  btn-outline--primary notifyDetail"
-                                            data-type="{{ $log->notification_type }}"
-                                            data-message="{{ route('admin.report.email.details', $log->id) }}"
-                                            data-sent_to="{{ $log->sent_to }}">
-                                            <i class="las la-info-circle"></i>
-                                            @lang('Detail')
+            {{-- <div class="row gy-4">
+                <div class="col-lg-12">
+                    <table class="table mt-4
+                         table--responsive--md">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Company</th>
+                                <th>Status</th>
+                                <th>Tier</th>
+                                <th>Joined</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Sarah Johnson</td>
+                                <td>sarah.j@realty.com</td>
+                                <td>Prime Properties</td>
+                                <td><span class="badge badge--success"> Verified</span></td>
+                                <td>Pro</td>
+                                <td>2024-10-15</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button type="button" class="action-btn edit-btn" data-bs-toggle="tooltip"
+                                            data-bs-placement="top" data-bs-title="Edit"><svg width="16" height="16"
+                                                viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <g clip-path="url(#clip0_726_1961)">
+                                                    <path
+                                                        d="M1.37468 8.232C1.31912 8.08232 1.31912 7.91767 1.37468 7.768C1.91581 6.4559 2.83435 5.33402 4.01386 4.5446C5.19336 3.75517 6.58071 3.33374 8.00001 3.33374C9.41932 3.33374 10.8067 3.75517 11.9862 4.5446C13.1657 5.33402 14.0842 6.4559 14.6253 7.768C14.6809 7.91767 14.6809 8.08232 14.6253 8.232C14.0842 9.54409 13.1657 10.666 11.9862 11.4554C10.8067 12.2448 9.41932 12.6663 8.00001 12.6663C6.58071 12.6663 5.19336 12.2448 4.01386 11.4554C2.83435 10.666 1.91581 9.54409 1.37468 8.232Z"
+                                                        stroke="#0A0A0A" stroke-width="1.33333" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                    <path
+                                                        d="M8 10C9.10457 10 10 9.10457 10 8C10 6.89543 9.10457 6 8 6C6.89543 6 6 6.89543 6 8C6 9.10457 6.89543 10 8 10Z"
+                                                        stroke="#0A0A0A" stroke-width="1.33333" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </g>
+                                                <defs>
+                                                    <clipPath id="clip0_726_1961">
+                                                        <rect width="16" height="16" fill="white" />
+                                                    </clipPath>
+                                                </defs>
+                                            </svg>
                                         </button>
-                                        @else
-                                        <button class="btn  btn-outline--primary notifyDetail"
-                                            data-type="{{ $log->notification_type }}" data-message="{{ $log->message }}"
-                                            data-image="{{ asset(getFilePath('push') . '/' . $log->image) }}"
-                                            data-sent_to="{{ $log->sent_to }}">
-                                            <i class="las la-info-circle"></i>
-                                            @lang('Detail')
+                                        <button type="button" class="action-btn delete-btn" data-bs-toggle="tooltip"
+                                            data-bs-placement="top" data-bs-title="Delete"><svg width="16" height="16"
+                                                viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <g clip-path="url(#clip0_726_1965)">
+                                                    <path d="M3.28589 3.28598L12.7132 12.714" stroke="#E7000B"
+                                                        stroke-width="1.33333" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                    <path
+                                                        d="M7.99992 14.6667C11.6818 14.6667 14.6666 11.6819 14.6666 8.00001C14.6666 4.31811 11.6818 1.33334 7.99992 1.33334C4.31802 1.33334 1.33325 4.31811 1.33325 8.00001C1.33325 11.6819 4.31802 14.6667 7.99992 14.6667Z"
+                                                        stroke="#E7000B" stroke-width="1.33333" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </g>
+                                                <defs>
+                                                    <clipPath id="clip0_726_1965">
+                                                        <rect width="16" height="16" fill="white" />
+                                                    </clipPath>
+                                                </defs>
+                                            </svg>
                                         </button>
-                                        @endif
-                                    </td>
-                                </tr>
-                                @empty
-                                <x-admin.ui.table.empty_message />
-                                @endforelse
-                            </tbody>
-                        </table>
+
+                                        <button type="button" class="action-btn delete-btn" data-bs-toggle="tooltip"
+                                            data-bs-placement="top" data-bs-title="Delete"><svg width="16" height="16"
+                                                viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <g clip-path="url(#clip0_726_1993)">
+                                                    <path
+                                                        d="M7.99992 14.6666C11.6818 14.6666 14.6666 11.6819 14.6666 7.99998C14.6666 4.31808 11.6818 1.33331 7.99992 1.33331C4.31802 1.33331 1.33325 4.31808 1.33325 7.99998C1.33325 11.6819 4.31802 14.6666 7.99992 14.6666Z"
+                                                        stroke="#E7000B" stroke-width="1.33333" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                    <path d="M10 6L6 10" stroke="#E7000B" stroke-width="1.33333"
+                                                        stroke-linecap="round" stroke-linejoin="round" />
+                                                    <path d="M6 6L10 10" stroke="#E7000B" stroke-width="1.33333"
+                                                        stroke-linecap="round" stroke-linejoin="round" />
+                                                </g>
+                                                <defs>
+                                                    <clipPath id="clip0_726_1993">
+                                                        <rect width="16" height="16" fill="white" />
+                                                    </clipPath>
+                                                </defs>
+                                            </svg>
+
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Michael Okafor</td>
+                                <td>michael.o@homes.ng</td>
+                                <td>Okafor Homes</td>
+                                <td><span class="badge badge--success">Pending</span></td>
+                                <td>Free Trial</td>
+                                <td>2024-11-08</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button type="button" class="action-btn edit-btn" data-bs-toggle="tooltip"
+                                            data-bs-placement="top" data-bs-title="Edit"><svg width="16" height="16"
+                                                viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <g clip-path="url(#clip0_726_1961)">
+                                                    <path
+                                                        d="M1.37468 8.232C1.31912 8.08232 1.31912 7.91767 1.37468 7.768C1.91581 6.4559 2.83435 5.33402 4.01386 4.5446C5.19336 3.75517 6.58071 3.33374 8.00001 3.33374C9.41932 3.33374 10.8067 3.75517 11.9862 4.5446C13.1657 5.33402 14.0842 6.4559 14.6253 7.768C14.6809 7.91767 14.6809 8.08232 14.6253 8.232C14.0842 9.54409 13.1657 10.666 11.9862 11.4554C10.8067 12.2448 9.41932 12.6663 8.00001 12.6663C6.58071 12.6663 5.19336 12.2448 4.01386 11.4554C2.83435 10.666 1.91581 9.54409 1.37468 8.232Z"
+                                                        stroke="#0A0A0A" stroke-width="1.33333" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                    <path
+                                                        d="M8 10C9.10457 10 10 9.10457 10 8C10 6.89543 9.10457 6 8 6C6.89543 6 6 6.89543 6 8C6 9.10457 6.89543 10 8 10Z"
+                                                        stroke="#0A0A0A" stroke-width="1.33333" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </g>
+                                                <defs>
+                                                    <clipPath id="clip0_726_1961">
+                                                        <rect width="16" height="16" fill="white" />
+                                                    </clipPath>
+                                                </defs>
+                                            </svg>
+                                        </button>
+                                        <button type="button" class="action-btn delete-btn" data-bs-toggle="tooltip"
+                                            data-bs-placement="top" data-bs-title="Delete"><svg width="16" height="16"
+                                                viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <g clip-path="url(#clip0_726_1965)">
+                                                    <path d="M3.28589 3.28598L12.7132 12.714" stroke="#E7000B"
+                                                        stroke-width="1.33333" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                    <path
+                                                        d="M7.99992 14.6667C11.6818 14.6667 14.6666 11.6819 14.6666 8.00001C14.6666 4.31811 11.6818 1.33334 7.99992 1.33334C4.31802 1.33334 1.33325 4.31811 1.33325 8.00001C1.33325 11.6819 4.31802 14.6667 7.99992 14.6667Z"
+                                                        stroke="#E7000B" stroke-width="1.33333" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </g>
+                                                <defs>
+                                                    <clipPath id="clip0_726_1965">
+                                                        <rect width="16" height="16" fill="white" />
+                                                    </clipPath>
+                                                </defs>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Amara Eze</td>
+                                <td>amara@luxuryestates.ng</td>
+                                <td>Luxury Estates Ltd</td>
+                                <td><span class="badge badge--success"> Verified</span></td>
+                                <td>Pro</td>
+                                <td>2024-09-22</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button type="button" class="action-btn edit-btn" data-bs-toggle="tooltip"
+                                            data-bs-placement="top" data-bs-title="Edit"><svg width="16" height="16"
+                                                viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <g clip-path="url(#clip0_726_1961)">
+                                                    <path
+                                                        d="M1.37468 8.232C1.31912 8.08232 1.31912 7.91767 1.37468 7.768C1.91581 6.4559 2.83435 5.33402 4.01386 4.5446C5.19336 3.75517 6.58071 3.33374 8.00001 3.33374C9.41932 3.33374 10.8067 3.75517 11.9862 4.5446C13.1657 5.33402 14.0842 6.4559 14.6253 7.768C14.6809 7.91767 14.6809 8.08232 14.6253 8.232C14.0842 9.54409 13.1657 10.666 11.9862 11.4554C10.8067 12.2448 9.41932 12.6663 8.00001 12.6663C6.58071 12.6663 5.19336 12.2448 4.01386 11.4554C2.83435 10.666 1.91581 9.54409 1.37468 8.232Z"
+                                                        stroke="#0A0A0A" stroke-width="1.33333" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                    <path
+                                                        d="M8 10C9.10457 10 10 9.10457 10 8C10 6.89543 9.10457 6 8 6C6.89543 6 6 6.89543 6 8C6 9.10457 6.89543 10 8 10Z"
+                                                        stroke="#0A0A0A" stroke-width="1.33333" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </g>
+                                                <defs>
+                                                    <clipPath id="clip0_726_1961">
+                                                        <rect width="16" height="16" fill="white" />
+                                                    </clipPath>
+                                                </defs>
+                                            </svg>
+                                        </button>
+                                        <button type="button" class="action-btn delete-btn" data-bs-toggle="tooltip"
+                                            data-bs-placement="top" data-bs-title="Delete"><svg width="16" height="16"
+                                                viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <g clip-path="url(#clip0_726_1965)">
+                                                    <path d="M3.28589 3.28598L12.7132 12.714" stroke="#E7000B"
+                                                        stroke-width="1.33333" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                    <path
+                                                        d="M7.99992 14.6667C11.6818 14.6667 14.6666 11.6819 14.6666 8.00001C14.6666 4.31811 11.6818 1.33334 7.99992 1.33334C4.31802 1.33334 1.33325 4.31811 1.33325 8.00001C1.33325 11.6819 4.31802 14.6667 7.99992 14.6667Z"
+                                                        stroke="#E7000B" stroke-width="1.33333" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </g>
+                                                <defs>
+                                                    <clipPath id="clip0_726_1965">
+                                                        <rect width="16" height="16" fill="white" />
+                                                    </clipPath>
+                                                </defs>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>David Williams</td>
+                                <td>d.williams@urbanspaces.com</td>
+                                <td>Urban Spaces</td>
+                                <td><span class="badge badge--success"> Verified</span></td>
+                                <td>Basic</td>
+                                <td>2024-08-11</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button type="button" class="action-btn edit-btn" data-bs-toggle="tooltip"
+                                            data-bs-placement="top" data-bs-title="Edit"><svg width="16" height="16"
+                                                viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <g clip-path="url(#clip0_726_1961)">
+                                                    <path
+                                                        d="M1.37468 8.232C1.31912 8.08232 1.31912 7.91767 1.37468 7.768C1.91581 6.4559 2.83435 5.33402 4.01386 4.5446C5.19336 3.75517 6.58071 3.33374 8.00001 3.33374C9.41932 3.33374 10.8067 3.75517 11.9862 4.5446C13.1657 5.33402 14.0842 6.4559 14.6253 7.768C14.6809 7.91767 14.6809 8.08232 14.6253 8.232C14.0842 9.54409 13.1657 10.666 11.9862 11.4554C10.8067 12.2448 9.41932 12.6663 8.00001 12.6663C6.58071 12.6663 5.19336 12.2448 4.01386 11.4554C2.83435 10.666 1.91581 9.54409 1.37468 8.232Z"
+                                                        stroke="#0A0A0A" stroke-width="1.33333" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                    <path
+                                                        d="M8 10C9.10457 10 10 9.10457 10 8C10 6.89543 9.10457 6 8 6C6.89543 6 6 6.89543 6 8C6 9.10457 6.89543 10 8 10Z"
+                                                        stroke="#0A0A0A" stroke-width="1.33333" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </g>
+                                                <defs>
+                                                    <clipPath id="clip0_726_1961">
+                                                        <rect width="16" height="16" fill="white" />
+                                                    </clipPath>
+                                                </defs>
+                                            </svg>
+                                        </button>
+                                        <button type="button" class="action-btn delete-btn" data-bs-toggle="tooltip"
+                                            data-bs-placement="top" data-bs-title="Delete"><svg width="16" height="16"
+                                                viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <g clip-path="url(#clip0_726_1965)">
+                                                    <path d="M3.28589 3.28598L12.7132 12.714" stroke="#E7000B"
+                                                        stroke-width="1.33333" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                    <path
+                                                        d="M7.99992 14.6667C11.6818 14.6667 14.6666 11.6819 14.6666 8.00001C14.6666 4.31811 11.6818 1.33334 7.99992 1.33334C4.31802 1.33334 1.33325 4.31811 1.33325 8.00001C1.33325 11.6819 4.31802 14.6667 7.99992 14.6667Z"
+                                                        stroke="#E7000B" stroke-width="1.33333" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </g>
+                                                <defs>
+                                                    <clipPath id="clip0_726_1965">
+                                                        <rect width="16" height="16" fill="white" />
+                                                    </clipPath>
+                                                </defs>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Sarah Johnson</td>
+                                <td>sarah.j@realty.com</td>
+                                <td>Prime Properties</td>
+                                <td><span class="badge badge--success"> Verified</span></td>
+                                <td>Pro</td>
+                                <td>2024-10-15</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button type="button" class="action-btn edit-btn" data-bs-toggle="tooltip"
+                                            data-bs-placement="top" data-bs-title="Edit"><svg width="16" height="16"
+                                                viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <g clip-path="url(#clip0_726_1961)">
+                                                    <path
+                                                        d="M1.37468 8.232C1.31912 8.08232 1.31912 7.91767 1.37468 7.768C1.91581 6.4559 2.83435 5.33402 4.01386 4.5446C5.19336 3.75517 6.58071 3.33374 8.00001 3.33374C9.41932 3.33374 10.8067 3.75517 11.9862 4.5446C13.1657 5.33402 14.0842 6.4559 14.6253 7.768C14.6809 7.91767 14.6809 8.08232 14.6253 8.232C14.0842 9.54409 13.1657 10.666 11.9862 11.4554C10.8067 12.2448 9.41932 12.6663 8.00001 12.6663C6.58071 12.6663 5.19336 12.2448 4.01386 11.4554C2.83435 10.666 1.91581 9.54409 1.37468 8.232Z"
+                                                        stroke="#0A0A0A" stroke-width="1.33333" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                    <path
+                                                        d="M8 10C9.10457 10 10 9.10457 10 8C10 6.89543 9.10457 6 8 6C6.89543 6 6 6.89543 6 8C6 9.10457 6.89543 10 8 10Z"
+                                                        stroke="#0A0A0A" stroke-width="1.33333" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </g>
+                                                <defs>
+                                                    <clipPath id="clip0_726_1961">
+                                                        <rect width="16" height="16" fill="white" />
+                                                    </clipPath>
+                                                </defs>
+                                            </svg>
+                                        </button>
+
+                                        <button type="button" class="action-btn delete-btn" data-bs-toggle="tooltip"
+                                            data-bs-placement="top" data-bs-title="Delete"><svg width="16" height="16"
+                                                viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <g clip-path="url(#clip0_726_1965)">
+                                                    <path d="M3.28589 3.28598L12.7132 12.714" stroke="#E7000B"
+                                                        stroke-width="1.33333" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                    <path
+                                                        d="M7.99992 14.6667C11.6818 14.6667 14.6666 11.6819 14.6666 8.00001C14.6666 4.31811 11.6818 1.33334 7.99992 1.33334C4.31802 1.33334 1.33325 4.31811 1.33325 8.00001C1.33325 11.6819 4.31802 14.6667 7.99992 14.6667Z"
+                                                        stroke="#E7000B" stroke-width="1.33333" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </g>
+                                                <defs>
+                                                    <clipPath id="clip0_726_1965">
+                                                        <rect width="16" height="16" fill="white" />
+                                                    </clipPath>
+                                                </defs>
+                                            </svg>
+                                        </button>
+
+                                        <button type="button" class="action-btn delete-btn" data-bs-toggle="tooltip"
+                                            data-bs-placement="top" data-bs-title="Delete"><svg width="16" height="16"
+                                                viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <g clip-path="url(#clip0_726_1993)">
+                                                    <path
+                                                        d="M7.99992 14.6666C11.6818 14.6666 14.6666 11.6819 14.6666 7.99998C14.6666 4.31808 11.6818 1.33331 7.99992 1.33331C4.31802 1.33331 1.33325 4.31808 1.33325 7.99998C1.33325 11.6819 4.31802 14.6666 7.99992 14.6666Z"
+                                                        stroke="#E7000B" stroke-width="1.33333" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                    <path d="M10 6L6 10" stroke="#E7000B" stroke-width="1.33333"
+                                                        stroke-linecap="round" stroke-linejoin="round" />
+                                                    <path d="M6 6L10 10" stroke="#E7000B" stroke-width="1.33333"
+                                                        stroke-linecap="round" stroke-linejoin="round" />
+                                                </g>
+                                                <defs>
+                                                    <clipPath id="clip0_726_1993">
+                                                        <rect width="16" height="16" fill="white" />
+                                                    </clipPath>
+                                                </defs>
+                                            </svg>
+
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Chioma Nwankwo</td>
+                                <td>chioma@topview.ng</td>
+                                <td>Top View Realty</td>
+                                <td><span class="badge badge--success"> Verified</span></td>
+                                <td>Free Trial</td>
+                                <td>2024-11-10</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button type="button" class="action-btn edit-btn" data-bs-toggle="tooltip"
+                                            data-bs-placement="top" data-bs-title="Edit"><svg width="16" height="16"
+                                                viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <g clip-path="url(#clip0_726_1961)">
+                                                    <path
+                                                        d="M1.37468 8.232C1.31912 8.08232 1.31912 7.91767 1.37468 7.768C1.91581 6.4559 2.83435 5.33402 4.01386 4.5446C5.19336 3.75517 6.58071 3.33374 8.00001 3.33374C9.41932 3.33374 10.8067 3.75517 11.9862 4.5446C13.1657 5.33402 14.0842 6.4559 14.6253 7.768C14.6809 7.91767 14.6809 8.08232 14.6253 8.232C14.0842 9.54409 13.1657 10.666 11.9862 11.4554C10.8067 12.2448 9.41932 12.6663 8.00001 12.6663C6.58071 12.6663 5.19336 12.2448 4.01386 11.4554C2.83435 10.666 1.91581 9.54409 1.37468 8.232Z"
+                                                        stroke="#0A0A0A" stroke-width="1.33333" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                    <path
+                                                        d="M8 10C9.10457 10 10 9.10457 10 8C10 6.89543 9.10457 6 8 6C6.89543 6 6 6.89543 6 8C6 9.10457 6.89543 10 8 10Z"
+                                                        stroke="#0A0A0A" stroke-width="1.33333" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </g>
+                                                <defs>
+                                                    <clipPath id="clip0_726_1961">
+                                                        <rect width="16" height="16" fill="white" />
+                                                    </clipPath>
+                                                </defs>
+                                            </svg>
+                                        </button>
+                                        <button type="button" class="action-btn delete-btn" data-bs-toggle="tooltip"
+                                            data-bs-placement="top" data-bs-title="Delete"><svg width="16" height="16"
+                                                viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <g clip-path="url(#clip0_726_1965)">
+                                                    <path d="M3.28589 3.28598L12.7132 12.714" stroke="#E7000B"
+                                                        stroke-width="1.33333" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                    <path
+                                                        d="M7.99992 14.6667C11.6818 14.6667 14.6666 11.6819 14.6666 8.00001C14.6666 4.31811 11.6818 1.33334 7.99992 1.33334C4.31802 1.33334 1.33325 4.31811 1.33325 8.00001C1.33325 11.6819 4.31802 14.6667 7.99992 14.6667Z"
+                                                        stroke="#E7000B" stroke-width="1.33333" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </g>
+                                                <defs>
+                                                    <clipPath id="clip0_726_1965">
+                                                        <rect width="16" height="16" fill="white" />
+                                                    </clipPath>
+                                                </defs>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div> --}}
+
+
+            <!-- Bottom: Notification History (Static/Mockup for now as per plan) -->
+          <div class="row mt-4">
+                <div class="col-12">
+                    <div class="dashboard-body__card">
+                        <h5 class="card-title mb-4">@lang('Notification History')</h5>
+                        <div class="table-responsive">
+                            <table class="table table--responsive--md">
+                                <thead>
+                                    <tr>
+                                        <th>@lang('Title')</th>
+                                        <th>@lang('Audience')</th>
+                                        <th>@lang('Type')</th>
+                                        <th>@lang('Sent Date')</th>
+                                        <th>@lang('Recipients')</th>
+                                        <th>@lang('Status')</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($logs as $log)
+                                        <tr>
+                                            <td>
+                                                {{-- <x-admin.other.user_info :user="$log->user" /> --}}
+                                                    @if ($log->subject)
+                                                        {{ __($log->subject) }}
+                                                    @else
+                                                        @lang('N/A')
+                                                    @endif
+                                            </td>
+                                            <td>
+                                                {{-- <br>
+                                                {{ diffForHumans($log->created_at) }} --}}
+                                            </td>
+                                            <td>
+                                                <span class="fw-bold">{{ keyToTitle($log->notification_type) }}</span> <br>
+                                                @lang('via') {{ __($log->sender) }}
+                                            </td>
+                                            <td>
+                                                @if ($log->subject)
+                                                {{ __($log->subject) }}
+                                                @else
+                                                @lang('N/A')
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($log->notification_type == 'email')
+                                                <button class="btn  btn-outline--primary notifyDetail"
+                                                    data-type="{{ $log->notification_type }}"
+                                                    data-message="{{ route('admin.report.email.details', $log->id) }}"
+                                                    data-sent_to="{{ $log->sent_to }}">
+                                                    <i class="las la-info-circle"></i>
+                                                    @lang('Detail')
+                                                </button>
+                                                @else
+                                                <button class="btn  btn-outline--primary notifyDetail"
+                                                    data-type="{{ $log->notification_type }}" data-message="{{ $log->message }}"
+                                                    data-image="{{ asset(getFilePath('push') . '/' . $log->image) }}"
+                                                    data-sent_to="{{ $log->sent_to }}">
+                                                    <i class="las la-info-circle"></i>
+                                                    @lang('Detail')
+                                                </button>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @empty
+                                    <x-admin.ui.table.empty_message />
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div> -->
+        </div>
     </div>
-</div>
 
 @endsection
 
@@ -809,7 +811,7 @@ let formSubmit = false;
 
 })(jQuery);
 
-@if(!empty(@$sessionData) && @request() -> email_sent && @request() -> email_sent = 'yes')
+@if(!empty(@$sessionData) && @request()->email_sent && @request()->email_sent = 'yes')
 window.addEventListener('beforeunload', function(event) {
     if (!formSubmit) {
         event.preventDefault();
