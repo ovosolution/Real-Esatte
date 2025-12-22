@@ -246,22 +246,22 @@
 
                     <div class="mb-3">
                         <label class="form--label">@lang('Plan Name')</label>
-                        <input type="text" class="form--control" name="name">
+                        <input type="text" class="form-control form--control" name="name">
                     </div>
 
                     <div class="mb-3">
                         <label class="form--label">@lang('Description')</label>
-                        <textarea class="form--control" name="description" rows="2"></textarea>
+                        <textarea class="form-control form--control" name="description" rows="2"></textarea>
                     </div>
 
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
                             <label class="form--label">@lang('Price')</label>
-                            <input type="number" class="form--control" name="price">
+                            <input type="number" class="form-control form--control" name="price">
                         </div>
                         <div class="col-md-6">
                             <label class="form--label">@lang('Duration')</label>
-                            <input type="text" class="form--control" name="duration">
+                            <input type="text" class="form-control form--control" name="duration">
                         </div>
                     </div>
 
@@ -269,7 +269,7 @@
                         <label class="form--label">@lang('Features')</label>
 
                         <div class="d-flex gap-2 mb-2">
-                            <input type="text" class="form--control feature-input" placeholder="@lang('Add a new feature...')">
+                            <input type="text" class="form-control form--control feature-input" placeholder="@lang('Add a new feature...')">
                             <button type="button" class="btn btn-outline--primary add-feature-btn">
                                 <span class="text--primary">
                                     <i class="las la-plus"></i>
