@@ -204,12 +204,12 @@
 
                     <div class="Verification">
                         <div class="verification__wrap mb-2">
-                            <input type="text" class="form--control Verification__form" name="username" value="" placeholder="Business License" required="" id="username">
-                            <a class="btn btn--base view__btn " href="#">view</a>
+                            <input type="text" class="form--control Verification__form" value="@lang('Business License')" readonly>
+                            <button type="button" class="btn btn--base view__btn view-license-btn">@lang('View')</button>
                         </div>
                         <div class="verification__wrap">
-                            <input type="text" class="form--control Verification__form" name="username" value="" placeholder="ID Verification" required="" id="username">
-                            <a class="btn btn--base view__btn " href="#">view</a>
+                            <input type="text" class="form--control Verification__form" value="@lang('ID Verification')" readonly>
+                            <button type="button" class="btn btn--base view__btn view-id-btn">@lang('View')</button>
                         </div>
                     </div>
                 </div>
@@ -241,6 +241,52 @@
                         <div class="d-flex gap-3 justify-content-center">
                             <button type="button" class="btn Reject__btn suspend-user-btn"><i class="las la-ban"></i> <span class="suspend-btn-text">@lang('Suspend Account')</span></button>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="verificationDetailsModal" tabindex="-1" aria-labelledby="verificationDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="verificationDetailsModalLabel">@lang('Verification Details')</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="company-details d-none">
+                        <ul class="list-group list-group-flush mb-3">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                @lang('Company Name')
+                                <span class="fw-bold company-name"></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                @lang('Role')
+                                <span class="fw-bold company-role"></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                @lang('Address')
+                                <span class="fw-bold company-address"></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                @lang('Website')
+                                <span class="fw-bold company-website"></span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="id-verification-details d-none mb-3">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                @lang('ID Type')
+                                <span class="fw-bold id-type"></span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="text-center">
+                        <img src="" class="img-fluid rounded verification-image" alt="@lang('Verification Image')">
                     </div>
                 </div>
             </div>
@@ -309,7 +355,7 @@
                     modal.find('.suspend-user-btn i').removeClass('la-ban').addClass('la-undo');
                 }
 
-                if(user.firstname && user.lastname){
+                if (user.firstname && user.lastname) {
                     initials = user.firstname.charAt(0) + user.lastname.charAt(0);
                 } else {
                     initials = user.firstname.charAt(0);
@@ -360,6 +406,54 @@
                 }
                 modal.modal('show');
             }
+
+            $('.view-license-btn').on('click', function () {
+                var modal = $('#userInfoModal');
+                var user = modal.data('user');
+                var detailsModal = $('#verificationDetailsModal');
+
+                detailsModal.find('.modal-title').text("@lang('Business License Details')");
+                detailsModal.find('.company-details').removeClass('d-none');
+                detailsModal.find('.id-verification-details').addClass('d-none');
+
+                detailsModal.find('.company-name').text(user.company_name);
+                detailsModal.find('.company-role').text(user.company_role);
+                detailsModal.find('.company-address').text(user.company_address);
+                detailsModal.find('.company-website').text(user.company_website);
+
+                var path = "{{ asset(getFilePath('company')) }}/" + user.company_image;
+                detailsModal.find('.verification-image').attr('src', path);
+
+                modal.modal('hide');
+                detailsModal.modal('show');
+            });
+
+            $('.view-id-btn').on('click', function () {
+                var modal = $('#userInfoModal');
+                var user = modal.data('user');
+                var detailsModal = $('#verificationDetailsModal');
+
+                detailsModal.find('.modal-title').text("@lang('ID Verification Details')");
+                detailsModal.find('.company-details').addClass('d-none');
+                detailsModal.find('.id-verification-details').removeClass('d-none');
+
+                var idType = 'N/A';
+                if (user.id_verification_type == 1) idType = 'NIN';
+                else if (user.id_verification_type == 2) idType = 'Driving License';
+                else if (user.id_verification_type == 3) idType = 'Passport';
+
+                detailsModal.find('.id-type').text(idType);
+
+                var path = "{{ asset(getFilePath('idVerification')) }}/" + user.id_verification_image;
+                detailsModal.find('.verification-image').attr('src', path);
+
+                modal.modal('hide');
+                detailsModal.modal('show');
+            });
+
+            $('#verificationDetailsModal').on('hidden.bs.modal', function () {
+                $('#userInfoModal').modal('show');
+            });
         })(jQuery);
     </script>
 @endpush
