@@ -39,7 +39,7 @@ class PropertyController extends Controller
         if ($saved) {
             $saved->delete();
 
-            return apiResponse("property", "success", ['property removed from saved property']);
+            return apiResponse("unsaved_property", "success", ['property removed from saved property']);
         }
 
         $property              = new SavedProperty();
@@ -47,7 +47,7 @@ class PropertyController extends Controller
         $property->property_id = $id;
         $property->save();
 
-        return apiResponse("property", "success", ['Property added to saved list'], [
+        return apiResponse("saved_property", "success", ['Property added to saved list'], [
             'property'  => $property,
             'imagePath' => getFilePath('property'),
         ]);
