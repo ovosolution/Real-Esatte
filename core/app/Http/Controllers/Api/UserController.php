@@ -25,10 +25,13 @@ class UserController extends Controller
     {
         $properties = Property::with('developer','location', 'propertyType', 'images')->active()->searchable(['title'])->orderBy('id', 'desc')->paginate();
 
+        $savedProperties = auth()->user()->savedProperties()->get();
+
         $notify[] = 'User Dashboard';
         return apiResponse("dashboard", "success", $notify, [
             'user'       => auth()->user(),
             'properties' => $properties,
+            'saved_properties' => $savedProperties,
         ]);
     }
 

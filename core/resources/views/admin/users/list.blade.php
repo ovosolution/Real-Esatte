@@ -194,11 +194,15 @@
                         <p class="modal__company__desc user-plan"></p>
                     </div>
 
-                </div>
-                <div class="modal__company__info">
-                    <div class="text-left">
-                        <p class="modal__company__title">@lang('Date Joined')</p>
-                        <p class="modal__company__desc user-joined"></p>
+                    <div class="Verification">
+                        <div class="verification__wrap mb-2">
+                            <input type="text" class="form--control Verification__form" value="@lang('Business License')" readonly>
+                            <button type="button" class="btn btn--base view__btn view-license-btn">@lang('View')</button>
+                        </div>
+                        <div class="verification__wrap">
+                            <input type="text" class="form--control Verification__form" value="@lang('ID Verification')" readonly>
+                            <button type="button" class="btn btn--base view__btn view-id-btn">@lang('View')</button>
+                        </div>
                     </div>
                 </div>
 
@@ -247,7 +251,53 @@
     </div>
 </div>
 
-<x-confirmation-modal />
+    <div class="modal fade" id="verificationDetailsModal" tabindex="-1" aria-labelledby="verificationDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="verificationDetailsModalLabel">@lang('Verification Details')</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="company-details d-none">
+                        <ul class="list-group list-group-flush mb-3">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                @lang('Company Name')
+                                <span class="fw-bold company-name"></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                @lang('Role')
+                                <span class="fw-bold company-role"></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                @lang('Address')
+                                <span class="fw-bold company-address"></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                @lang('Website')
+                                <span class="fw-bold company-website"></span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="id-verification-details d-none mb-3">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                @lang('ID Type')
+                                <span class="fw-bold id-type"></span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="text-center">
+                        <img src="" class="img-fluid rounded verification-image" alt="@lang('Verification Image')">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <x-confirmation-modal />
 
 @endsection
 
@@ -266,100 +316,148 @@
 @endpush
 
 @push('script')
-<script>
-    (function($) {
-        "use strict";
-        $('.view-btn').on('click', function() {
-            var user = $(this).data('user');
-            var modal = $('#userInfoModal');
-            let initials = '';
+    <script>
+        (function ($) {
+            "use strict";
+            $('.view-btn').on('click', function () {
+                var user = $(this).data('user');
+                var modal = $('#userInfoModal');
+                let initials = '';
 
-            modal.find('.user-name').text(user.firstname + ' ' + user.lastname);
-            modal.find('.user-email').text(user.email);
-            modal.find('.user-company').text(user.company_name || 'N/A');
-            modal.find('.user-plan').text(user.plan_name || 'N/A');
+                modal.find('.user-name').text(user.firstname + ' ' + user.lastname);
+                modal.find('.user-email').text(user.email);
+                modal.find('.user-company').text(user.company_name || 'N/A');
+                modal.find('.user-plan').text(user.plan_name || 'N/A');
 
-            var date = new Date(user.created_at);
-            modal.find('.user-joined').text(date.toISOString().split('T')[0]);
+                var date = new Date(user.created_at);
+                modal.find('.user-joined').text(date.toISOString().split('T')[0]);
 
-            var statusBadge = modal.find('.user-status');
-            var isPending = user.company_complete == 1 && user.profile_complete == 1 && user.id_verification_complete == 1 && user.is_verified == 0;
-            var isVerified = user.is_verified == 1;
-            var isIncomplete = !isPending && !isVerified;
+                var statusBadge = modal.find('.user-status');
+                var isPending = user.company_complete == 1 && user.profile_complete == 1 && user.id_verification_complete == 1 && user.is_verified == 0;
+                var isVerified = user.is_verified == 1;
+                var isIncomplete = !isPending && !isVerified;
 
-            if (isVerified) {
-                statusBadge.text('Verified').removeClass('badge--warning badge--danger').addClass('badge--success');
-                modal.find('.pending-user-actions').addClass('d-none');
-                modal.find('.verified-user-actions').removeClass('d-none');
-            } else if (isPending) {
-                statusBadge.text('Pending').removeClass('badge--success badge--danger').addClass('badge--warning');
-                modal.find('.pending-user-actions').removeClass('d-none');
-                modal.find('.verified-user-actions').addClass('d-none');
-            } else if (isIncomplete) {
-                statusBadge.text('Incomplete').removeClass('badge--success badge--warning').addClass('badge--info');
-                modal.find('.pending-user-actions').addClass('d-none');
-                modal.find('.verified-user-actions').addClass('d-none');
+                if (isVerified) {
+                    statusBadge.text('Verified').removeClass('badge--warning badge--danger').addClass('badge--success');
+                    modal.find('.pending-user-actions').addClass('d-none');
+                    modal.find('.verified-user-actions').removeClass('d-none');
+                } else if (isPending) {
+                    statusBadge.text('Pending').removeClass('badge--success badge--danger').addClass('badge--warning');
+                    modal.find('.pending-user-actions').removeClass('d-none');
+                    modal.find('.verified-user-actions').addClass('d-none');
+                } else if (isIncomplete) {
+                    statusBadge.text('Incomplete').removeClass('badge--success badge--warning').addClass('badge--info');
+                    modal.find('.pending-user-actions').addClass('d-none');
+                    modal.find('.verified-user-actions').addClass('d-none');
+                }
+
+                if (user.status == 1) {
+                    modal.find('.suspend-user-btn').removeClass('approve__btn').addClass('Reject__btn').find('.suspend-btn-text').text("@lang('Suspend Account')");
+                    modal.find('.suspend-user-btn i').removeClass('la-undo').addClass('la-ban');
+                } else {
+                    modal.find('.suspend-user-btn').removeClass('Reject__btn').addClass('approve__btn').find('.suspend-btn-text').text("@lang('Unban User')");
+                    modal.find('.suspend-user-btn i').removeClass('la-ban').addClass('la-undo');
+                }
+
+                if (user.firstname && user.lastname) {
+                    initials = user.firstname.charAt(0) + user.lastname.charAt(0);
+                } else {
+                    initials = user.firstname.charAt(0);
+                }
+
+                modal.find('.user__name').text(initials.toUpperCase());
+                modal.find('.user-listings').text((user.properties_count || 0) + ' properties');
+
+                var approveRoute = "{{ route('admin.users.approve', '') }}/" + user.id;
+                var rejectRoute = "{{ route('admin.users.reject', '') }}/" + user.id;
+                var suspendRoute = "{{ route('admin.users.status', '') }}/" + user.id;
+
+                modal.find('.approve-form').attr('action', approveRoute);
+                modal.find('.reject-form').attr('action', rejectRoute);
+                modal.data('user', user);
+
+                modal.modal('show');
+            });
+
+            $('.userStatus').on('click', function () {
+                var user = $(this).data('user');
+                openStatusModal(user);
+            });
+
+            $('.suspend-user-btn').on('click', function () {
+                var modal = $('#userInfoModal');
+                var user = modal.data('user');
+                modal.modal('hide');
+                openStatusModal(user);
+            });
+
+            function openStatusModal(user) {
+                var modal = $('#userStatusModal');
+                var form = modal.find('form');
+                form.attr('action', "{{ route('admin.users.status', '') }}/" + user.id);
+
+                if (user.status == 1) {
+                    modal.find('.modal-title').text("@lang('Ban User')");
+                    modal.find('.ban-content').removeClass('d-none');
+                    modal.find('.unban-content').addClass('d-none');
+                    modal.find('textarea[name=reason]').attr('required', true);
+                } else {
+                    modal.find('.modal-title').text("@lang('Unban User')");
+                    modal.find('.ban-content').addClass('d-none');
+                    modal.find('.unban-content').removeClass('d-none');
+                    modal.find('.ban-reason-text').text(user.ban_reason);
+                    modal.find('textarea[name=reason]').attr('required', false);
+                }
+                modal.modal('show');
             }
 
-            if (user.status == 1) {
-                modal.find('.suspend-user-btn').removeClass('approve__btn').addClass('Reject__btn').find('.suspend-btn-text').text("@lang('Suspend Account')");
-                modal.find('.suspend-user-btn i').removeClass('la-undo').addClass('la-ban');
-            } else {
-                modal.find('.suspend-user-btn').removeClass('Reject__btn').addClass('approve__btn').find('.suspend-btn-text').text("@lang('Unban User')");
-                modal.find('.suspend-user-btn i').removeClass('la-ban').addClass('la-undo');
-            }
+            $('.view-license-btn').on('click', function () {
+                var modal = $('#userInfoModal');
+                var user = modal.data('user');
+                var detailsModal = $('#verificationDetailsModal');
 
-            if (user.firstname && user.lastname) {
-                initials = user.firstname.charAt(0) + user.lastname.charAt(0);
-            } else {
-                initials = user.firstname.charAt(0);
-            }
+                detailsModal.find('.modal-title').text("@lang('Business License Details')");
+                detailsModal.find('.company-details').removeClass('d-none');
+                detailsModal.find('.id-verification-details').addClass('d-none');
 
-            modal.find('.user__name').text(initials.toUpperCase());
-            modal.find('.user-listings').text((user.properties_count || 0) + ' properties');
+                detailsModal.find('.company-name').text(user.company_name);
+                detailsModal.find('.company-role').text(user.company_role);
+                detailsModal.find('.company-address').text(user.company_address);
+                detailsModal.find('.company-website').text(user.company_website);
 
-            var approveRoute = "{{ route('admin.users.approve', '') }}/" + user.id;
-            var rejectRoute = "{{ route('admin.users.reject', '') }}/" + user.id;
-            var suspendRoute = "{{ route('admin.users.status', '') }}/" + user.id;
+                var path = "{{ asset(getFilePath('company')) }}/" + user.company_image;
+                detailsModal.find('.verification-image').attr('src', path);
 
-            modal.find('.approve-form').attr('action', approveRoute);
-            modal.find('.reject-form').attr('action', rejectRoute);
-            modal.data('user', user);
+                modal.modal('hide');
+                detailsModal.modal('show');
+            });
 
-            modal.modal('show');
-        });
+            $('.view-id-btn').on('click', function () {
+                var modal = $('#userInfoModal');
+                var user = modal.data('user');
+                var detailsModal = $('#verificationDetailsModal');
 
-        $('.userStatus').on('click', function() {
-            var user = $(this).data('user');
-            openStatusModal(user);
-        });
+                detailsModal.find('.modal-title').text("@lang('ID Verification Details')");
+                detailsModal.find('.company-details').addClass('d-none');
+                detailsModal.find('.id-verification-details').removeClass('d-none');
 
-        $('.suspend-user-btn').on('click', function() {
-            var modal = $('#userInfoModal');
-            var user = modal.data('user');
-            modal.modal('hide');
-            openStatusModal(user);
-        });
+                var idType = 'N/A';
+                if (user.id_verification_type == 1) idType = 'NIN';
+                else if (user.id_verification_type == 2) idType = 'Driving License';
+                else if (user.id_verification_type == 3) idType = 'Passport';
 
-        function openStatusModal(user) {
-            var modal = $('#userStatusModal');
-            var form = modal.find('form');
-            form.attr('action', "{{ route('admin.users.status', '') }}/" + user.id);
+                detailsModal.find('.id-type').text(idType);
 
-            if (user.status == 1) {
-                modal.find('.modal-title').text("@lang('Ban User')");
-                modal.find('.ban-content').removeClass('d-none');
-                modal.find('.unban-content').addClass('d-none');
-                modal.find('textarea[name=reason]').attr('required', true);
-            } else {
-                modal.find('.modal-title').text("@lang('Unban User')");
-                modal.find('.ban-content').addClass('d-none');
-                modal.find('.unban-content').removeClass('d-none');
-                modal.find('.ban-reason-text').text(user.ban_reason);
-                modal.find('textarea[name=reason]').attr('required', false);
-            }
-            modal.modal('show');
-        }
-    })(jQuery);
-</script>
+                var path = "{{ asset(getFilePath('idVerification')) }}/" + user.id_verification_image;
+                detailsModal.find('.verification-image').attr('src', path);
+
+                modal.modal('hide');
+                detailsModal.modal('show');
+            });
+
+            $('#verificationDetailsModal').on('hidden.bs.modal', function () {
+                $('#userInfoModal').modal('show');
+            });
+        })(jQuery);
+    </script>
 @endpush
