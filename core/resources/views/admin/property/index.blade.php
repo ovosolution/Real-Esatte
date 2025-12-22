@@ -43,7 +43,7 @@
                             <td>{{ __($property?->propertyType?->name) }}</td>
                             <td>
                                 @php
-                                echo $property->statusBadge;
+    echo $property->statusBadge;
                                 @endphp
                             </td>
                             <td>
@@ -223,6 +223,15 @@
                             </select>
                         </div>
 
+                        <div class="col-md-6">
+                            <label class="form--label required">@lang('Pricing Type')</label>
+                            <select name="pricing_type" class="form-select select2">
+                                <option value="" disabled selected>@lang('Set Pricing Type')</option>
+                                <option value=1>@lang('Fixed')</option>
+                                <option value=2>@lang('Negotiable')</option>
+                            </select>
+                        </div>
+
                         <div class="col-12">
                             <label class="form--label">@lang('Description')</label>
                             <textarea name="description" rows="3" class="form--control form-control" value="{{ old('description') }}"></textarea>
@@ -334,6 +343,15 @@
                             </select>
                         </div>
 
+                        <div class="col-md-6">
+                            <label class="form--label required">@lang('Pricing Type')</label>
+                            <select name="pricing_type" class="form-select select2">
+                                <option value="" disabled selected>@lang('Set Pricing Type')</option>
+                                <option value=1>@lang('Fixed')</option>
+                                <option value=2>@lang('Negotiable')</option>
+                            </select>
+                        </div>
+
                         <div class="col-12">
                             <label class="form--label">@lang('Description')</label>
                             <textarea name="description" rows="3" class="form--control form-control"></textarea>
@@ -409,6 +427,11 @@
                         <span class="fw-bold property-listing-type"></span>
                     </div>
 
+                    <div class="col-6 col-md-4">
+                        <small class="text-muted d-block">@lang('Pricing Type')</small>
+                        <span class="fw-bold property-pricing-type"></span>
+                    </div>
+
                 </div>
 
                 <div class="p-3 bg--light rounded mb-4">
@@ -463,7 +486,7 @@
             modal.find('textarea[name=description]').val(resource.description);
             modal.find('select[name=construction_status]').val(resource.construction_status).change();
             modal.find('select[name=listing_type]').val(resource.listing_type).change();
-
+            modal.find('select[name=pricing_type]').val(resource.pricing_type).change();
 
             if (resource.status == 1) {
                 checkbox.prop('checked', true);
@@ -501,6 +524,9 @@
                 resource.listing_type == 1 ? '@lang("Sale")' : '@lang("Rent")'
             );
 
+            modal.find('.property-pricing-type').text(
+                resource.pricing_type == 1 ? '@lang("Fixed")' : '@lang("Negotiable")'
+            );
 
             var imageHtml = '';
             var path = "{{ asset(getFilePath('property')) }}";

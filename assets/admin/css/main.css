@@ -7144,3 +7144,7 @@ label.required:after {
   padding: 5px 12px;
   border-radius: 8px;
 }
+
+.verified-user-actions{
+  width: 100%;
+}
