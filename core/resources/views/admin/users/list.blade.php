@@ -194,28 +194,19 @@
                         <p class="modal__company__desc user-plan"></p>
                     </div>
 
-                    <div class="Verification">
-                        <div class="verification__wrap mb-2">
-                            <input type="text" class="form--control Verification__form" value="@lang('Business License')" readonly>
-                            <button type="button" class="btn btn--base view__btn view-license-btn">@lang('View')</button>
-                        </div>
-                        <div class="verification__wrap">
-                            <input type="text" class="form--control Verification__form" value="@lang('ID Verification')" readonly>
-                            <button type="button" class="btn btn--base view__btn view-id-btn">@lang('View')</button>
-                        </div>
+                </div>
+                
+                <div class="Verification">
+                    <div class="verification__wrap mb-2">
+                        <input type="text" class="form--control Verification__form" value="@lang('Business License')" readonly>
+                        <button type="button" class="btn btn--base view__btn view-license-btn">@lang('View')</button>
+                    </div>
+                    <div class="verification__wrap">
+                        <input type="text" class="form--control Verification__form" value="@lang('ID Verification')" readonly>
+                        <button type="button" class="btn btn--base view__btn view-id-btn">@lang('View')</button>
                     </div>
                 </div>
 
-                <div class="Verification">
-                    <div class="verification__wrap mb-2">
-                        <input type="text" class="form--control Verification__form" name="username" value="" placeholder="Business License" required="" id="username">
-                        <a class="btn btn--base view__btn " href="#">view</a>
-                    </div>
-                    <div class="verification__wrap">
-                        <input type="text" class="form--control Verification__form" name="username" value="" placeholder="ID Verification" required="" id="username">
-                        <a class="btn btn--base view__btn " href="#">view</a>
-                    </div>
-                </div>
             </div>
 
             <div class="modal-footer">
