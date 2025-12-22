@@ -166,59 +166,80 @@
     </div>
 
     <div class="modal fade" id="userInfoModal" tabindex="-1" aria-labelledby="userInfoModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="userInfoModalLabel">@lang('Realtor Profile')</h5>
+                    <h1 class="modal-title fs-5" id="userInfoModalLabel">@lang('Realtor Profile')</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="d-flex align-items-start gap-3 mb-4">
-                        <div class="user-avatar-modal">
-                            <span class="user-initials"></span>
+                    <div class="modal-body__user">
+                        <span class="user__name">MO</span>
+                        <div class="modal__user__content">
+                            <p class="modal__user__title user-name"></p>
+                            <p class="modal__user__desc user-email"></p>
+                            <span class="modal__user__tag user-status badge"></span>
+                        </div>
+
+                    </div>
+
+                    <div class="modal__company__info">
+
+                        <div class=" text-left">
+                            <p class="modal__company__title">@lang('Company')</p>
+                            <p class="modal__company__desc user-company"></p>
                         </div>
                         <div>
-                            <h5 class="user-name mb-1"></h5>
-                            <p class="user-email text-muted mb-2"></p>
-                            <span class="user-status badge"></span>
+                            <p class="modal__company__title">@lang('Subscription Tier')</p>
+                            <p class="modal__company__desc user-plan"></p>
+                        </div>
+
+                    </div>
+                    <div class="modal__company__info">
+                        <div class="text-left">
+                            <p class="modal__company__title">@lang('Date Joined')</p>
+                            <p class="modal__company__desc user-joined"></p>
                         </div>
                     </div>
 
-                    <div class="row g-3 mb-4">
-                        <div class="col-sm-6">
-                            <label class="text-muted d-block mb-1">@lang('Company')</label>
-                            <div class="fw-bold user-company"></div>
+                    <div class="Verification">
+                        <div class="verification__wrap mb-2">
+                            <input type="text" class="form--control Verification__form" name="username" value="" placeholder="Business License" required="" id="username">
+                            <a class="btn btn--base view__btn " href="#">view</a>
                         </div>
-                        <div class="col-sm-6">
-                            <label class="text-muted d-block mb-1">@lang('Subscription Tier')</label>
-                            <div class="fw-bold user-plan"></div>
-                        </div>
-                        <div class="col-sm-6">
-                            <label class="text-muted d-block mb-1">@lang('Date Joined')</label>
-                            <div class="fw-bold user-joined"></div>
-                        </div>
-                        <div class="col-sm-6">
-                            <label class="text-muted d-block mb-1">@lang('Total Listings')</label>
-                            <div class="fw-bold user-listings"></div>
+                        <div class="verification__wrap">
+                            <input type="text" class="form--control Verification__form" name="username" value="" placeholder="ID Verification" required="" id="username">
+                            <a class="btn btn--base view__btn " href="#">view</a>
                         </div>
                     </div>
+                </div>
 
+                <div class="modal-footer">
                     <div class="pending-user-actions d-none">
-                        <div class="d-flex gap-3 justify-content-center">
-                            <form action="" method="POST" class="approve-form w-100">
-                                @csrf
-                                <button type="submit" class="btn btn--success w-100"><i class="las la-check-circle"></i> @lang('Approve')</button>
-                            </form>
-                            <form action="" method="POST" class="reject-form w-100">
-                                @csrf
-                                <button type="submit" class="btn btn--danger w-100"><i class="las la-times-circle"></i> @lang('Reject')</button>
-                            </form>
-                        </div>
+                        <form action="" method="POST" class="approve-form w-100">
+                            @csrf
+                            <button type="submit" class="btn approve__btn"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <g clip-path="url(#clip0_726_2700)">
+                                        <path d="M14.5341 6.66666C14.8385 8.16086 14.6215 9.71427 13.9193 11.0679C13.2171 12.4214 12.072 13.4934 10.6751 14.1049C9.27816 14.7164 7.71382 14.8305 6.24293 14.4282C4.77205 14.026 3.48353 13.1316 2.59225 11.8943C1.70097 10.657 1.26081 9.15148 1.34518 7.62892C1.42954 6.10635 2.03332 4.65872 3.05583 3.52744C4.07835 2.39616 5.45779 1.64961 6.96411 1.4123C8.47043 1.17498 10.0126 1.46123 11.3334 2.22333" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M6 7.33341L8 9.33341L14.6667 2.66675" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round" />
+                                    </g>
+                                    <defs>
+                                        <clipPath id="clip0_726_2700">
+                                            <rect width="16" height="16" fill="white" />
+                                        </clipPath>
+                                    </defs>
+                                </svg>
+                                @lang('Approve')
+                            </button>
+                        </form>
+                        <form action="" method="POST" class="reject-form w-100">
+                            @csrf
+                            <button type="submit" class="btn Reject__btn">@lang('Reject')</button>
+                        </form>
                     </div>
-
                     <div class="verified-user-actions d-none">
                         <div class="d-flex gap-3 justify-content-center">
-                            <button type="button" class="btn Reject__btn suspend-user-btn"><i class="las la-ban"></i> <span class="suspend-btn-text">@lang('Suspend')</span></button>
+                            <button type="button" class="btn Reject__btn suspend-user-btn"><i class="las la-ban"></i> <span class="suspend-btn-text">@lang('Suspend Account')</span></button>
                         </div>
                     </div>
                 </div>
@@ -251,6 +272,7 @@
             $('.view-btn').on('click', function () {
                 var user = $(this).data('user');
                 var modal = $('#userInfoModal');
+                let initials = '';
 
                 modal.find('.user-name').text(user.firstname + ' ' + user.lastname);
                 modal.find('.user-email').text(user.email);
@@ -280,13 +302,20 @@
                 }
 
                 if (user.status == 1) {
-                    modal.find('.suspend-user-btn').removeClass('approve__btn').addClass('Reject__btn').find('.suspend-btn-text').text("@lang('Ban User')");
+                    modal.find('.suspend-user-btn').removeClass('approve__btn').addClass('Reject__btn').find('.suspend-btn-text').text("@lang('Suspend Account')");
                     modal.find('.suspend-user-btn i').removeClass('la-undo').addClass('la-ban');
                 } else {
                     modal.find('.suspend-user-btn').removeClass('Reject__btn').addClass('approve__btn').find('.suspend-btn-text').text("@lang('Unban User')");
                     modal.find('.suspend-user-btn i').removeClass('la-ban').addClass('la-undo');
                 }
 
+                if(user.firstname && user.lastname){
+                    initials = user.firstname.charAt(0) + user.lastname.charAt(0);
+                } else {
+                    initials = user.firstname.charAt(0);
+                }
+
+                modal.find('.user__name').text(initials.toUpperCase());
                 modal.find('.user-listings').text((user.properties_count || 0) + ' properties');
 
                 var approveRoute = "{{ route('admin.users.approve', '') }}/" + user.id;

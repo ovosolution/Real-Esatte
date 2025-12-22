@@ -54,6 +54,7 @@ class PropertyController extends Controller
             'longitude'           => 'required|string',
             'construction_status' => 'required',
             'listing_type'        => 'required',
+            'pricing_type'        => 'required',
             'description'         => 'required|string',
             'images'              => 'nullable|array',
             'images.*'            => ['image', new FileTypeValidate(['jpg', 'jpeg', 'png'])],
@@ -79,6 +80,7 @@ class PropertyController extends Controller
         $property->longitude           = $request->longitude;
         $property->construction_status = $request->construction_status;
         $property->listing_type        = $request->listing_type;
+        $property->pricing_type        = $request->pricing_type;
         $property->description         = $request->description;
         $property->status              = $request->status ?? Status::ENABLE;
         $property->save();
