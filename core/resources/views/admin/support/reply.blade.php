@@ -24,7 +24,7 @@
                                     @lang('Supported file formats include .jpg, .jpeg, .png, .pdf, .doc, and .docx.')
                                 </span>
                                 <div class="d-flex gap-2  flex-wrap">
-                                    <button type="button" class="btn  btn--secondary btn-large addAttachment flex-fill">
+                                    <button type="button" class="btn  btn-outline--primary btn-large addAttachment flex-fill">
                                         <i class="fas fa-plus"></i>
                                         @lang('Add Attachment')
                                     </button>
@@ -60,7 +60,7 @@
                                     @lang('Posted on') {{ showDateTime($message->created_at, 'l, dS F Y @ h:i a') }}
                                 </small>
                             </div>
-                            <button class="btn btn--danger  confirmationBtn" data-question="@lang('Are you sure to delete this message?')"
+                            <button class="btn btn-outline--danger confirmationBtn text-danger" data-question="@lang('Are you sure to delete this message?')"
                                 data-action="{{ route('admin.ticket.delete', $message->id) }}">
                                 <i class="la la-trash"></i>
                                 @lang('Delete')
@@ -93,7 +93,7 @@
                                     @lang('Posted on') {{ showDateTime($message->created_at, 'l, dS F Y @ h:i a') }}
                                 </small>
                             </div>
-                            <button class="btn btn--danger  confirmationBtn" data-question="@lang('Are you sure to delete this message?')"
+                            <button class="btn btn-outline--danger confirmationBtn" data-question="@lang('Are you sure to delete this message?')"
                                 data-action="{{ route('admin.ticket.delete', $message->id) }}">
                                 <i class="la la-trash"></i>
                                 @lang('Delete')
@@ -122,9 +122,9 @@
 @endsection
 
 @push('breadcrumb-plugins')
-    <div class="d-flex gap-2 flex-wrap mb-3">
+    <div class="d-flex gap-2 flex-wrap justify-content-end mb-3">
         @if ($ticket->status != Status::TICKET_CLOSE)
-            <button class="btn Reject__btn confirmationBtn " type="button" data-question="@lang('Are you want to close this support ticket?')"
+            <button class="btn btn-outline--danger confirmationBtn text-end " type="button" data-question="@lang('Are you want to close this support ticket?')"
                 data-action="{{ route('admin.ticket.close', $ticket->id) }}">
                 <i class="la la-times"></i> @lang('Close Ticket')
             </button>

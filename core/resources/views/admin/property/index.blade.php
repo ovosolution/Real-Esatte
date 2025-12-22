@@ -20,7 +20,7 @@
             </div>
 
             <div class="col-lg-12">
-                <table class="table mt-4 table--responsive--md">
+                <table class="table mt-4 table--responsive--lg">
                     <thead>
                         <tr>
                             <th>@lang('Title')</th>
@@ -43,7 +43,7 @@
                             <td>{{ __($property?->propertyType?->name) }}</td>
                             <td>
                                 @php
-    echo $property->statusBadge;
+                                echo $property->statusBadge;
                                 @endphp
                             </td>
                             <td>
@@ -104,11 +104,11 @@
 <div class="row d-flex align-items-center justify-content-between">
     <div class="col-lg-auto">
         <div class="dashboard-body__heading__wrap">
+            <span class="breadcrumb-icon navigation-bar"><i class="fa-solid fa-bars"></i></span>
             <div class="dashboard-body__heading">
                 <h3 class="dashboard-body__title">@lang('Property Management')</h3>
                 <p class="dashboard-body__desc">@lang('Add and manage property listings with accurate coordinates')</p>
             </div>
-            <span class="breadcrumb-icon navigation-bar"><i class="fa-solid fa-bars"></i></span>
         </div>
     </div>
 
@@ -317,6 +317,14 @@
                             <label class="form--label required">@lang('Full Address')</label>
                             <input type="text" class="form--control form-control" name="address" required>
                         </div>
+                        <div class="col-12">
+                            <div class="google__info d-flex align-items-center gap-2"> <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M13.3332 6.66671C13.3332 9.99537 9.6405 13.462 8.4005 14.5327C8.28499 14.6196 8.14437 14.6665 7.99984 14.6665C7.85531 14.6665 7.71469 14.6196 7.59917 14.5327C6.35917 13.462 2.6665 9.99537 2.6665 6.66671C2.6665 5.25222 3.22841 3.89567 4.2286 2.89547C5.2288 1.89528 6.58535 1.33337 7.99984 1.33337C9.41433 1.33337 10.7709 1.89528 11.7711 2.89547C12.7713 3.89567 13.3332 5.25222 13.3332 6.66671Z" stroke="#1D4ED8" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M8 8.66663C9.10457 8.66663 10 7.7712 10 6.66663C10 5.56206 9.10457 4.66663 8 4.66663C6.89543 4.66663 6 5.56206 6 6.66663C6 7.7712 6.89543 8.66663 8 8.66663Z" stroke="#1D4ED8" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>Google Coordinates *</div>
+
+                        </div>
+
                         <div class="col-md-6">
                             <label class="form--label">@lang('Latitude')</label>
                             <input type="text" class="form--control form-control" name="latitude">
@@ -350,6 +358,10 @@
                                 <option value=1>@lang('Fixed')</option>
                                 <option value=2>@lang('Negotiable')</option>
                             </select>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <p class="form__tip">💡 Tip: Right-click on Google Maps and select the coordinates to copy them accurately.</p>
                         </div>
 
                         <div class="col-12">

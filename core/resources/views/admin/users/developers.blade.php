@@ -167,11 +167,11 @@
 <div class="row d-flex align-items-center justify-content-between">
     <div class="col-lg-auto">
         <div class="dashboard-body__heading__wrap">
+            <span class="breadcrumb-icon navigation-bar"><i class="fa-solid fa-bars"></i></span>
             <div class="dashboard-body__heading">
                 <h3 class="dashboard-body__title">@lang('User Management')</h3>
                 <p class="dashboard-body__desc">@lang('Manage all registered realtors and developers')</p>
             </div>
-            <span class="breadcrumb-icon navigation-bar"><i class="fa-solid fa-bars"></i></span>
         </div>
         <div class="col-lg-auto">
             <button type="button" class="btn btn--primary add-btn">
@@ -189,36 +189,36 @@
 
 
 @push('script')
-    <script>
-        (function ($) {
-            const modal = $('#addModal');
-            const form = modal.find('form');
-            const title = modal.find('#addModalLabel');
-            const submitBtn = modal.find('.submit-btn');
+<script>
+    (function($) {
+        const modal = $('#addModal');
+        const form = modal.find('form');
+        const title = modal.find('#addModalLabel');
+        const submitBtn = modal.find('.submit-btn');
 
-            $('.add-btn').on('click', function () {
-                form.trigger('reset');
-                form.attr('action', "{{ route('admin.developer.store') }}");
-                title.text("@lang('Add Developer')");
-                submitBtn.html('<i class="las la-plus"></i> @lang("Add Developer")');
+        $('.add-btn').on('click', function() {
+            form.trigger('reset');
+            form.attr('action', "{{ route('admin.developer.store') }}");
+            title.text("@lang('Add Developer')");
+            submitBtn.html('<i class="las la-plus"></i> @lang("Add Developer")');
 
-                modal.modal('show');
-            });
+            modal.modal('show');
+        });
 
-            $('.edit-btn').on('click', function () {
-                const developer = $(this).data('resource');
-                form.trigger('reset');
-                form.attr('action', "{{ route('admin.developer.store', ':id') }}".replace(':id', developer.id));
-                title.text("@lang('Edit developer Type')");
-                submitBtn.html('<i class="las la-edit"></i> @lang("Update Developer")');
-                modal.find('.developer-id').val(developer.id);
-                modal.find('.developer-name').val(developer.name);
-                modal.find('.developer-contact').val(developer.contact_person);
-                modal.find('.developer-email').val(developer.email);
-                modal.find('.developer-phone').val(developer.phone);
-                modal.find('.developer-location').val(developer.location);
-                modal.modal('show');
-            });
-        })(jQuery);
-    </script>
+        $('.edit-btn').on('click', function() {
+            const developer = $(this).data('resource');
+            form.trigger('reset');
+            form.attr('action', "{{ route('admin.developer.store', ':id') }}".replace(':id', developer.id));
+            title.text("@lang('Edit developer Type')");
+            submitBtn.html('<i class="las la-edit"></i> @lang("Update Developer")');
+            modal.find('.developer-id').val(developer.id);
+            modal.find('.developer-name').val(developer.name);
+            modal.find('.developer-contact').val(developer.contact_person);
+            modal.find('.developer-email').val(developer.email);
+            modal.find('.developer-phone').val(developer.phone);
+            modal.find('.developer-location').val(developer.location);
+            modal.modal('show');
+        });
+    })(jQuery);
+</script>
 @endpush
