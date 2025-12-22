@@ -846,10 +846,6 @@ a:hover {
   width: fit-content;
 }
 
-/* .btn--primary {
-  --btn-color: var(--primary);
-  background-color: hsl(var(--primary) / 0.06);
-} */
 .btn--primary {
   --btn-color: var(--primary);
   background-color: hsl(var(--primary));
@@ -886,50 +882,62 @@ a:hover {
 }
 
 [class*="btn--"]:not([class*="btn-outline--"]):hover,
+[class*="btn--"]:not([class*="btn-outline--"]):active,
+[class*="btn--"]:not([class*="btn-outline--"]).disabled,
 [class*="btn--"]:not([class*="btn-outline--"]):focus,
 [class*="btn--"]:not([class*="btn-outline--"]):focus-visible {
   background-color: transparent;
+  color: hsl(var(--btn-color)) !important;
 }
 
 .btn-outline--primary {
-  --btn-color: var(--primary);
+  --btn-color: var(--primary) !important;
   background-color: transparent;
+  color: hsl(var(--btn-color)) !important;
 }
 
 .btn-outline--secondary {
-  --btn-color: var(--secondary);
+  --btn-color: var(--secondary) !important;
   background-color: transparent;
+  color: hsl(var(--btn-color)) !important;
 }
 
 .btn-outline--success {
-  --btn-color: var(--success);
+  --btn-color: var(--success) !important;
   background-color: transparent;
+  color: hsl(var(--btn-color)) !important;
 }
 
 .btn-outline--info {
-  --btn-color: var(--info);
+  --btn-color: var(--info) !important;
   background-color: transparent;
+  color: hsl(var(--btn-color)) !important;
 }
 
 .btn-outline--warning {
-  --btn-color: var(--warning);
+  --btn-color: var(--warning) !important;
   background-color: transparent;
+  color: hsl(var(--btn-color)) !important;
 }
 
 .btn-outline--danger {
-  --btn-color: var(--danger);
+  --btn-color: var(--danger) !important;
   background-color: transparent;
+  color: hsl(var(--btn-color)) !important;
 }
 
 .btn-outline--dark {
-  --btn-color: var(--dark);
+  --btn-color: var(--dark) !important;
   background-color: transparent;
+  color: hsl(var(--btn-color)) !important;
 }
 
 [class*="btn-outline--"]:hover,
+[class*="btn-outline--"]:active,
 [class*="btn-outline--"]:focus,
 [class*="btn-outline--"]:focus-visible {
   background-color: hsl(var(--btn-color) / 0.06);
+  color: hsl(var(--btn-color)) !important;
 }
 
 /* ================================= Button Css End =========================== */
@@ -1405,6 +1413,13 @@ input[type="number"] {
   width: calc(100% - 14px);
   padding-left: 5px;
   cursor: pointer;
+}
+.form-check-input {
+  height: 24px;
+  width: 24px;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+  border-color: hsl(var(--primary));
 }
 
 .form--switch.switch--lg .form-check-input {
@@ -2441,10 +2456,6 @@ input[type="number"] {
 
 [data-theme="dark"] .table tbody {
   background-color: hsl(var(--light));
-}
-
-.table tbody tr:last-child td:first-child {
-  border-bottom-left-radius: var(--border-radios);
 }
 
 .table tbody tr:last-child td.action-table {
@@ -6634,20 +6645,19 @@ label.required:after {
 }
 
 .pricing__card {
-  background-color: hsl(var(--white));
+  background-color: #f5f7ff;
   border-radius: 14px;
-  border: 2px solid hsl(var(--black) / 0.1);
+
   padding: 24px;
   transition: 0.3s;
   height: 100%;
 }
-
+.pricing__card.pricing__btn {
+  border: 2px solid hsl(var(--primary));
+}
 .pricing__card.pricing__btn:hover {
   background-color: hsl(var(--primary)) !important;
   color: hsl(var(--white)) !important;
-}
-.pricing__card:hover {
-  border: 2px solid hsl(var(--primary));
 }
 
 .pricing ul {
@@ -6669,7 +6679,7 @@ label.required:after {
 }
 
 .pricing__date {
-  margin-bottom: -21px;
+  margin-bottom: -5px;
   font-size: 16px;
   font-weight: 400;
   color: #6a7282;
@@ -6678,8 +6688,7 @@ label.required:after {
 
 .pricing__card__price {
   display: flex;
-  align-items: end;
-  margin-bottom: 24px;
+  align-items: center;
 }
 
 .fa-check {
@@ -6687,8 +6696,8 @@ label.required:after {
 }
 
 .pricing__btn {
-  border-color: hsl(var(--black) / 0.1) !important;
-  background-color: transparent;
+  border: 1px solid hsl(var(--black) / 0.2) !important;
+  background-color: hsl(var(--white));
   color: hsl(var(--title-color)) !important;
   border-radius: 8px;
   padding: 6.5px 20px;
@@ -6714,10 +6723,7 @@ label.required:after {
   background-color: #e0e7ff !important;
   padding: 2px 8px;
   border-radius: 8px;
-
 }
-
-
 
 .user__name {
   font-size: 24px;
@@ -7011,7 +7017,130 @@ label.required:after {
   }
 }
 
-.search-menu__link.active{
+.search-menu__link.active {
   background-color: hsl(var(--black));
   color: white;
+}
+
+.notification__title {
+  background-color: #f9fafb;
+  padding: 16px;
+  border-radius: 10px;
+  border: 1px solid hsl(var(--black) / 0.2);
+}
+
+.delivery {
+  border: 1px solid hsl(var(--black) / 0.2);
+  padding: 4px 8px;
+  border-radius: 8px;
+  color: hsl(var(--black)) !important;
+}
+
+.preview-audience {
+  border: 1px solid hsl(var(--black) / 0.2);
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  padding: 2px 8px;
+  border-radius: 8px;
+}
+
+.card {
+  padding: 24px !important;
+  border: 1px solid hsl(var(--black) / 0.2) !important;
+  border-radius: 14px !important;
+  background-color: hsl(var(--white)) !important;
+}
+
+.edit-plan-btn {
+  padding: 8px;
+}
+
+.edit-plan-btn:hover {
+  stroke: #fff !important;
+  background-color: hsl(var(--black));
+}
+
+.pricing__card:hover,
+.pricing__card.active {
+  background-color: hsl(var(--primary));
+
+  .pricing__card__title {
+    color: hsl(var(--white));
+  }
+
+  .pricing__card__price h2 {
+    color: hsl(var(--white)) !important;
+  }
+  .pricing__date {
+    color: hsl(var(--white));
+  }
+
+  .pricing__desc {
+    color: hsl(var(--white));
+  }
+
+  .pricing__btn {
+    border: 1px solid hsl(var(--white)) !important;
+    background-color: transparent !important;
+  }
+
+  .pricing__btn svg {
+    color: hsl(var(--white));
+  }
+}
+
+.pricing__desc {
+  font-size: 14px;
+}
+
+.pricing__card {
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.pricing__card.active {
+  border: 1px solid #4f46e5;
+  background-color: hsl(var(--primary));
+}
+
+.pricing__list__wrap {
+  display: flex !important;
+}
+
+.pricing__list__wrap {
+  padding-left: 0 !important;
+  display: flex;
+  max-width: 230px;
+  gap: 10px 80px;
+  flex-wrap: wrap;
+}
+
+.subscription__button {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.subscription__button__fill {
+  font-size: 14px;
+  font-weight: 500;
+  color: hsl(var(--black));
+  border: 1px solid hsl(var(--black) / 0.2);
+  padding: 5px 12px;
+  border-radius: 8px;
+  transform: 0.3s;
+}
+
+.subscription__button__fill:hover {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--white));
+  border-color: hsl(var(--primary));
+}
+
+.subscription__button__text {
+  color: hsl(var(--danger));
+  font-size: 14px;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 8px;
 }
