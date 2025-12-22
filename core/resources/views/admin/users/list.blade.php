@@ -6,14 +6,7 @@
 
             <div class="row gy-4">
                 <div class="col-lg-12">
-                    <ul class="custom__nav nav user-management  nav-pills mb-3">
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link @if(request()->routeIs(['admin.users.all', 'admin.users.active', 'admin.users.pending'])) active @endif" href="{{ route('admin.users.all') }}">@lang('Realtors')</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link @if(request()->routeIs('admin.developer.index')) active @endif" href="{{ route('admin.developer.index') }}">@lang('Developers')</a>
-                        </li>
-                    </ul>
+                    @include('admin.users.user_header')
                     <div class="search-box__wrap mt-4">
                         <div class="search-box w-100">
                             <form>

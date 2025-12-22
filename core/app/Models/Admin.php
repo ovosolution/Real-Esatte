@@ -29,4 +29,9 @@ class Admin extends Authenticatable
             get: fn() => $this->image  ? getImage(getFilePath('adminProfile') . '/' . $this->image, getFileSize('adminProfile')) : siteFavicon(),
         );
     }
+
+    public function activities()
+    {
+        return $this->hasMany(AdminActivity::class, 'admin_id');
+    }
 }

@@ -55,7 +55,7 @@ Route::middleware('admin')->group(function () {
         Route::post('approve/{id}', 'approveUser')->name('approve');
         Route::post('reject/{id}', 'rejectUser')->name('reject');
 
-        Route::get('send-notification', 'showNotificationAllForm')->name('notification.all');
+        Route::get('send-notification', 'showNotificationAllForm')->name('notification.all')->middleware('permission:notification settings,admin');
         Route::post('send-notification', 'sendNotificationAll')->name('notification.all.send');
         Route::get('list', 'list')->name('list');
         Route::get('count-by-segment/{methodName}', 'countBySegment')->name('segment.count');
@@ -80,7 +80,7 @@ Route::middleware('admin')->group(function () {
     });
 
     // Admin Support
-    Route::controller('SupportTicketController')->prefix('ticket')->name('ticket.')->group(function () {
+    Route::controller('SupportTicketController')->prefix('ticket')->name('ticket.')->middleware('permission:view user tickets,admin')->group(function () {
         Route::get('/', 'tickets')->name('index');
         Route::get('pending', 'pendingTicket')->name('pending');
         Route::get('closed', 'closedTicket')->name('closed');
@@ -98,8 +98,10 @@ Route::middleware('admin')->group(function () {
         Route::get('chart/transaction', 'transactionReport')->name('chart.transaction');
         Route::get('profile', 'profile')->name('profile');
         Route::post('profile', 'profileUpdate')->name('profile.update');
-        Route::get('password', 'password')->name('password');
-        Route::post('password', 'passwordUpdate')->name('password.update');
+        Route::get('password', 'password')->name('password')->middleware('permission:security settings,admin');
+        Route::post('password', 'passwordUpdate')->name('password.update')->middleware('permission:security settings,admin');
+        Route::get('analytics', 'analytics')->name('analytics')->middleware('permission:view analytics,admin');
+        Route::get('activities', 'activities')->name('activities');
 
         //Notification
         Route::get('notifications', 'notifications')->name('notifications');
@@ -112,7 +114,7 @@ Route::middleware('admin')->group(function () {
         Route::get('download-attachments/{file_hash}', 'downloadAttachment')->name('download.attachment');
 
         // Assign role
-        Route::get('list', 'list')->name('list');
+        Route::get('list', 'list')->name('list')->middleware('permission:security settings,admin');
         Route::post('store', 'save')->name('store');
         Route::post('update/{id}', 'save')->name('update');
         Route::post('delete/{id}', 'delete')->name('delete');
@@ -140,7 +142,7 @@ Route::middleware('admin')->group(function () {
         Route::post('/delete/{id}', 'destroy')->name('delete');
     });
 
-    Route::controller('PropertyController')->prefix('property')->name('property.')->group(function () {
+    Route::controller('PropertyController')->prefix('property')->name('property.')->middleware('permission:view properties,admin')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/active', 'active')->name('active');
         Route::get('/inactive', 'inactive')->name('inactive');
@@ -148,18 +150,18 @@ Route::middleware('admin')->group(function () {
         Route::post('delete/{id}', 'destroy')->name('delete');
     });
 
-    Route::controller('PlanController')->prefix('plan')->name('plan.')->group(function () {
+    Route::controller('PlanController')->prefix('plan')->name('plan.')->middleware('permission:view plans,admin')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::post('store/{id?}', 'store')->name('store');
     });
 
-    Route::controller('LocationController')->prefix('location')->name('location.')->group(function () {
+    Route::controller('LocationController')->prefix('location')->name('location.')->middleware('permission:system configuration,admin')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::post('store/{id?}', 'store')->name('store');
         Route::post('delete/{id}', 'destroy')->name('delete');
     });
 
-    Route::controller('PropertyTypeController')->prefix('property-type')->name('property.type.')->group(function () {
+    Route::controller('PropertyTypeController')->prefix('property-type')->name('property.type.')->middleware('permission:system configuration,admin')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::post('store/{id?}', 'store')->name('store');
         Route::post('delete/{id?}', 'destroy')->name('delete');

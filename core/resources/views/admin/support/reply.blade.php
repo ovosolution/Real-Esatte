@@ -122,14 +122,14 @@
 @endsection
 
 @push('breadcrumb-plugins')
-    <div class="d-flex gap-2 flex-wrap">
+    <div class="d-flex gap-2 flex-wrap mb-3">
         @if ($ticket->status != Status::TICKET_CLOSE)
-            <button class="btn btn--danger confirmationBtn " type="button" data-question="@lang('Are you want to close this support ticket?')"
+            <button class="btn Reject__btn confirmationBtn " type="button" data-question="@lang('Are you want to close this support ticket?')"
                 data-action="{{ route('admin.ticket.close', $ticket->id) }}">
                 <i class="la la-times"></i> @lang('Close Ticket')
             </button>
         @endif
-        <x-back_btn route="{{ route('admin.ticket.index') }}" />
+        {{-- <x-back_btn route="{{ route('admin.ticket.index') }}" /> --}}
     </div>
 @endpush
 

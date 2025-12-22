@@ -15,20 +15,19 @@
                     <div class="d-flex gap-3 flex-wrap pt-2 pb-3">
                         <div class="flex-fill">
                             <button type="button"
-                                class="btn w-100 @if (!$isFrontend) btn--secondary btn-large @else btn-dark @endif "
+                                class="btn w-100 @if (!$isFrontend) Reject__btn btn-large @else btn-dark @endif "
                                 data-bs-dismiss="modal">
                                 <i class="fa-regular fa-circle-xmark"></i> @lang('No')
                             </button>
                         </div>
                         <div class="flex-fill">
                             <button type="submit"
-                                class="btn w-100  btn--primary  @if (!$isFrontend) btn-large @endif">
+                                class="btn w-100  approve__btn  @if (!$isFrontend) btn-large @endif">
                                 <i class="fa-regular fa-check-circle"></i> @lang('Yes')
                             </button>
                         </div>
                     </div>
                 </div>
-
             </form>
         </div>
     </div>
