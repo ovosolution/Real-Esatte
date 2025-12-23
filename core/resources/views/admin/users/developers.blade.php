@@ -1,5 +1,71 @@
 @extends('admin.layouts.app')
 @section('panel')
+    <div class="dashboard-body">
+        <div class="dashboard-body__card">
+            <div class="row gy-4">
+                <div class="col-lg-12">
+                    @include('admin.users.user_header')
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card table__card__wrap">
+                                <div class="table__heading d-flex align-items-center justify-content-between">
+                                    <p class="table__heading__title mb-0">Properties (4)</p>
+                                    <button type="button" class="btn  btn--primary add-btn">
+                                        <i class="las la-plus"></i> Add Developer </button>
+                                </div>
+                                <table class="table border-0 p-0 mt-4 table--responsive--md">
+                                    <thead>
+                                        <tr>
+                                            <th>@lang('Company Name')</th>
+                                            <th>@lang('Contact Person')</th>
+                                            <th>@lang('Email')</th>
+                                            <th>@lang('Phone')</th>
+                                            <th>@lang('Location')</th>
+                                            <th>@lang('Properties')</th>
+                                            <th>@lang('Actions')</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse ($developers as $developer)
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center gap-2"> <span
+                                                            class="company__icon">
+                                                            <svg width="16" height="16" viewBox="0 0 20 20"
+                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <g clip-path="url(#clip0_2514_2910)">
+                                                                    <path
+                                                                        d="M5 18.3333V3.33332C5 2.8913 5.17559 2.46737 5.48816 2.15481C5.80072 1.84225 6.22464 1.66666 6.66667 1.66666H13.3333C13.7754 1.66666 14.1993 1.84225 14.5118 2.15481C14.8244 2.46737 15 2.8913 15 3.33332V18.3333H5Z"
+                                                                        stroke="currentColor" stroke-width="1.66667"
+                                                                        stroke-linecap="round" stroke-linejoin="round" />
+                                                                    <path
+                                                                        d="M5.00008 10H3.33341C2.89139 10 2.46746 10.1756 2.1549 10.4882C1.84234 10.8007 1.66675 11.2246 1.66675 11.6667V16.6667C1.66675 17.1087 1.84234 17.5326 2.1549 17.8452C2.46746 18.1577 2.89139 18.3333 3.33341 18.3333H5.00008"
+                                                                        stroke="currentColor" stroke-width="1.66667"
+                                                                        stroke-linecap="round" stroke-linejoin="round" />
+                                                                    <path
+                                                                        d="M15 7.5H16.6667C17.1087 7.5 17.5326 7.6756 17.8452 7.98816C18.1577 8.30072 18.3333 8.72464 18.3333 9.16667V16.6667C18.3333 17.1087 18.1577 17.5326 17.8452 17.8452C17.5326 18.1577 17.1087 18.3333 16.6667 18.3333H15"
+                                                                        stroke="currentColor" stroke-width="1.66667"
+                                                                        stroke-linecap="round" stroke-linejoin="round" />
+                                                                    <path d="M8.33325 5H11.6666" stroke="currentColor"
+                                                                        stroke-width="1.66667" stroke-linecap="round"
+                                                                        stroke-linejoin="round" />
+                                                                    <path d="M8.33325 8.33334H11.6666" stroke="currentColor"
+                                                                        stroke-width="1.66667" stroke-linecap="round"
+                                                                        stroke-linejoin="round" />
+                                                                    <path d="M8.33325 11.6667H11.6666" stroke="currentColor"
+                                                                        stroke-width="1.66667" stroke-linecap="round"
+                                                                        stroke-linejoin="round" />
+                                                                    <path d="M8.33325 15H11.6666" stroke="currentColor"
+                                                                        stroke-width="1.66667" stroke-linecap="round"
+                                                                        stroke-linejoin="round" />
+                                                                </g>
+                                                                <defs>
+                                                                    <clipPath id="clip0_2514_2910">
+                                                                        <rect width="20" height="20"
+                                                                            fill="white" />
+                                                                    </clipPath>
+                                                                </defs>
+                                                            </svg>
 
     <div class="dashboard-body">
         <div class="dashboard-body__card">
@@ -128,24 +194,29 @@
                     <div class="row g-3">
                         <div class="col-6">
                             <label class="form--label required">@lang('Name')</label>
-                            <input type="text" class="form--control form-control developer-name" name="name" value="{{ old('name') }}">
+                            <input type="text" class="form--control form-control developer-name" name="name"
+                                value="{{ old('name') }}">
                         </div>
 
                         <div class="col-6">
                             <label class="form--label required">@lang('Contact Person')</label>
-                            <input type="text" class="form--control form-control developer-contact" name="contact_person" value="{{ old('contact_person') }}">
+                            <input type="text" class="form--control form-control developer-contact"
+                                name="contact_person" value="{{ old('contact_person') }}">
                         </div>
                         <div class="col-6">
                             <label class="form--label required">@lang('Email')</label>
-                            <input type="email" class="form--control form-control developer-email" name="email" value="{{ old('email') }}">
+                            <input type="email" class="form--control form-control developer-email" name="email"
+                                value="{{ old('email') }}">
                         </div>
                         <div class="col-6">
                             <label class="form--label required">@lang('Phone')</label>
-                            <input type="text" class="form--control form-control developer-phone" name="phone" value="{{ old('phone') }}">
+                            <input type="text" class="form--control form-control developer-phone" name="phone"
+                                value="{{ old('phone') }}">
                         </div>
                         <div class="col-6">
                             <label class="form--label required">@lang('Location')</label>
-                            <input type="text" class="form--control form-control developer-location" name="location" value="{{ old('location') }}">
+                            <input type="text" class="form--control form-control developer-location"
+                                name="location" value="{{ old('location') }}">
                         </div>
                     </div>
 
@@ -164,13 +235,19 @@
 
 
 @push('breadcrumb-plugins')
-<div class="row d-flex align-items-center justify-content-between">
-    <div class="col-lg-auto">
-        <div class="dashboard-body__heading__wrap">
-            <span class="breadcrumb-icon navigation-bar"><i class="fa-solid fa-bars"></i></span>
-            <div class="dashboard-body__heading">
-                <h3 class="dashboard-body__title">@lang('User Management')</h3>
-                <p class="dashboard-body__desc">@lang('Manage all registered realtors and developers')</p>
+    <div class="row d-flex align-items-center justify-content-between">
+        <div class="col-lg-auto">
+            <div class="dashboard-body__heading__wrap">
+                <span class="breadcrumb-icon navigation-bar"><i class="fa-solid fa-bars"></i></span>
+                <div class="dashboard-body__heading">
+                    <h3 class="dashboard-body__title">@lang('User Management')</h3>
+                    <p class="dashboard-body__desc">@lang('Manage all registered realtors and developers')</p>
+                </div>
+            </div>
+            <div class="col-lg-auto">
+                <button type="button" class="btn btn--primary add-btn">
+                    <i class="las la-plus"></i> @lang('Add Developer')
+                </button>
             </div>
         </div>
     </div>
@@ -179,36 +256,37 @@
 
 
 @push('script')
-<script>
-    (function($) {
-        const modal = $('#addModal');
-        const form = modal.find('form');
-        const title = modal.find('#addModalLabel');
-        const submitBtn = modal.find('.submit-btn');
+    <script>
+        (function($) {
+            const modal = $('#addModal');
+            const form = modal.find('form');
+            const title = modal.find('#addModalLabel');
+            const submitBtn = modal.find('.submit-btn');
 
-        $('.add-btn').on('click', function() {
-            form.trigger('reset');
-            form.attr('action', "{{ route('admin.developer.store') }}");
-            title.text("@lang('Add Developer')");
-            submitBtn.html('<i class="las la-plus"></i> @lang("Add Developer")');
+            $('.add-btn').on('click', function() {
+                form.trigger('reset');
+                form.attr('action', "{{ route('admin.developer.store') }}");
+                title.text("@lang('Add Developer')");
+                submitBtn.html('<i class="las la-plus"></i> @lang('Add Developer')');
 
-            modal.modal('show');
-        });
+                modal.modal('show');
+            });
 
-        $('.edit-btn').on('click', function() {
-            const developer = $(this).data('resource');
-            form.trigger('reset');
-            form.attr('action', "{{ route('admin.developer.store', ':id') }}".replace(':id', developer.id));
-            title.text("@lang('Edit developer Type')");
-            submitBtn.html('<i class="las la-edit"></i> @lang("Update Developer")');
-            modal.find('.developer-id').val(developer.id);
-            modal.find('.developer-name').val(developer.name);
-            modal.find('.developer-contact').val(developer.contact_person);
-            modal.find('.developer-email').val(developer.email);
-            modal.find('.developer-phone').val(developer.phone);
-            modal.find('.developer-location').val(developer.location);
-            modal.modal('show');
-        });
-    })(jQuery);
-</script>
+            $('.edit-btn').on('click', function() {
+                const developer = $(this).data('resource');
+                form.trigger('reset');
+                form.attr('action', "{{ route('admin.developer.store', ':id') }}".replace(':id', developer
+                .id));
+                title.text("@lang('Edit developer Type')");
+                submitBtn.html('<i class="las la-edit"></i> @lang('Update Developer')');
+                modal.find('.developer-id').val(developer.id);
+                modal.find('.developer-name').val(developer.name);
+                modal.find('.developer-contact').val(developer.contact_person);
+                modal.find('.developer-email').val(developer.email);
+                modal.find('.developer-phone').val(developer.phone);
+                modal.find('.developer-location').val(developer.location);
+                modal.modal('show');
+            });
+        })(jQuery);
+    </script>
 @endpush
