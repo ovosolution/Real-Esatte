@@ -6936,6 +6936,7 @@ label.required:after {
   padding: 24px;
   border: 1px solid hsl(var(--black) / 0.1);
   border-radius: 14px;
+  margin-bottom: 16px;
 }
 
 .search-menu__link {
@@ -7176,8 +7177,9 @@ label.required:after {
 }
 
 .table__heading__title {
-  font-size: 14px !important;
+  font-size: 16px !important;
   font-weight: 400;
+  color: hsl(var(--black));
 }
 
 .company__icon {
@@ -7189,4 +7191,21 @@ label.required:after {
   align-items: center;
   color: hsl(var(--primary));
   border-radius: 10px;
+}
+
+@media screen and (max-width: 1199px) {
+  .dashboard-body__heading__wrap {
+    justify-content: start;
+  }
+}
+@media screen and (max-width: 767px) {
+  .dashboard-body__title {
+    font-size: 20px !important;
+    margin-bottom: 0;
+  }
+}
+@media screen and (max-width: 1399px) {
+  .table thead tr th {
+    padding: 14px 15px;
+  }
 }
