@@ -22,7 +22,7 @@ class Sms extends NotifyProcess implements Notifiable{
     * @return void
     */
 	public function __construct(){
-        
+
 		$this->statusField = 'sms_status';
 		$this->body = 'sms_body';
 		$this->globalTemplate = 'sms_template';

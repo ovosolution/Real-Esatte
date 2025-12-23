@@ -11,7 +11,6 @@
                 @foreach ($plans as $key => $plan)
                     <div class="col-xxl-4 col-md-4 col-sm-6">
                         <div class="pricing__card plan-item {{ $key == 0 ? 'active' : '' }}" data-name="{{ ucfirst($plan->name) }}" data-features='@json($plan->features)'>
-                            {{-- Top section --}}
                             <div class="pricing__card__content d-flex align-items-center gap-3 justify-content-between">
                                 <div class="form-check d-flex align-items-center">
                                     <input class="form-check-input" type="checkbox" id="plan_{{ $plan->id }}" {{ $key == 0 ? 'checked' : '' }}>
@@ -24,7 +23,6 @@
 
                                 <div>
                                     <button type="button" class="pricing__btn edit-plan-btn" data-plan='@json($plan)'>
-                                        {{-- Edit icon --}}
                                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M8 2H3.33333C2.97971 2 2.64057 2.14048 2.39052 2.39052C2.14048 2.64057 2 2.97971 2 3.33333V12.6667C2 13.0203 2.14048 13.3594 2.39052 13.6095C2.64057 13.8595 2.97971 14 3.33333 14H12.6667C13.0203 14 13.3594 13.8595 13.6095 13.6095C13.8595 13.3594 14 13.0203 14 12.6667V8" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round" />
                                             <path d="M12.2499 1.75C12.5151 1.48478 12.8748 1.33578 13.2499 1.33578C13.625 1.33578 13.9847 1.48478 14.2499 1.75C14.5151 2.01521 14.6641 2.37493 14.6641 2.75C14.6641 3.12507 14.5151 3.48478 14.2499 3.75L8.24123 9.75933" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round" />
@@ -83,7 +81,7 @@
                 <div class="col-lg-3">
                     <div class="role__card card">
                         <span class="role__card__icon">
-                            <h3 class="role__card__title">@lang('Free Trial Users')</h3>
+                            <h3 class="role__card__title">@lang('Weekly Subscribers')</h3>
                         </span>
                         <span>
                             <h3 class="role__card__price">100</h3>
@@ -94,7 +92,7 @@
                 <div class="col-lg-3">
                     <div class="role__card card">
                         <span class="role__card__icon">
-                            <h3 class="role__card__title">@lang('Basic Subscribers')</h3>
+                            <h3 class="role__card__title">@lang('Monthly Subscribers')</h3>
                         </span>
                         <span>
                             <h3 class="role__card__price">100</h3>
@@ -105,7 +103,7 @@
                 <div class="col-lg-3">
                     <div class="role__card card">
                         <span class="role__card__icon">
-                            <h3 class="role__card__title">@lang('Pro Subscriber')</h3>
+                            <h3 class="role__card__title">@lang('Yearly Subscribers')</h3>
                         </span>
                         <span>
                             <h3 class="role__card__price">100</h3>

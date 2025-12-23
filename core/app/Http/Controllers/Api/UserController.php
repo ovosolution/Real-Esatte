@@ -32,6 +32,8 @@ class UserController extends Controller
             'user'       => auth()->user(),
             'properties' => $properties,
             'saved_properties' => $savedProperties,
+            'image_path'  => getFilePath('property'),
+            'developer_image_path' => getFilePath('adminProfile'),
         ]);
     }
 

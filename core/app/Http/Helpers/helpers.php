@@ -227,7 +227,7 @@ function getImage($image, $size = null, $isAvatar = false)
     return asset('assets/images/default.png');
 }
 
-function notify($user, $templateName, $shortCodes = null, $sendVia = null, $createLog = true, $pushImage = null)
+function notify($user, $templateName, $shortCodes = null, $sendVia = null, $createLog = true, $pushImage = null, $recipientsCount = 0, $scheduledAt = null)
 {
     $globalShortCodes = [
         'site_name'       => gs('site_name'),
@@ -247,6 +247,7 @@ function notify($user, $templateName, $shortCodes = null, $sendVia = null, $crea
     $notify->user         = $user;
     $notify->createLog    = $createLog;
     $notify->pushImage    = $pushImage;
+    $notify->recipients   = $recipientsCount;
     $notify->userColumn   = isset($user->id) ? $user->getForeignKey() : 'user_id';
     $notify->send();
 }
