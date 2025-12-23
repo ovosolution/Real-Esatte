@@ -13,7 +13,8 @@ class DeveloperController extends Controller
     {
         $pageTitle  = 'All Developers';
         $developers = Developer::with('properties')->orderBy('id', 'desc')->paginate(getPaginate());
-        return view('admin.users.developers', compact('pageTitle', 'developers'));
+        $developersCount = Developer::count();
+        return view('admin.users.developers', compact('pageTitle', 'developers', 'developersCount'));
     }
 
     public function store(Request $request, $id = null)
