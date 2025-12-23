@@ -1,512 +1,508 @@
 @extends('admin.layouts.app')
 @section('panel')
-    <div class="dashboard-body">
-        <div class="dashboard-body__card">
+<div class="dashboard-body">
+    <div class="dashboard-body__card">
 
-            <div class="row gy-4">
-                <div class="col-lg-12">
-                    @include('admin.users.user_header')
-                    <div class="search-box__wrap mb-3">
-                        <div class="search-box w-100">
-                            <form>
-                                <input type="search" class="form-control form--control w-100 h-36" name="search"
-                                    value="{{ request()->search }}" placeholder="@lang('Search...')">
-                            </form>
-                        </div>
-                        <div class="search-menu">
-                            <a class="search-menu__link @if (request()->routeIs('admin.users.all')) active @endif"
-                                href="{{ route('admin.users.all') }}">@lang('All')</a>
-                            <a class="search-menu__link @if (request()->routeIs('admin.users.active')) active @endif"
-                                href="{{ route('admin.users.active') }}">@lang('Verified')</a>
-                            <a class="search-menu__link @if (request()->routeIs('admin.users.pending'))  @endif"
-                                href="{{ route('admin.users.pending') }}">@lang('Pending')</a>
-                        </div>
+        <div class="row gy-4">
+            <div class="col-lg-12">
+                @include('admin.users.user_header')
+                <div class="search-box__wrap">
+                    <div class="search-box w-100">
+                        <form>
+                            <input type="search" class="form-control form--control w-100 h-36" name="search"
+                                value="{{ request()->search }}" placeholder="@lang('Search...')">
+                        </form>
                     </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="card">
-                                <div class="table__heading d-flex align-items-center justify-content-between">
-                                    <p class="table__heading__title text-black mb-0">Properties (5)</p>
+                    <div class="search-menu">
+                        <a class="search-menu__link @if (request()->routeIs('admin.users.all')) active @endif"
+                            href="{{ route('admin.users.all') }}">@lang('All')</a>
+                        <a class="search-menu__link @if (request()->routeIs('admin.users.active')) active @endif"
+                            href="{{ route('admin.users.active') }}">@lang('Verified')</a>
+                        <a class="search-menu__link @if (request()->routeIs('admin.users.pending'))  @endif"
+                            href="{{ route('admin.users.pending') }}">@lang('Pending')</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="table__heading d-flex align-items-center justify-content-between">
+                                <p class="table__heading__title text-black mb-0">Properties (5)</p>
 
-                                </div>
-                                <table class="table border-0 p-0 mt-4 table--responsive--md">
-                                    <thead>
+                            </div>
+                            <table class="table border-0 p-0 mt-4 table--responsive--md">
+                                <thead>
+                                    <tr>
+                                        <th>@lang('Name')</th>
+                                        <th>@lang('Email')</th>
+                                        <th>@lang('Company')</th>
+                                        <th>@lang('Status')</th>
+                                        <th>@lang('Tier')</th>
+                                        <th>@lang('Joined')</th>
+                                        <th>@lang('Action')</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($users as $user)
                                         <tr>
-                                            <th>@lang('Name')</th>
-                                            <th>@lang('Email')</th>
-                                            <th>@lang('Company')</th>
-                                            <th>@lang('Status')</th>
-                                            <th>@lang('Tier')</th>
-                                            <th>@lang('Joined')</th>
-                                            <th>@lang('Action')</th>
+                                            <td>{{ $user->firstname }} {{ $user->lastname }}
+                                            </td>
+                                            <td>{{ $user->email }}</td>
+                                            <td>{{ $user->company_name ?? 'N/A' }}</td>
+                                            <td>
+                                                @if($user->is_verified == Status::VERIFIED)
+                                                    <span class="badge badge--success">@lang('Verified')</span>
+                                                @elseif(
+                                                    $user->company_complete == Status::COMPLETE &&
+                                                    $user->profile_complete == Status::COMPLETE &&
+                                                    $user->id_verification_complete == Status::COMPLETE &&
+                                                    $user->is_verified == Status::UNVERIFIED)
+                                                    <span class="badge badge--warning">@lang('Pending')</span>
+                                                @else
+                                                    <span class="badge badge--info">@lang('Incomplete')</span>
+                                                @endif
+                                            </td>
+                                            <td>{{ $user->plan_name ?? 'N/A' }}</td>
+                                            <td>{{ showDateTime($user->created_at) }}</td>
+                                            <td>
+                                                <div class="action-buttons">
+                                                    <button type="button" class="action-btn view-btn"
+                                                        data-bs-toggle="tooltip" data-bs-placement="top"
+                                                        data-bs-title="View" data-user="{{ json_encode($user) }}">
+                                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M1.37468 8.232C1.31912 8.08232 1.31912 7.91767 1.37468 7.768C1.91581 6.4559 2.83435 5.33402 4.01386 4.5446C5.19336 3.75517 6.58071 3.33374 8.00001 3.33374C9.41932 3.33374 10.8067 3.75517 11.9862 4.5446C13.1657 5.33402 14.0842 6.4559 14.6253 7.768C14.6809 7.91767 14.6809 8.08232 14.6253 8.232C14.0842 9.54409 13.1657 10.666 11.9862 11.4554C10.8067 12.2448 9.41932 12.6663 8.00001 12.6663C6.58071 12.6663 5.19336 12.2448 4.01386 11.4554C2.83435 10.666 1.91581 9.54409 1.37468 8.232Z"
+                                                                stroke="#0A0A0A" stroke-width="1.33333"
+                                                                stroke-linecap="round" stroke-linejoin="round" />
+                                                            <path
+                                                                d="M8 10C9.10457 10 10 9.10457 10 8C10 6.89543 9.10457 6 8 6C6.89543 6 6 6.89543 6 8C6 9.10457 6.89543 10 8 10Z"
+                                                                stroke="#0A0A0A" stroke-width="1.33333"
+                                                                stroke-linecap="round" stroke-linejoin="round" />
+                                                            </g>
+                                                            <defs>
+                                                                <clipPath id="clip0_726_1961">
+                                                                    <rect width="16" height="16" fill="white" />
+                                                                </clipPath>
+                                                            </defs>
+                                                        </svg>
+                                                    </button>
+
+                                                    @if(
+                                                        $user->company_complete == Status::COMPLETE &&
+                                                        $user->profile_complete == Status::COMPLETE &&
+                                                        $user->id_verification_complete == Status::COMPLETE &&
+                                                        $user->is_verified == Status::UNVERIFIED)
+                                                        <button type="button"
+                                                            class="action-btn approve-btn confirmationBtn"
+                                                            data-bs-toggle="tooltip" data-bs-placement="top"
+                                                            data-bs-title="Edit"
+                                                            data-question="@lang('Are you sure to approve this user?')"
+                                                            data-action="{{ route('admin.users.approve', $user->id) }}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
+                                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="16"
+                                                                height="16" x="0" y="0" viewBox="0 0 512 512"
+                                                                style="enable-background:new 0 0 512 512"
+                                                                xml:space="preserve" class="">
+                                                                <g>
+                                                                    <path
+                                                                        d="M497.36 69.995c-7.532-7.545-19.753-7.558-27.285-.032L238.582 300.845l-83.522-90.713c-7.217-7.834-19.419-8.342-27.266-1.126-7.841 7.217-8.343 19.425-1.126 27.266l97.126 105.481a19.273 19.273 0 0 0 13.784 6.22c.141.006.277.006.412.006a19.317 19.317 0 0 0 13.623-5.628L497.322 97.286c7.551-7.525 7.564-19.746.038-27.291z"
+                                                                        fill="#00a63e" opacity="1"
+                                                                        data-original="#000000" class="">
+                                                                    </path>
+                                                                    <path
+                                                                        d="M492.703 236.703c-10.658 0-19.296 8.638-19.296 19.297 0 119.883-97.524 217.407-217.407 217.407-119.876 0-217.407-97.524-217.407-217.407 0-119.876 97.531-217.407 217.407-217.407 10.658 0 19.297-8.638 19.297-19.296C275.297 8.638 266.658 0 256 0 114.84 0 0 114.84 0 256c0 141.154 114.84 256 256 256 141.154 0 256-114.846 256-256 0-10.658-8.638-19.297-19.297-19.297z"
+                                                                        fill="#00a63e" opacity="1"
+                                                                        data-original="#000000" class="">
+                                                                    </path>
+                                                                </g>
+                                                            </svg>
+                                                        </button>
+
+                                                        <button type="button" class="action-btn reject-btn"
+                                                            data-bs-toggle="tooltip" data-bs-placement="top"
+                                                            data-bs-title="Delete"
+                                                            data-question="@lang('Are you sure to delete the notification?')"
+                                                            data-action="{{ route('admin.users.reject', $user->id) }}"><svg
+                                                                width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                <g clip-path="url(#clip0_726_1993)">
+                                                                    <path
+                                                                        d="M7.99992 14.6666C11.6818 14.6666 14.6666 11.6819 14.6666 7.99998C14.6666 4.31808 11.6818 1.33331 7.99992 1.33331C4.31802 1.33331 1.33325 4.31808 1.33325 7.99998C1.33325 11.6819 4.31802 14.6666 7.99992 14.6666Z"
+                                                                        stroke="#E7000B" stroke-width="1.33333"
+                                                                        stroke-linecap="round"
+                                                                        stroke-linejoin="round" />
+                                                                    <path d="M10 6L6 10" stroke="#E7000B"
+                                                                        stroke-width="1.33333" stroke-linecap="round"
+                                                                        stroke-linejoin="round" />
+                                                                    <path d="M6 6L10 10" stroke="#E7000B"
+                                                                        stroke-width="1.33333" stroke-linecap="round"
+                                                                        stroke-linejoin="round" />
+                                                                </g>
+                                                                <defs>
+                                                                    <clipPath id="clip0_726_1993">
+                                                                        <rect width="16" height="16" fill="white" />
+                                                                    </clipPath>
+                                                                </defs>
+                                                            </svg>
+                                                        </button>
+                                                    @endif
+
+                                                    @if($user->is_verified)
+                                                        <button type="button" class="action-btn ban-btn userStatus"
+                                                            data-bs-toggle="tooltip" data-bs-placement="top"
+                                                            data-bs-title="@lang('Ban User')"
+                                                            data-user="{{ json_encode($user) }}"><svg width="16"
+                                                                height="16" viewBox="0 0 16 16" fill="none"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                <g clip-path="url(#clip0_726_1965)">
+                                                                    <path d="M3.28589 3.28598L12.7132 12.714"
+                                                                        stroke="#E7000B" stroke-width="1.33333"
+                                                                        stroke-linecap="round"
+                                                                        stroke-linejoin="round" />
+                                                                    <path
+                                                                        d="M7.99992 14.6667C11.6818 14.6667 14.6666 11.6819 14.6666 8.00001C14.6666 4.31811 11.6818 1.33334 7.99992 1.33334C4.31802 1.33334 1.33325 4.31811 1.33325 8.00001C1.33325 11.6819 4.31802 14.6667 7.99992 14.6667Z"
+                                                                        stroke="#E7000B" stroke-width="1.33333"
+                                                                        stroke-linecap="round"
+                                                                        stroke-linejoin="round" />
+                                                                </g>
+                                                                <defs>
+                                                                    <clipPath id="clip0_726_1965">
+                                                                        <rect width="16" height="16" fill="white" />
+                                                                    </clipPath>
+                                                                </defs>
+                                                            </svg>
+                                                        </button>
+                                                    @endif
+                                                </div>
+                                            </td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        @forelse ($users as $user)
-                                            <tr>
-                                                <td>{{ $user->firstname }} {{ $user->lastname }}
-                                                </td>
-                                                <td>{{ $user->email }}</td>
-                                                <td>{{ $user->company_name ?? 'N/A' }}</td>
-                                                <td>
-                                                    @if ($user->is_verified == Status::VERIFIED)
-                                                        <span class="badge badge--success">@lang('Verified')</span>
-                                                    @elseif (
+                                        <tr>
+                                            <td>{{ $user->firstname }} {{ $user->lastname }}
+                                            </td>
+                                            <td>{{ $user->email }}</td>
+                                            <td>{{ $user->company_name ?? 'N/A' }}</td>
+                                            <td>
+                                                @if($user->is_verified == Status::VERIFIED)
+                                                    <span class="badge badge--success">@lang('Verified')</span>
+                                                @elseif(
+                                                    $user->company_complete == Status::COMPLETE &&
+                                                    $user->profile_complete == Status::COMPLETE &&
+                                                    $user->id_verification_complete == Status::COMPLETE &&
+                                                    $user->is_verified == Status::UNVERIFIED)
+                                                    <span class="badge badge--warning">@lang('Pending')</span>
+                                                @else
+                                                    <span class="badge badge--info">@lang('Incomplete')</span>
+                                                @endif
+                                            </td>
+                                            <td>{{ $user->plan_name ?? 'N/A' }}</td>
+                                            <td>{{ showDateTime($user->created_at) }}</td>
+                                            <td>
+                                                <div class="action-buttons">
+                                                    <button type="button" class="action-btn view-btn"
+                                                        data-bs-toggle="tooltip" data-bs-placement="top"
+                                                        data-bs-title="View" data-user="{{ json_encode($user) }}">
+                                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M1.37468 8.232C1.31912 8.08232 1.31912 7.91767 1.37468 7.768C1.91581 6.4559 2.83435 5.33402 4.01386 4.5446C5.19336 3.75517 6.58071 3.33374 8.00001 3.33374C9.41932 3.33374 10.8067 3.75517 11.9862 4.5446C13.1657 5.33402 14.0842 6.4559 14.6253 7.768C14.6809 7.91767 14.6809 8.08232 14.6253 8.232C14.0842 9.54409 13.1657 10.666 11.9862 11.4554C10.8067 12.2448 9.41932 12.6663 8.00001 12.6663C6.58071 12.6663 5.19336 12.2448 4.01386 11.4554C2.83435 10.666 1.91581 9.54409 1.37468 8.232Z"
+                                                                stroke="#0A0A0A" stroke-width="1.33333"
+                                                                stroke-linecap="round" stroke-linejoin="round" />
+                                                            <path
+                                                                d="M8 10C9.10457 10 10 9.10457 10 8C10 6.89543 9.10457 6 8 6C6.89543 6 6 6.89543 6 8C6 9.10457 6.89543 10 8 10Z"
+                                                                stroke="#0A0A0A" stroke-width="1.33333"
+                                                                stroke-linecap="round" stroke-linejoin="round" />
+                                                            </g>
+                                                            <defs>
+                                                                <clipPath id="clip0_726_1961">
+                                                                    <rect width="16" height="16" fill="white" />
+                                                                </clipPath>
+                                                            </defs>
+                                                        </svg>
+                                                    </button>
+
+                                                    @if(
                                                         $user->company_complete == Status::COMPLETE &&
-                                                            $user->profile_complete == Status::COMPLETE &&
-                                                            $user->id_verification_complete == Status::COMPLETE &&
-                                                            $user->is_verified == Status::UNVERIFIED)
-                                                        <span class="badge badge--warning">@lang('Pending')</span>
-                                                    @else
-                                                        <span class="badge badge--info">@lang('Incomplete')</span>
-                                                    @endif
-                                                </td>
-                                                <td>{{ $user->plan_name ?? 'N/A' }}</td>
-                                                <td>{{ showDateTime($user->created_at) }}</td>
-                                                <td>
-                                                    <div class="action-buttons">
-                                                        <button type="button" class="action-btn view-btn"
+                                                        $user->profile_complete == Status::COMPLETE &&
+                                                        $user->id_verification_complete == Status::COMPLETE &&
+                                                        $user->is_verified == Status::UNVERIFIED)
+                                                        <button type="button"
+                                                            class="action-btn approve-btn confirmationBtn"
                                                             data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            data-bs-title="View" data-user="{{ json_encode($user) }}">
-                                                            <svg width="16" height="16" viewBox="0 0 16 16"
-                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <path
-                                                                    d="M1.37468 8.232C1.31912 8.08232 1.31912 7.91767 1.37468 7.768C1.91581 6.4559 2.83435 5.33402 4.01386 4.5446C5.19336 3.75517 6.58071 3.33374 8.00001 3.33374C9.41932 3.33374 10.8067 3.75517 11.9862 4.5446C13.1657 5.33402 14.0842 6.4559 14.6253 7.768C14.6809 7.91767 14.6809 8.08232 14.6253 8.232C14.0842 9.54409 13.1657 10.666 11.9862 11.4554C10.8067 12.2448 9.41932 12.6663 8.00001 12.6663C6.58071 12.6663 5.19336 12.2448 4.01386 11.4554C2.83435 10.666 1.91581 9.54409 1.37468 8.232Z"
-                                                                    stroke="#0A0A0A" stroke-width="1.33333"
-                                                                    stroke-linecap="round" stroke-linejoin="round" />
-                                                                <path
-                                                                    d="M8 10C9.10457 10 10 9.10457 10 8C10 6.89543 9.10457 6 8 6C6.89543 6 6 6.89543 6 8C6 9.10457 6.89543 10 8 10Z"
-                                                                    stroke="#0A0A0A" stroke-width="1.33333"
-                                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                                            data-bs-title="Edit"
+                                                            data-question="@lang('Are you sure to approve this user?')"
+                                                            data-action="{{ route('admin.users.approve', $user->id) }}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
+                                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="16"
+                                                                height="16" x="0" y="0" viewBox="0 0 512 512"
+                                                                style="enable-background:new 0 0 512 512"
+                                                                xml:space="preserve" class="">
+                                                                <g>
+                                                                    <path
+                                                                        d="M497.36 69.995c-7.532-7.545-19.753-7.558-27.285-.032L238.582 300.845l-83.522-90.713c-7.217-7.834-19.419-8.342-27.266-1.126-7.841 7.217-8.343 19.425-1.126 27.266l97.126 105.481a19.273 19.273 0 0 0 13.784 6.22c.141.006.277.006.412.006a19.317 19.317 0 0 0 13.623-5.628L497.322 97.286c7.551-7.525 7.564-19.746.038-27.291z"
+                                                                        fill="#00a63e" opacity="1"
+                                                                        data-original="#000000" class="">
+                                                                    </path>
+                                                                    <path
+                                                                        d="M492.703 236.703c-10.658 0-19.296 8.638-19.296 19.297 0 119.883-97.524 217.407-217.407 217.407-119.876 0-217.407-97.524-217.407-217.407 0-119.876 97.531-217.407 217.407-217.407 10.658 0 19.297-8.638 19.297-19.296C275.297 8.638 266.658 0 256 0 114.84 0 0 114.84 0 256c0 141.154 114.84 256 256 256 141.154 0 256-114.846 256-256 0-10.658-8.638-19.297-19.297-19.297z"
+                                                                        fill="#00a63e" opacity="1"
+                                                                        data-original="#000000" class="">
+                                                                    </path>
+                                                                </g>
+                                                            </svg>
+                                                        </button>
+
+                                                        <button type="button" class="action-btn reject-btn"
+                                                            data-bs-toggle="tooltip" data-bs-placement="top"
+                                                            data-bs-title="Delete"
+                                                            data-question="@lang('Are you sure to delete the notification?')"
+                                                            data-action="{{ route('admin.users.reject', $user->id) }}"><svg
+                                                                width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                <g clip-path="url(#clip0_726_1993)">
+                                                                    <path
+                                                                        d="M7.99992 14.6666C11.6818 14.6666 14.6666 11.6819 14.6666 7.99998C14.6666 4.31808 11.6818 1.33331 7.99992 1.33331C4.31802 1.33331 1.33325 4.31808 1.33325 7.99998C1.33325 11.6819 4.31802 14.6666 7.99992 14.6666Z"
+                                                                        stroke="#E7000B" stroke-width="1.33333"
+                                                                        stroke-linecap="round"
+                                                                        stroke-linejoin="round" />
+                                                                    <path d="M10 6L6 10" stroke="#E7000B"
+                                                                        stroke-width="1.33333" stroke-linecap="round"
+                                                                        stroke-linejoin="round" />
+                                                                    <path d="M6 6L10 10" stroke="#E7000B"
+                                                                        stroke-width="1.33333" stroke-linecap="round"
+                                                                        stroke-linejoin="round" />
                                                                 </g>
                                                                 <defs>
-                                                                    <clipPath id="clip0_726_1961">
-                                                                        <rect width="16" height="16"
-                                                                            fill="white" />
+                                                                    <clipPath id="clip0_726_1993">
+                                                                        <rect width="16" height="16" fill="white" />
                                                                     </clipPath>
                                                                 </defs>
                                                             </svg>
                                                         </button>
-
-                                                        @if (
-                                                            $user->company_complete == Status::COMPLETE &&
-                                                                $user->profile_complete == Status::COMPLETE &&
-                                                                $user->id_verification_complete == Status::COMPLETE &&
-                                                                $user->is_verified == Status::UNVERIFIED)
-                                                            <button type="button"
-                                                                class="action-btn approve-btn confirmationBtn"
-                                                                data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                data-bs-title="Edit" data-question="@lang('Are you sure to approve this user?')"
-                                                                data-action="{{ route('admin.users.approve', $user->id) }}">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
-                                                                    xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                                    width="16" height="16" x="0" y="0"
-                                                                    viewBox="0 0 512 512"
-                                                                    style="enable-background:new 0 0 512 512"
-                                                                    xml:space="preserve" class="">
-                                                                    <g>
-                                                                        <path
-                                                                            d="M497.36 69.995c-7.532-7.545-19.753-7.558-27.285-.032L238.582 300.845l-83.522-90.713c-7.217-7.834-19.419-8.342-27.266-1.126-7.841 7.217-8.343 19.425-1.126 27.266l97.126 105.481a19.273 19.273 0 0 0 13.784 6.22c.141.006.277.006.412.006a19.317 19.317 0 0 0 13.623-5.628L497.322 97.286c7.551-7.525 7.564-19.746.038-27.291z"
-                                                                            fill="#00a63e" opacity="1"
-                                                                            data-original="#000000" class="">
-                                                                        </path>
-                                                                        <path
-                                                                            d="M492.703 236.703c-10.658 0-19.296 8.638-19.296 19.297 0 119.883-97.524 217.407-217.407 217.407-119.876 0-217.407-97.524-217.407-217.407 0-119.876 97.531-217.407 217.407-217.407 10.658 0 19.297-8.638 19.297-19.296C275.297 8.638 266.658 0 256 0 114.84 0 0 114.84 0 256c0 141.154 114.84 256 256 256 141.154 0 256-114.846 256-256 0-10.658-8.638-19.297-19.297-19.297z"
-                                                                            fill="#00a63e" opacity="1"
-                                                                            data-original="#000000" class="">
-                                                                        </path>
-                                                                    </g>
-                                                                </svg>
-                                                            </button>
-
-                                                            <button type="button" class="action-btn reject-btn"
-                                                                data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                data-bs-title="Delete" data-question="@lang('Are you sure to delete the notification?')"
-                                                                data-action="{{ route('admin.users.reject', $user->id) }}"><svg
-                                                                    width="16" height="16" viewBox="0 0 16 16"
-                                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                    <g clip-path="url(#clip0_726_1993)">
-                                                                        <path
-                                                                            d="M7.99992 14.6666C11.6818 14.6666 14.6666 11.6819 14.6666 7.99998C14.6666 4.31808 11.6818 1.33331 7.99992 1.33331C4.31802 1.33331 1.33325 4.31808 1.33325 7.99998C1.33325 11.6819 4.31802 14.6666 7.99992 14.6666Z"
-                                                                            stroke="#E7000B" stroke-width="1.33333"
-                                                                            stroke-linecap="round"
-                                                                            stroke-linejoin="round" />
-                                                                        <path d="M10 6L6 10" stroke="#E7000B"
-                                                                            stroke-width="1.33333" stroke-linecap="round"
-                                                                            stroke-linejoin="round" />
-                                                                        <path d="M6 6L10 10" stroke="#E7000B"
-                                                                            stroke-width="1.33333" stroke-linecap="round"
-                                                                            stroke-linejoin="round" />
-                                                                    </g>
-                                                                    <defs>
-                                                                        <clipPath id="clip0_726_1993">
-                                                                            <rect width="16" height="16"
-                                                                                fill="white" />
-                                                                        </clipPath>
-                                                                    </defs>
-                                                                </svg>
-                                                            </button>
-                                                        @endif
-
-                                                        @if ($user->is_verified)
-                                                            <button type="button" class="action-btn ban-btn userStatus"
-                                                                data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                data-bs-title="@lang('Ban User')"
-                                                                data-user="{{ json_encode($user) }}"><svg width="16"
-                                                                    height="16" viewBox="0 0 16 16" fill="none"
-                                                                    xmlns="http://www.w3.org/2000/svg">
-                                                                    <g clip-path="url(#clip0_726_1965)">
-                                                                        <path d="M3.28589 3.28598L12.7132 12.714"
-                                                                            stroke="#E7000B" stroke-width="1.33333"
-                                                                            stroke-linecap="round"
-                                                                            stroke-linejoin="round" />
-                                                                        <path
-                                                                            d="M7.99992 14.6667C11.6818 14.6667 14.6666 11.6819 14.6666 8.00001C14.6666 4.31811 11.6818 1.33334 7.99992 1.33334C4.31802 1.33334 1.33325 4.31811 1.33325 8.00001C1.33325 11.6819 4.31802 14.6667 7.99992 14.6667Z"
-                                                                            stroke="#E7000B" stroke-width="1.33333"
-                                                                            stroke-linecap="round"
-                                                                            stroke-linejoin="round" />
-                                                                    </g>
-                                                                    <defs>
-                                                                        <clipPath id="clip0_726_1965">
-                                                                            <rect width="16" height="16"
-                                                                                fill="white" />
-                                                                        </clipPath>
-                                                                    </defs>
-                                                                </svg>
-                                                            </button>
-                                                        @endif
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>{{ $user->firstname }} {{ $user->lastname }}
-                                                </td>
-                                                <td>{{ $user->email }}</td>
-                                                <td>{{ $user->company_name ?? 'N/A' }}</td>
-                                                <td>
-                                                    @if ($user->is_verified == Status::VERIFIED)
-                                                        <span class="badge badge--success">@lang('Verified')</span>
-                                                    @elseif (
-                                                        $user->company_complete == Status::COMPLETE &&
-                                                            $user->profile_complete == Status::COMPLETE &&
-                                                            $user->id_verification_complete == Status::COMPLETE &&
-                                                            $user->is_verified == Status::UNVERIFIED)
-                                                        <span class="badge badge--warning">@lang('Pending')</span>
-                                                    @else
-                                                        <span class="badge badge--info">@lang('Incomplete')</span>
                                                     @endif
-                                                </td>
-                                                <td>{{ $user->plan_name ?? 'N/A' }}</td>
-                                                <td>{{ showDateTime($user->created_at) }}</td>
-                                                <td>
-                                                    <div class="action-buttons">
-                                                        <button type="button" class="action-btn view-btn"
+
+                                                    @if($user->is_verified)
+                                                        <button type="button" class="action-btn ban-btn userStatus"
                                                             data-bs-toggle="tooltip" data-bs-placement="top"
-                                                            data-bs-title="View" data-user="{{ json_encode($user) }}">
-                                                            <svg width="16" height="16" viewBox="0 0 16 16"
-                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <path
-                                                                    d="M1.37468 8.232C1.31912 8.08232 1.31912 7.91767 1.37468 7.768C1.91581 6.4559 2.83435 5.33402 4.01386 4.5446C5.19336 3.75517 6.58071 3.33374 8.00001 3.33374C9.41932 3.33374 10.8067 3.75517 11.9862 4.5446C13.1657 5.33402 14.0842 6.4559 14.6253 7.768C14.6809 7.91767 14.6809 8.08232 14.6253 8.232C14.0842 9.54409 13.1657 10.666 11.9862 11.4554C10.8067 12.2448 9.41932 12.6663 8.00001 12.6663C6.58071 12.6663 5.19336 12.2448 4.01386 11.4554C2.83435 10.666 1.91581 9.54409 1.37468 8.232Z"
-                                                                    stroke="#0A0A0A" stroke-width="1.33333"
-                                                                    stroke-linecap="round" stroke-linejoin="round" />
-                                                                <path
-                                                                    d="M8 10C9.10457 10 10 9.10457 10 8C10 6.89543 9.10457 6 8 6C6.89543 6 6 6.89543 6 8C6 9.10457 6.89543 10 8 10Z"
-                                                                    stroke="#0A0A0A" stroke-width="1.33333"
-                                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                                            data-bs-title="@lang('Ban User')"
+                                                            data-user="{{ json_encode($user) }}"><svg width="16"
+                                                                height="16" viewBox="0 0 16 16" fill="none"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                <g clip-path="url(#clip0_726_1965)">
+                                                                    <path d="M3.28589 3.28598L12.7132 12.714"
+                                                                        stroke="#E7000B" stroke-width="1.33333"
+                                                                        stroke-linecap="round"
+                                                                        stroke-linejoin="round" />
+                                                                    <path
+                                                                        d="M7.99992 14.6667C11.6818 14.6667 14.6666 11.6819 14.6666 8.00001C14.6666 4.31811 11.6818 1.33334 7.99992 1.33334C4.31802 1.33334 1.33325 4.31811 1.33325 8.00001C1.33325 11.6819 4.31802 14.6667 7.99992 14.6667Z"
+                                                                        stroke="#E7000B" stroke-width="1.33333"
+                                                                        stroke-linecap="round"
+                                                                        stroke-linejoin="round" />
                                                                 </g>
                                                                 <defs>
-                                                                    <clipPath id="clip0_726_1961">
-                                                                        <rect width="16" height="16"
-                                                                            fill="white" />
+                                                                    <clipPath id="clip0_726_1965">
+                                                                        <rect width="16" height="16" fill="white" />
                                                                     </clipPath>
                                                                 </defs>
                                                             </svg>
                                                         </button>
+                                                    @endif
+                                                </div>
+                                            </td>
+                                        </tr>
 
-                                                        @if (
-                                                            $user->company_complete == Status::COMPLETE &&
-                                                                $user->profile_complete == Status::COMPLETE &&
-                                                                $user->id_verification_complete == Status::COMPLETE &&
-                                                                $user->is_verified == Status::UNVERIFIED)
-                                                            <button type="button"
-                                                                class="action-btn approve-btn confirmationBtn"
-                                                                data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                data-bs-title="Edit" data-question="@lang('Are you sure to approve this user?')"
-                                                                data-action="{{ route('admin.users.approve', $user->id) }}">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
-                                                                    xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                                    width="16" height="16" x="0" y="0"
-                                                                    viewBox="0 0 512 512"
-                                                                    style="enable-background:new 0 0 512 512"
-                                                                    xml:space="preserve" class="">
-                                                                    <g>
-                                                                        <path
-                                                                            d="M497.36 69.995c-7.532-7.545-19.753-7.558-27.285-.032L238.582 300.845l-83.522-90.713c-7.217-7.834-19.419-8.342-27.266-1.126-7.841 7.217-8.343 19.425-1.126 27.266l97.126 105.481a19.273 19.273 0 0 0 13.784 6.22c.141.006.277.006.412.006a19.317 19.317 0 0 0 13.623-5.628L497.322 97.286c7.551-7.525 7.564-19.746.038-27.291z"
-                                                                            fill="#00a63e" opacity="1"
-                                                                            data-original="#000000" class="">
-                                                                        </path>
-                                                                        <path
-                                                                            d="M492.703 236.703c-10.658 0-19.296 8.638-19.296 19.297 0 119.883-97.524 217.407-217.407 217.407-119.876 0-217.407-97.524-217.407-217.407 0-119.876 97.531-217.407 217.407-217.407 10.658 0 19.297-8.638 19.297-19.296C275.297 8.638 266.658 0 256 0 114.84 0 0 114.84 0 256c0 141.154 114.84 256 256 256 141.154 0 256-114.846 256-256 0-10.658-8.638-19.297-19.297-19.297z"
-                                                                            fill="#00a63e" opacity="1"
-                                                                            data-original="#000000" class="">
-                                                                        </path>
-                                                                    </g>
-                                                                </svg>
-                                                            </button>
-
-                                                            <button type="button" class="action-btn reject-btn"
-                                                                data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                data-bs-title="Delete" data-question="@lang('Are you sure to delete the notification?')"
-                                                                data-action="{{ route('admin.users.reject', $user->id) }}"><svg
-                                                                    width="16" height="16" viewBox="0 0 16 16"
-                                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                    <g clip-path="url(#clip0_726_1993)">
-                                                                        <path
-                                                                            d="M7.99992 14.6666C11.6818 14.6666 14.6666 11.6819 14.6666 7.99998C14.6666 4.31808 11.6818 1.33331 7.99992 1.33331C4.31802 1.33331 1.33325 4.31808 1.33325 7.99998C1.33325 11.6819 4.31802 14.6666 7.99992 14.6666Z"
-                                                                            stroke="#E7000B" stroke-width="1.33333"
-                                                                            stroke-linecap="round"
-                                                                            stroke-linejoin="round" />
-                                                                        <path d="M10 6L6 10" stroke="#E7000B"
-                                                                            stroke-width="1.33333" stroke-linecap="round"
-                                                                            stroke-linejoin="round" />
-                                                                        <path d="M6 6L10 10" stroke="#E7000B"
-                                                                            stroke-width="1.33333" stroke-linecap="round"
-                                                                            stroke-linejoin="round" />
-                                                                    </g>
-                                                                    <defs>
-                                                                        <clipPath id="clip0_726_1993">
-                                                                            <rect width="16" height="16"
-                                                                                fill="white" />
-                                                                        </clipPath>
-                                                                    </defs>
-                                                                </svg>
-                                                            </button>
-                                                        @endif
-
-                                                        @if ($user->is_verified)
-                                                            <button type="button" class="action-btn ban-btn userStatus"
-                                                                data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                data-bs-title="@lang('Ban User')"
-                                                                data-user="{{ json_encode($user) }}"><svg width="16"
-                                                                    height="16" viewBox="0 0 16 16" fill="none"
-                                                                    xmlns="http://www.w3.org/2000/svg">
-                                                                    <g clip-path="url(#clip0_726_1965)">
-                                                                        <path d="M3.28589 3.28598L12.7132 12.714"
-                                                                            stroke="#E7000B" stroke-width="1.33333"
-                                                                            stroke-linecap="round"
-                                                                            stroke-linejoin="round" />
-                                                                        <path
-                                                                            d="M7.99992 14.6667C11.6818 14.6667 14.6666 11.6819 14.6666 8.00001C14.6666 4.31811 11.6818 1.33334 7.99992 1.33334C4.31802 1.33334 1.33325 4.31811 1.33325 8.00001C1.33325 11.6819 4.31802 14.6667 7.99992 14.6667Z"
-                                                                            stroke="#E7000B" stroke-width="1.33333"
-                                                                            stroke-linecap="round"
-                                                                            stroke-linejoin="round" />
-                                                                    </g>
-                                                                    <defs>
-                                                                        <clipPath id="clip0_726_1965">
-                                                                            <rect width="16" height="16"
-                                                                                fill="white" />
-                                                                        </clipPath>
-                                                                    </defs>
-                                                                </svg>
-                                                            </button>
-                                                        @endif
-                                                    </div>
-                                                </td>
-                                            </tr>
-
-                                        @empty
-                                            <x-admin.ui.table.empty_message />
-                                        @endforelse
-                                    </tbody>
-                                </table>
-                            </div>
+                                    @empty
+                                        <x-admin.ui.table.empty_message />
+                                    @endforelse
+                                </tbody>
+                            </table>
                         </div>
-                        @if ($users->hasPages())
-                            <div class="mt-3">
-                                {{ paginateLinks($users) }}
-                            </div>
-                        @endif
                     </div>
+                    @if($users->hasPages())
+                        <div class="mt-3">
+                            {{ paginateLinks($users) }}
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
+</div>
 
 
-    <div class="modal fade" id="userStatusModal" tabindex="-1" role="dialog" aria-labelledby="userStatusModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="userStatusModalLabel"></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class="modal fade" id="userStatusModal" tabindex="-1" role="dialog" aria-labelledby="userStatusModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userStatusModalLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST">
+                    @csrf
+                    <div class="ban-content">
+                        <small>@lang('If this user is banned, they will no longer have access to their
+                            dashboard.')</small>
+                        <div class="form-group">
+                            <label>@lang('Reason')</label>
+                            <textarea class="form-control" name="reason" rows="4"></textarea>
+                        </div>
+                    </div>
+                    <div class="unban-content d-none">
+                        <small>
+                            <span class="text--info">@lang('Ban reason was'):</span>
+                            <span class="ban-reason-text"></span>
+                        </small>
+                        <h4 class="mt-3 text-center text--warning">@lang('Are you sure to unban this user?')</h4>
+                    </div>
+                    <div class="form-group mt-3 d-flex justify-content-end gap-2">
+                        <button type="button" class="btn Reject__btn" data-bs-dismiss="modal">
+                            @lang('No')
+                        </button>
+
+                        <button type="submit" class="btn approve__btn">
+                            @lang('Yes')
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="userInfoModal" tabindex="-1" aria-labelledby="userInfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="userInfoModalLabel">@lang('Realtor Profile')</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-body__user">
+                    <span class="user__name">MO</span>
+                    <div class="modal__user__content">
+                        <p class="modal__user__title user-name"></p>
+                        <p class="modal__user__desc user-email"></p>
+                        <span class="modal__user__tag user-status badge"></span>
+                    </div>
+
                 </div>
-                <div class="modal-body">
-                    <form action="" method="POST">
-                        @csrf
-                        <div class="ban-content">
-                            <small>@lang('If this user is banned, they will no longer have access to their dashboard.')</small>
-                            <div class="form-group">
-                                <label>@lang('Reason')</label>
-                                <textarea class="form-control" name="reason" rows="4"></textarea>
-                            </div>
-                        </div>
-                        <div class="unban-content d-none">
-                            <small>
-                                <span class="text--info">@lang('Ban reason was'):</span>
-                                <span class="ban-reason-text"></span>
-                            </small>
-                            <h4 class="mt-3 text-center text--warning">@lang('Are you sure to unban this user?')</h4>
-                        </div>
-                        <div class="form-group mt-3 d-flex justify-content-end gap-2">
-                            <button type="button" class="btn Reject__btn" data-bs-dismiss="modal">
-                                @lang('No')
-                            </button>
 
-                            <button type="submit" class="btn approve__btn">
-                                @lang('Yes')
-                            </button>
-                        </div>
+                <div class="modal__company__info">
+
+                    <div class=" text-left">
+                        <p class="modal__company__title">@lang('Company')</p>
+                        <p class="modal__company__desc user-company"></p>
+                    </div>
+                    <div>
+                        <p class="modal__company__title">@lang('Subscription Tier')</p>
+                        <p class="modal__company__desc user-plan"></p>
+                    </div>
+
+                </div>
+
+                <div class="Verification">
+                    <div class="verification__wrap mb-2">
+                        <input type="text" class="form--control Verification__form" value="@lang('Business License')"
+                            readonly>
+                        <button type="button" class="btn btn--base view__btn view-license-btn">@lang('View')</button>
+                    </div>
+                    <div class="verification__wrap">
+                        <input type="text" class="form--control Verification__form" value="@lang('ID Verification')"
+                            readonly>
+                        <button type="button" class="btn btn--base view__btn view-id-btn">@lang('View')</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <div class="pending-user-actions d-none">
+                    <form action="" method="POST" class="approve-form w-100">
+                        @csrf
+                        <button type="submit" class="btn approve__btn"><svg width="16" height="16" viewBox="0 0 16 16"
+                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_726_2700)">
+                                    <path
+                                        d="M14.5341 6.66666C14.8385 8.16086 14.6215 9.71427 13.9193 11.0679C13.2171 12.4214 12.072 13.4934 10.6751 14.1049C9.27816 14.7164 7.71382 14.8305 6.24293 14.4282C4.77205 14.026 3.48353 13.1316 2.59225 11.8943C1.70097 10.657 1.26081 9.15148 1.34518 7.62892C1.42954 6.10635 2.03332 4.65872 3.05583 3.52744C4.07835 2.39616 5.45779 1.64961 6.96411 1.4123C8.47043 1.17498 10.0126 1.46123 11.3334 2.22333"
+                                        stroke="white" stroke-width="1.33333" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path d="M6 7.33341L8 9.33341L14.6667 2.66675" stroke="white" stroke-width="1.33333"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_726_2700">
+                                        <rect width="16" height="16" fill="white" />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                            @lang('Approve')
+                        </button>
+                    </form>
+                    <form action="" method="POST" class="reject-form w-100">
+                        @csrf
+                        <button type="submit" class="btn Reject__btn">@lang('Reject')</button>
                     </form>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="userInfoModal" tabindex="-1" aria-labelledby="userInfoModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="userInfoModalLabel">@lang('Realtor Profile')</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="modal-body__user">
-                        <span class="user__name">MO</span>
-                        <div class="modal__user__content">
-                            <p class="modal__user__title user-name"></p>
-                            <p class="modal__user__desc user-email"></p>
-                            <span class="modal__user__tag user-status badge"></span>
-                        </div>
-
-                    </div>
-
-                    <div class="modal__company__info">
-
-                        <div class=" text-left">
-                            <p class="modal__company__title">@lang('Company')</p>
-                            <p class="modal__company__desc user-company"></p>
-                        </div>
-                        <div>
-                            <p class="modal__company__title">@lang('Subscription Tier')</p>
-                            <p class="modal__company__desc user-plan"></p>
-                        </div>
-
-                    </div>
-
-                    <div class="Verification">
-                        <div class="verification__wrap mb-2">
-                            <input type="text" class="form--control Verification__form" value="@lang('Business License')"
-                                readonly>
-                            <button type="button"
-                                class="btn btn--base view__btn view-license-btn">@lang('View')</button>
-                        </div>
-                        <div class="verification__wrap">
-                            <input type="text" class="form--control Verification__form" value="@lang('ID Verification')"
-                                readonly>
-                            <button type="button" class="btn btn--base view__btn view-id-btn">@lang('View')</button>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="modal-footer">
-                    <div class="pending-user-actions d-none">
-                        <form action="" method="POST" class="approve-form w-100">
-                            @csrf
-                            <button type="submit" class="btn approve__btn"><svg width="16" height="16"
-                                    viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <g clip-path="url(#clip0_726_2700)">
-                                        <path
-                                            d="M14.5341 6.66666C14.8385 8.16086 14.6215 9.71427 13.9193 11.0679C13.2171 12.4214 12.072 13.4934 10.6751 14.1049C9.27816 14.7164 7.71382 14.8305 6.24293 14.4282C4.77205 14.026 3.48353 13.1316 2.59225 11.8943C1.70097 10.657 1.26081 9.15148 1.34518 7.62892C1.42954 6.10635 2.03332 4.65872 3.05583 3.52744C4.07835 2.39616 5.45779 1.64961 6.96411 1.4123C8.47043 1.17498 10.0126 1.46123 11.3334 2.22333"
-                                            stroke="white" stroke-width="1.33333" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                        <path d="M6 7.33341L8 9.33341L14.6667 2.66675" stroke="white"
-                                            stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round" />
-                                    </g>
-                                    <defs>
-                                        <clipPath id="clip0_726_2700">
-                                            <rect width="16" height="16" fill="white" />
-                                        </clipPath>
-                                    </defs>
-                                </svg>
-                                @lang('Approve')
-                            </button>
-                        </form>
-                        <form action="" method="POST" class="reject-form w-100">
-                            @csrf
-                            <button type="submit" class="btn Reject__btn">@lang('Reject')</button>
-                        </form>
-                    </div>
-                    <div class="verified-user-actions d-none">
-                        <div class="d-flex gap-3 justify-content-center">
-                            <button type="button" class="btn Reject__btn suspend-user-btn"><i class="las la-ban"></i>
-                                <span class="suspend-btn-text">@lang('Suspend Account')</span></button>
-                        </div>
+                <div class="verified-user-actions d-none">
+                    <div class="d-flex gap-3 justify-content-center">
+                        <button type="button" class="btn Reject__btn suspend-user-btn"><i class="las la-ban"></i>
+                            <span class="suspend-btn-text">@lang('Suspend Account')</span></button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="modal fade" id="verificationDetailsModal" tabindex="-1" aria-labelledby="verificationDetailsModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="verificationDetailsModalLabel">@lang('Verification Details')</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="company-details d-none">
-                        <ul class="list-group list-group-flush mb-3">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                @lang('Company Name')
+<div class="modal fade" id="verificationDetailsModal" tabindex="-1" aria-labelledby="verificationDetailsModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="verificationDetailsModalLabel">@lang('Verification Details')</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="company-details d-none">
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            @lang('Company Name')
                                 <span class="fw-bold company-name"></span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                @lang('Role')
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            @lang('Role')
                                 <span class="fw-bold company-role"></span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                @lang('Address')
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            @lang('Address')
                                 <span class="fw-bold company-address"></span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                @lang('Website')
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            @lang('Website')
                                 <span class="fw-bold company-website"></span>
-                            </li>
-                        </ul>
-                    </div>
+                        </li>
+                    </ul>
+                </div>
 
-                    <div class="id-verification-details d-none mb-3">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                @lang('ID Type')
+                <div class="id-verification-details d-none mb-3">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            @lang('ID Type')
                                 <span class="fw-bold id-type"></span>
-                            </li>
-                        </ul>
-                    </div>
+                        </li>
+                    </ul>
+                </div>
 
-                    <div class="text-center">
-                        <img src="" class="img-fluid rounded verification-image" alt="@lang('Verification Image')">
-                    </div>
+                <div class="text-center">
+                    <img src="" class="img-fluid rounded verification-image" alt="@lang('Verification Image')">
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <x-confirmation-modal />
+<x-confirmation-modal />
 @endsection
 
 @push('breadcrumb-plugins')
@@ -525,9 +521,9 @@
 
 @push('script')
     <script>
-        (function($) {
+        (function ($) {
             "use strict";
-            $('.view-btn').on('click', function() {
+            $('.view-btn').on('click', function () {
                 var user = $(this).data('user');
                 var modal = $('#userInfoModal');
                 let initials = '';
@@ -564,12 +560,14 @@
                 }
 
                 if (user.status == 1) {
-                    modal.find('.suspend-user-btn').removeClass('approve__btn').addClass('Reject__btn').find(
-                        '.suspend-btn-text').text("@lang('Suspend Account')");
+                    modal.find('.suspend-user-btn').removeClass('approve__btn').addClass('Reject__btn')
+                        .find(
+                            '.suspend-btn-text').text("@lang('Suspend Account')");
                     modal.find('.suspend-user-btn i').removeClass('la-undo').addClass('la-ban');
                 } else {
-                    modal.find('.suspend-user-btn').removeClass('Reject__btn').addClass('approve__btn').find(
-                        '.suspend-btn-text').text("@lang('Unban User')");
+                    modal.find('.suspend-user-btn').removeClass('Reject__btn').addClass('approve__btn')
+                        .find(
+                            '.suspend-btn-text').text("@lang('Unban User')");
                     modal.find('.suspend-user-btn i').removeClass('la-ban').addClass('la-undo');
                 }
 
@@ -582,9 +580,15 @@
                 modal.find('.user__name').text(initials.toUpperCase());
                 modal.find('.user-listings').text((user.properties_count || 0) + ' properties');
 
-                var approveRoute = "{{ route('admin.users.approve', '') }}/" + user.id;
-                var rejectRoute = "{{ route('admin.users.reject', '') }}/" + user.id;
-                var suspendRoute = "{{ route('admin.users.status', '') }}/" + user.id;
+                var approveRoute =
+                    "{{ route('admin.users.approve', '') }}/" +
+                    user.id;
+                var rejectRoute =
+                    "{{ route('admin.users.reject', '') }}/" +
+                    user.id;
+                var suspendRoute =
+                    "{{ route('admin.users.status', '') }}/" +
+                    user.id;
 
                 modal.find('.approve-form').attr('action', approveRoute);
                 modal.find('.reject-form').attr('action', rejectRoute);
@@ -593,12 +597,12 @@
                 modal.modal('show');
             });
 
-            $('.userStatus').on('click', function() {
+            $('.userStatus').on('click', function () {
                 var user = $(this).data('user');
                 openStatusModal(user);
             });
 
-            $('.suspend-user-btn').on('click', function() {
+            $('.suspend-user-btn').on('click', function () {
                 var modal = $('#userInfoModal');
                 var user = modal.data('user');
                 modal.modal('hide');
@@ -608,7 +612,9 @@
             function openStatusModal(user) {
                 var modal = $('#userStatusModal');
                 var form = modal.find('form');
-                form.attr('action', "{{ route('admin.users.status', '') }}/" + user.id);
+                form.attr('action',
+                    "{{ route('admin.users.status', '') }}/" + user.id
+                    );
 
                 if (user.status == 1) {
                     modal.find('.modal-title').text("@lang('Ban User')");
@@ -625,7 +631,7 @@
                 modal.modal('show');
             }
 
-            $('.view-license-btn').on('click', function() {
+            $('.view-license-btn').on('click', function () {
                 var modal = $('#userInfoModal');
                 var user = modal.data('user');
                 var detailsModal = $('#verificationDetailsModal');
@@ -646,7 +652,7 @@
                 detailsModal.modal('show');
             });
 
-            $('.view-id-btn').on('click', function() {
+            $('.view-id-btn').on('click', function () {
                 var modal = $('#userInfoModal');
                 var user = modal.data('user');
                 var detailsModal = $('#verificationDetailsModal');
@@ -662,16 +668,18 @@
 
                 detailsModal.find('.id-type').text(idType);
 
-                var path = "{{ asset(getFilePath('idVerification')) }}/" + user.id_verification_image;
+                var path = "{{ asset(getFilePath('idVerification')) }}/" + user
+                    .id_verification_image;
                 detailsModal.find('.verification-image').attr('src', path);
 
                 modal.modal('hide');
                 detailsModal.modal('show');
             });
 
-            $('#verificationDetailsModal').on('hidden.bs.modal', function() {
+            $('#verificationDetailsModal').on('hidden.bs.modal', function () {
                 $('#userInfoModal').modal('show');
             });
         })(jQuery);
+
     </script>
 @endpush
