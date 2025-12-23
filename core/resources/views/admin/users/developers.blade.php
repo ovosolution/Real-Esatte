@@ -435,15 +435,7 @@
                     <p class="dashboard-body__desc">@lang('Manage all registered realtors and developers')</p>
                 </div>
             </div>
-            <div class="col-lg-auto">
-                <button type="button" class="btn btn--primary add-btn">
-                    <i class="las la-plus"></i> @lang('Add Developer')
-                </button>
-            </div>
         </div>
-    </div>
-    </div>
-    </div>
     </div>
 @endpush
 
