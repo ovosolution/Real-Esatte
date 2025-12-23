@@ -1128,9 +1128,6 @@ select {
   outline: 1px solid transparent;
 }
 
-
-
-
 [data-theme="dark"] .form--control,
 [data-theme="dark"] .form-control {
   color: hsl(var(--black) / 0.8);
@@ -1182,10 +1179,9 @@ select {
 
 .form--control:focus,
 .form-control:focus {
-    border-color: hsl(var(--primary)) !important;
-    background-color: #f3f3f5 !important;
-    outline: 1px solid hsl(var(--primary)) !important;
-
+  border-color: hsl(var(--primary)) !important;
+  background-color: #f3f3f5 !important;
+  outline: 1px solid hsl(var(--primary)) !important;
 }
 
 [data-theme="dark"] .form--control:focus,
@@ -6457,7 +6453,7 @@ label.required:after {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
   gap: 24px;
 }
 .navigation-bar {
@@ -6610,9 +6606,9 @@ label.required:after {
 
 .dashboard-body__title {
   font-size: 30px;
-  font-weight: 700;
+  font-weight: 400;
   color: hsl(var(--title-color));
-  margin-bottom: 4px;
+  margin-bottom: 8px;
 }
 
 @media screen and (max-width: 575px) {
@@ -6922,6 +6918,7 @@ label.required:after {
 
 .user-management {
   max-width: 190px;
+  margin-bottom: 32px !important;
 }
 
 .search-menu {
@@ -7063,7 +7060,7 @@ label.required:after {
 
 .card {
   padding: 24px !important;
-  border: 1px solid hsl(var(--black) / 0.2) !important;
+  border: 1px solid hsl(var(--black) / 0.1) !important;
   border-radius: 14px !important;
   background-color: hsl(var(--white)) !important;
 }
@@ -7176,4 +7173,20 @@ label.required:after {
 }
 .dashboard__area-inner .card-header {
   background-color: transparent !important;
+}
+
+.table__heading__title {
+  font-size: 14px !important;
+  font-weight: 400;
+}
+
+.company__icon {
+  background-color: #e0e7ff;
+  height: 40px;
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: hsl(var(--primary));
+  border-radius: 10px;
 }
