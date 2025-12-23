@@ -3,18 +3,23 @@
     <div class="dashboard-body">
         <div class="dashboard-body__card">
             <div class="row gy-4">
-                <div class="col-lg-12">
+                <div class="col-lg-12 mt-0">
                     <div class="search-box__wrap mt-4">
                         <div class="search-box w-100">
                             <form>
-                                <input type="search" class="form-control form--control w-100 h-36" name="search" value="{{ request()->search }}" placeholder="@lang('Search...')">
+                                <input type="search" class="form-control form--control w-100 h-36" name="search"
+                                    value="{{ request()->search }}" placeholder="@lang('Search...')">
                             </form>
                         </div>
                         <div class="search-menu">
-                            <a class="search-menu__link @if(request()->routeIs('admin.ticket.index')) active @endif" href="{{ route('admin.ticket.index') }}">@lang('All')</a>
-                            <a class="search-menu__link @if(request()->routeIs('admin.ticket.answered')) active @endif" href="{{ route('admin.ticket.answered') }}">@lang('Open')</a>
-                            <a class="search-menu__link @if (request()->routeIs('admin.ticket.pending')) @endif" href="{{ route('admin.ticket.pending') }}">@lang('In Review')</a>
-                            <a class="search-menu__link @if (request()->routeIs('admin.ticket.closed')) @endif" href="{{ route('admin.ticket.closed') }}">@lang('Resolved')</a>
+                            <a class="search-menu__link @if (request()->routeIs('admin.ticket.index')) active @endif"
+                                href="{{ route('admin.ticket.index') }}">@lang('All')</a>
+                            <a class="search-menu__link @if (request()->routeIs('admin.ticket.answered')) active @endif"
+                                href="{{ route('admin.ticket.answered') }}">@lang('Open')</a>
+                            <a class="search-menu__link @if (request()->routeIs('admin.ticket.pending'))  @endif"
+                                href="{{ route('admin.ticket.pending') }}">@lang('In Review')</a>
+                            <a class="search-menu__link @if (request()->routeIs('admin.ticket.closed'))  @endif"
+                                href="{{ route('admin.ticket.closed') }}">@lang('Resolved')</a>
                         </div>
                     </div>
 
@@ -52,7 +57,8 @@
                                         <td>{{ showDateTime($ticket->created_at) }}</td>
                                         <td>
                                             <div class="action-buttons">
-                                                <a href="{{ route('admin.ticket.view', $ticket->id) }}" class="action-btn btn btn-outline--dark">
+                                                <a href="{{ route('admin.ticket.view', $ticket->id) }}"
+                                                    class="action-btn btn btn-outline--dark">
                                                     <i class="las la-comment-alt"></i> @lang('View')
                                                 </a>
                                             </div>
@@ -68,7 +74,6 @@
             </div>
         </div>
     </div>
-
 @endsection
 
 @push('breadcrumb-plugins')
