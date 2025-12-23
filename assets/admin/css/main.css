@@ -6966,6 +6966,19 @@ label.required:after {
 .search-box__wrap .form--control {
   border: 1px solid #f9fafb !important;
   background-color: #f3f3f5 !important;
+  padding-left: 40px !important;
+}
+
+.search-box {
+  position: relative;
+  z-index: 1;
+}
+
+.search__icon {
+  position: absolute;
+  left: 14px;
+  top: 9px;
+  z-index: 2;
 }
 
 .search-box__wrap .form--control:focus {
