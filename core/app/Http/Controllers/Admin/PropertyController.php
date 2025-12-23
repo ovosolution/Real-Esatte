@@ -18,9 +18,10 @@ class PropertyController extends Controller
     {
         $properties    = Property::with('location', 'propertyType', 'images', 'developer')->searchable(['title'])->orderBy('id', 'desc')->paginate(getPaginate());
         $propertyTypes = PropertyType::orderBy('id', 'desc')->get();
+        $propertiesCount = Property::count();
         $locations     = Location::orderBy('id', 'desc')->get();
         $developers    = Developer::orderBy('id', 'desc')->get();
-        return view('admin.property.index', compact('properties', 'propertyTypes', 'locations', 'developers'));
+        return view('admin.property.index', compact('properties', 'propertiesCount', 'propertyTypes', 'locations', 'developers'));
     }
     public function active()
     {
