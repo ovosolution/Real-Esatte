@@ -1,23 +1,30 @@
 @extends('admin.layouts.app')
 @section('panel')
-
-    <div class="dashboard-body">
-        <div class="dashboard-body__card">
-            <div class="row gy-4">
-                <div class="col-lg-12">
-                    <div class="search-box__wrap mt-4">
-                        <div class="search-box w-100">
-                            <form>
-                                <input type="search" class="form-control form--control w-100 h-36" name="search" value="{{ request()->search }}" placeholder="@lang('Search...')">
-                            </form>
-                        </div>
-                        <div class="search-menu">
-                            <a class="search-menu__link @if (request()->routeIs('admin.property.index')) active @endif" href="{{ route('admin.property.index') }}">@lang('All')</a>
-                            <a class="search-menu__link @if (request()->routeIs('admin.property.active')) active @endif" href="{{ route('admin.property.active') }}">@lang('Active')</a>
-                            <a class="search-menu__link @if(request()->routeIs('admin.property.inactive')) active @endif" href="{{ route('admin.property.inactive') }}">@lang('Inactive')</a>
-                        </div>
+<div class="dashboard-body">
+    <div class="dashboard-body__card">
+        <div class="row gy-4">
+            <div class="col-lg-12">
+                <div class="search-box__wrap">
+                    <div class="search-box w-100">
+                        <form>
+                            <input type="search" class="form-control form--control w-100 h-36" name="search"
+                                value="{{ request()->search }}" placeholder="@lang('Search...')">
+                        </form>
+                    </div>
+                    <div class="search-menu">
+                        <a class="search-menu__link @if (request()->routeIs('admin.property.index')) active @endif"
+                            href="{{ route('admin.property.index') }}">@lang('All')</a>
+                        <a class="search-menu__link @if (request()->routeIs('admin.property.active')) active @endif"
+                            href="{{ route('admin.property.active') }}">@lang('Active')</a>
+                        <a class="search-menu__link @if (request()->routeIs('admin.property.inactive')) active @endif"
+                            href="{{ route('admin.property.inactive') }}">@lang('Inactive')</a>
                     </div>
                 </div>
+            </div>
+            <div class="col-lg-12 mt-0">
+                <div class="card table__card__wrap">
+                    <div class="table__heading d-flex align-items-center justify-content-between">
+                        <p class="table__heading__title mb-0">@lang('Properties') ({{ $propertiesCount }})</p>
 
 
                 <div class="col-lg-12">
@@ -126,6 +133,9 @@
         </div>
     @endpush
 
+                <form action="{{ route('admin.property.store') }}" method="POST"
+                    enctype="multipart/form-data">
+                    @csrf
 
     <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">

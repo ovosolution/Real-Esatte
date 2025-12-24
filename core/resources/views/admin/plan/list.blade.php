@@ -31,52 +31,67 @@
                                 </div>
                             </div>
 
-                            <div class="d-flex align-items-end justify-content-between">
-                                <div>
-                                    <p class="pricing__desc">
-                                        {{ $plan->description }}
-                                    </p>
-                                </div>
+                            <div>
+                                <button type="button" class="pricing__btn edit-plan-btn" data-plan='@json($plan)'>
+                                    {{-- Edit icon --}}
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M8 2H3.33333C2.97971 2 2.64057 2.14048 2.39052 2.39052C2.14048 2.64057 2 2.97971 2 3.33333V12.6667C2 13.0203 2.14048 13.3594 2.39052 13.6095C2.64057 13.8595 2.97971 14 3.33333 14H12.6667C13.0203 14 13.3594 13.8595 13.6095 13.6095C13.8595 13.3594 14 13.0203 14 12.6667V8"
+                                            stroke="currentColor" stroke-width="1.33333" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                        <path
+                                            d="M12.2499 1.75C12.5151 1.48478 12.8748 1.33578 13.2499 1.33578C13.625 1.33578 13.9847 1.48478 14.2499 1.75C14.5151 2.01521 14.6641 2.37493 14.6641 2.75C14.6641 3.12507 14.5151 3.48478 14.2499 3.75L8.24123 9.75933"
+                                            stroke="currentColor" stroke-width="1.33333" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
 
-                                <div class="pricing__card__price">
-                                    <h2 class="mb-0">
-                                        {{ gs('cur_sym') }}{{ getAmount($plan->price) }}
-                                    </h2>
-                                    <p class="pricing__date">
-                                        /{{ planDuration($plan->duration) }}
-                                    </p>
-                                </div>
+                        <div class="d-flex align-items-end justify-content-between">
+                            <div>
+                                <p class="pricing__desc">
+                                    {{ $plan->description }}
+                                </p>
+                            </div>
+
+                            <div class="pricing__card__price">
+                                <h2 class="mb-0">
+                                    {{ gs('cur_sym') }}{{ getAmount($plan->price) }}
+                                </h2>
+                                <p class="pricing__date">
+                                    /{{ planDuration($plan->duration) }}
+                                </p>
                             </div>
                         </div>
                     </div>
-                @endforeach
+                </div>
+            @endforeach
+        </div>
 
+        <div class="row mt-4 justify-content-center">
+            <div class="col-lg-12">
+                <div class="role__card card">
+                    <h5 class="mb-3">@lang('Premium Features')</h5>
 
-            </div>
+                    <ul class="pricing__list__wrap feature-list">
 
-            <div class="row mt-5 justify-content-center">
-                <div class="col-lg-12">
-                    <div class="role__card card">
-                        <h5 class="mb-3">@lang('Premium Features')</h5>
-
-                        <ul class="pricing__list__wrap feature-list">
-
-                        </ul>
-                    </div>
+                    </ul>
                 </div>
             </div>
+        </div>
 
-            <div class="row mt-5 justify-content-center">
-                <div class="col-lg-3">
-                    <div class="role__card card">
-                        <span class="role__card__icon">
-                            <h3 class="role__card__title">@lang('Free Trial Users')</h3>
-                        </span>
-                        <span>
-                            <h3 class="role__card__price">100</h3>
-                        </span>
-                        <p class="role__card__desc">44% @lang('of total')</p>
-                    </div>
+        <div class="row mt-4 justify-content-center">
+            <div class="col-lg-3">
+                <div class="role__card card align-items-center">
+                    <span class="role__card__icon">
+                        <h3 class="role__card__title">@lang('Free Trial Users')</h3>
+                    </span>
+                    <span>
+                        <h3 class="role__card__price">100</h3>
+                    </span>
+                    <p class="role__card__desc">44% @lang('of total')</p>
                 </div>
                 <div class="col-lg-3">
                     <div class="role__card card">
@@ -112,51 +127,52 @@
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="row mt-5">
-                <div class="col-lg-12">
-                    <div class="card table__card__wrap">
-                        <div class="table__heading d-flex align-items-center justify-content-between">
-                            <p class="table__heading__title mb-0">@lang('Recent Subscribers')</p>
-                        </div>
-                        <table class="table border-0  mt-4 p-0 table--responsive--md">
-
-                            <thead>
-                                <tr>
-                                    <th>@lang('User')</th>
-                                    <th>@lang('Plan')</th>
-                                    <th>@lang('Status')</th>
-                                    <th>@lang('Start Date')</th>
-                                    <th>@lang('End Date')</th>
-                                    <th>@lang('Amount')</th>
-                                    <th>@lang('Action')</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Sarah Johnson</td>
-                                    <td>Yearly</td>
-                                    <td><span class="badge badge--success">Active</span></td>
-                                    <td>
-                                        2024-09-15
-                                    </td>
-                                    <td>2025-09-15</td>
-                                    <td>₦150,000</td>
-                                    <td>
-                                        <div class="subscription__button">
-                                            <button class="subscription__button__fill">Upgrade</button>
-                                            <button class="subscription__button__text">Cancel</button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+        <div class="row mt-4">
+            <div class="col-lg-12">
+                <div class="card table__card__wrap">
+                    <div class="table__heading d-flex align-items-center justify-content-between">
+                        <p class="table__heading__title mb-0">@lang('Recent Subscribers')</p>
                     </div>
+                    <table class="table border-0  mt-4 p-0 table--responsive--md">
+
+                        <thead>
+                            <tr>
+                                <th>@lang('User')</th>
+                                <th>@lang('Plan')</th>
+                                <th>@lang('Status')</th>
+                                <th>@lang('Start Date')</th>
+                                <th>@lang('End Date')</th>
+                                <th>@lang('Amount')</th>
+                                <th>@lang('Action')</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Sarah Johnson</td>
+                                <td>Yearly</td>
+                                <td><span class="badge badge--success">Active</span></td>
+                                <td>
+                                    2024-09-15
+                                </td>
+                                <td>2025-09-15</td>
+                                <td>₦150,000</td>
+                                <td>
+                                    <div class="subscription__button">
+                                        <button class="subscription__button__fill">Upgrade</button>
+                                        <button class="subscription__button__text">Cancel</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+    </div>
 
-@endsection
+    @endsection
 
     @push('breadcrumb-plugins')
         <div class="row d-flex align-items-center justify-content-between">
@@ -222,7 +238,8 @@
                             <label class="form--label">@lang('Features')</label>
 
                             <div class="d-flex gap-2 mb-2">
-                                <input type="text" class="form-control form--control feature-input" placeholder="@lang('Add a new feature...')">
+                                <input type="text" class="form-control form--control feature-input"
+                                    placeholder="@lang('Add a new feature...')">
                                 <button type="button" class="btn btn-outline--primary add-feature-btn">
                                     <span class="text--primary">
                                         <i class="las la-plus"></i>
@@ -306,7 +323,8 @@
                     $('.modal-title-text').text('@lang("Edit Plan")');
                     $('.modal-subtitle').text('@lang("Update the details of the selected plan.")');
 
-                    $('.plan-form').attr('action', "{{ route('admin.plan.store') }}/" + plan.id);
+                    $('.plan-form').attr('action', "{{ route('admin.plan.store') }}/" +
+                        plan.id);
 
                     $('input[name="name"]').val(plan.name);
                     $('textarea[name="description"]').val(plan.description ?? '');
@@ -354,5 +372,6 @@
                 }
 
             })(jQuery);
+
         </script>
     @endpush
