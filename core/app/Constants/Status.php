@@ -2,6 +2,7 @@
 
 namespace App\Constants;
 
+use Dompdf\Positioner\Fixed;
 use PHPUnit\Framework\TestStatus\Incomplete;
 
 class Status
@@ -53,5 +54,14 @@ class Status
     const CUR_BOTH = 1;
     const CUR_TEXT = 2;
     const CUR_SYM  = 3;
+
+    const AVAILABLE = 1;
+    const UNDERCONSTRUCTION = 2;
+
+    const SALE = 1;
+    const RENT = 2;
+
+    const FIXED = 1;
+    const NEGOTIABLE = 2;
 
 }

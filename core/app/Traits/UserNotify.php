@@ -5,29 +5,21 @@ use App\Constants\Status;
 
 trait UserNotify
 {
-    public static function notifyToUser(){
+    public static function notifyToUser()
+    {
         return [
-            'allUsers'              => 'All Users',
-            'selectedUsers'         => 'Selected Users',
-            'kycUnverified'         => 'Kyc Unverified Users',
-            'kycVerified'           => 'Kyc Verified Users',
-            'kycPending'            => 'Kyc Pending Users',
-            'withBalance'           => 'With Balance Users',
-            'emptyBalanceUsers'     => 'Empty Balance Users',
-            'twoFaDisableUsers'     => '2FA Disable User',
-            'twoFaEnableUsers'      => '2FA Enable User',
-            'hasDepositedUsers'       => 'Deposited Users',
-            'notDepositedUsers'       => 'Not Deposited Users',
-            'pendingDepositedUsers'   => 'Pending Deposited Users',
-            'rejectedDepositedUsers'  => 'Rejected Deposited Users',
-            'topDepositedUsers'     => 'Top Deposited Users',
-            'hasWithdrawUsers'      => 'Withdraw Users',
-            'pendingWithdrawUsers'  => 'Pending Withdraw Users',
-            'rejectedWithdrawUsers' => 'Rejected Withdraw Users',
-            'pendingTicketUser'     => 'Pending Ticket Users',
-            'answerTicketUser'      => 'Answer Ticket Users',
-            'closedTicketUser'      => 'Closed Ticket Users',
-            'notLoginUsers'         => 'Last Few Days Not Login Users',
+            'allRealtors'            => 'All Realtors',
+            'selectedUsers'          => 'Selected Users',
+            'hasDepositedUsers'      => 'Deposited Users',
+            'notDepositedUsers'      => 'Not Deposited Users',
+            'pendingDepositedUsers'  => 'Pending Deposited Users',
+            'rejectedDepositedUsers' => 'Rejected Deposited Users',
+            'topDepositedUsers'      => 'Top Deposited Users',
+            'pendingTicketUser'      => 'Pending Ticket Users',
+            'answerTicketUser'       => 'Answer Ticket Users',
+            'closedTicketUser'       => 'Closed Ticket Users',
+            'notLoginUsers'          => 'Last Few Days Not Login Users',
+            'proSubscribers'         => 'Pro Subscribers',
         ];
     }
 
@@ -36,9 +28,14 @@ trait UserNotify
         return $query->whereIn('id', request()->user ?? []);
     }
 
-    public function scopeAllUsers($query)
+    public function scopeAllRealtors($query)
     {
         return $query;
+    }
+
+    public function scopeProSubscribers($query)
+    {
+        return $query->where('plan_id', '!=', 0);
     }
 
     public function scopeEmptyBalanceUsers($query)
@@ -88,7 +85,7 @@ trait UserNotify
     {
         return $query->whereHas('deposits', function ($deposit) {
             $deposit->successful();
-        })->withSum(['deposits'=>function($q){
+        })->withSum(['deposits' => function ($q) {
             $q->successful();
         }], 'amount')->orderBy('deposits_sum_amount', 'desc')->take(request()->number_of_top_deposited_user ?? 10);
     }

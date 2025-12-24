@@ -148,6 +148,18 @@ class NotifyProcess{
     protected $sentFrom = null;
 
     /**
+    * Notification recipients count
+    *
+    * @var int
+    */
+    /**
+    * Notification recipients count
+    *
+    * @var int
+    */
+    public $recipients = 0;
+
+    /**
     * Get the final message after replacing the short code.
     *
     * Also custom message will be return from here if notification template doesn't exist.
@@ -273,7 +285,8 @@ class NotifyProcess{
 		    $notificationLog->subject = $this->subject;
 		    $notificationLog->image = @$this->pushImage ?? null;
 		    $notificationLog->message = $type == 'email' ? $this->finalMessage : strip_tags($this->finalMessage);
-		    $notificationLog->save();
+		    $notificationLog->recipients = $this->recipients;
+            $notificationLog->save();
 		}
 	}
 

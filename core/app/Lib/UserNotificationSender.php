@@ -8,7 +8,7 @@ use App\Models\User;
 
 /**
  * Class UserNotificationSender
- * 
+ *
  * This class handles the sending of notifications to users based on specified criteria.
  * It supports multiple notification channels (e.g., email, push notifications) and manages
  * session data to track the notification sending process.
@@ -17,7 +17,7 @@ class UserNotificationSender
 {
     /**
      * Send notifications to all or selected users based on the request parameters.
-     * 
+     *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -42,14 +42,16 @@ class UserNotificationSender
         $imageUrl = $this->handlePushNotificationImage($request);
         $users    = $this->getUsers($userQuery, $request->start, $request->batch);
 
-        $this->sendNotifications($users, $request, $imageUrl);
+        $users = $this->getUsers($userQuery, $request->start, $request->batch);
+
+        $this->sendNotifications($users, $request, $imageUrl, false, $totalUserCount, $request->scheduled_at);
 
         return $this->manageSessionForNotification($totalUserCount, $request);
     }
 
     /**
      * Send a notification to a single user.
-     * 
+     *
      * @param \Illuminate\Http\Request $request
      * @param int $userId
      * @return \Illuminate\Http\RedirectResponse
@@ -62,13 +64,15 @@ class UserNotificationSender
         $imageUrl = $this->handlePushNotificationImage($request);
         $user     = User::findOrFail($userId);
 
-        $this->sendNotifications($user, $request, $imageUrl, true);
+        $user = User::findOrFail($userId);
+
+        $this->sendNotifications($user, $request, $imageUrl, true, 1, $request->scheduled_at);
 
         return $this->redirectWithNotify("success", "Notification sent successfully");
     }
     /**
      * Check if the notification template is enabled for the specified channel.
-     * 
+     *
      * @param string $via
      * @return bool
      */
@@ -79,7 +83,7 @@ class UserNotificationSender
 
     /**
      * Redirect with a notification message.
-     * 
+     *
      * @param string $type
      * @param string $message
      * @return \Illuminate\Http\RedirectResponse
@@ -92,7 +96,7 @@ class UserNotificationSender
 
     /**
      * Handle selected users logic, merging user data from session if necessary.
-     * 
+     *
      * @param \Illuminate\Http\Request $request
      * @return bol
      */
@@ -110,7 +114,7 @@ class UserNotificationSender
 
     /**
      * Get user query based on the scope.
-     * 
+     *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Database\Eloquent\Builder
      */
@@ -122,7 +126,7 @@ class UserNotificationSender
 
     /**
      * Get the total user count for notification.
-     * 
+     *
      * @param \Illuminate\Database\Eloquent\Builder $userQuery
      * @param \Illuminate\Http\Request $request
      * @return int
@@ -139,7 +143,7 @@ class UserNotificationSender
 
     /**
      * Handle image upload for push notifications.
-     * 
+     *
      * @param \Illuminate\Http\Request $request
      * @return string|null
      */
@@ -158,7 +162,7 @@ class UserNotificationSender
 
     /**
      * Get users for notification based on pagination.
-     * 
+     *
      * @param \Illuminate\Database\Eloquent\Builder $userQuery
      * @param int $start
      * @param int $batch
@@ -171,33 +175,33 @@ class UserNotificationSender
 
     /**
      * Send notifications to users.
-     * 
+     *
      * @param \Illuminate\Support\Collection $users
      * @param \Illuminate\Http\Request $request
      * @param string|null $imageUrl
      * @param bol $isSingleNotification
      * @return void
      */
-    private function sendNotifications($users, $request, $imageUrl, $isSingleNotification = false)
+    private function sendNotifications($users, $request, $imageUrl, $isSingleNotification = false, $count = 0, $scheduledAt = null)
     {
         if (!$isSingleNotification) {
             foreach ($users as $user) {
                 notify($user, 'DEFAULT', [
                     'subject' => $request->subject,
                     'message' => $request->message,
-                ], [$request->via], pushImage: $imageUrl);
+                ], [$request->via], true, $imageUrl, $count, $scheduledAt);
             }
         } else {
             notify($users, 'DEFAULT', [
                 'subject' => $request->subject,
                 'message' => $request->message,
-            ], [$request->via], pushImage: $imageUrl);
+            ], [$request->via], true, $imageUrl, $count, $scheduledAt);
         }
     }
 
     /**
      * Manage session data for notification sending process.
-     * 
+     *
      * @param int $totalUserCount
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
@@ -205,7 +209,7 @@ class UserNotificationSender
     private function manageSessionForNotification($totalUserCount, $request)
     {
         if (session()->has('SEND_NOTIFICATION')) {
-            $sessionData                = session("SEND_NOTIFICATION");
+            $sessionData = session("SEND_NOTIFICATION");
             $sessionData['total_sent'] += $sessionData['batch'];
         } else {
             $sessionData               = $request->except('_token', 'image');

@@ -6,6 +6,8 @@ use App\Constants\Status;
 use App\Lib\CurlRequest;
 use App\Models\CronJob;
 use App\Models\CronJobLog;
+use App\Models\ScheduleNotification;
+use App\Models\User;
 use Carbon\Carbon;
 
 class CronController extends Controller
@@ -64,4 +66,35 @@ class CronController extends Controller
             return back()->withNotify($notify);
         }
     }
+
+    public function scheduleNotification()
+    {
+        $schedules = ScheduleNotification::where('status', 0)
+            ->where('scheduled_at', '<=', now())
+            ->limit(20)
+            ->get();
+
+        foreach ($schedules as $schedule) {
+
+            $metaData = $schedule->meta_data;
+
+            $scopeName = $metaData->being_sent_to;
+
+            $users = User::$scopeName()->active()->get();
+            foreach ($users as $user) {
+
+                notify($user, 'DEFAULT', [
+                    'subject' => $metaData->subject,
+                    'message' => $metaData->message,
+                ], [$metaData->via],);
+
+            }
+
+            $schedule->status  = 1;
+            $schedule->sent_at = now();
+            $schedule->save();
+
+        }
+    }
+
 }
