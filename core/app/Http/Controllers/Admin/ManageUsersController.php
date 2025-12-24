@@ -9,6 +9,7 @@ use App\Models\Deposit;
 use App\Models\NotificationLog;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Models\ScheduleNotification;
 use App\Models\UserLogin;
 use App\Models\Withdrawal;
 use App\Rules\FileTypeValidate;
@@ -26,7 +27,9 @@ class ManageUsersController extends Controller
         }
         $users = $baseQuery->paginate(getPaginate());
 
-        return view('admin.users.list', compact('pageTitle', 'users', 'widget'));
+        $usersCount = $baseQuery->count();
+
+        return view('admin.users.list', compact('pageTitle', 'users', 'widget', 'usersCount'));
     }
 
     public function activeUsers()
@@ -39,7 +42,9 @@ class ManageUsersController extends Controller
         }
 
         $users = $baseQuery->paginate(getPaginate());
-        return view('admin.users.list', compact('pageTitle', 'users', 'widget'));
+
+        $usersCount = $baseQuery->count();
+        return view('admin.users.list', compact('pageTitle', 'users', 'widget', 'usersCount'));
     }
 
     public function pendingUsers()
@@ -52,7 +57,10 @@ class ManageUsersController extends Controller
         }
 
         $users = $baseQuery->paginate(getPaginate());
-        return view('admin.users.list', compact('pageTitle', 'users', 'widget'));
+
+        $usersCount = $baseQuery->count();
+
+        return view('admin.users.list', compact('pageTitle', 'users', 'widget', 'usersCount'));
     }
 
     public function bannedUsers()
@@ -440,6 +448,7 @@ class ManageUsersController extends Controller
             'number_of_top_deposited_user' => 'required_if:being_sent_to,topDepositedUsers|integer|gte:0',
             'number_of_days'               => 'required_if:being_sent_to,notLoginUsers|integer|gte:0',
             'image'                        => ["nullable", 'image', new FileTypeValidate(['jpg', 'jpeg', 'png'])],
+            'scheduled_at'                 => 'nullable|date|after_or_equal:now',
         ], [
             'number_of_days.required_if'               => "Number of days field is required",
             'number_of_top_deposited_user.required_if' => "Number of top deposited user field is required",
@@ -448,6 +457,25 @@ class ManageUsersController extends Controller
         if (!gs('en') && !gs('sn') && !gs('pn')) {
             $notify[] = ['warning', 'Notification options are disabled currently'];
             return to_route('admin.dashboard')->withNotify($notify);
+        }
+
+        if ($request->scheduled_at) {
+
+            $imageUrl = null;
+
+            if ($request->via == 'push' && $request->hasFile('image')) {
+                $imageUrl = fileUploader($request->image, getFilePath('push'));
+            }
+
+            $schedule = new ScheduleNotification();
+            $schedule->scheduled_at = now()->parse($request->scheduled_at);
+            $schedule->status = 0;
+            $schedule->file = $imageUrl;
+            $schedule->meta_data = $request->except(['_token', 'image', 'scheduled_at']);
+            $schedule->save();
+
+            $notify[] = ['success', 'Notification scheduled successfully'];
+            return back()->withNotify($notify);
         }
 
         return (new UserNotificationSender())->notificationToAll($request);

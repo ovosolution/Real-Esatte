@@ -16,11 +16,11 @@ class PropertyController extends Controller
 {
     public function index()
     {
-        $properties    = Property::with('location', 'propertyType', 'images', 'developer')->searchable(['title'])->orderBy('id', 'desc')->paginate(getPaginate());
-        $propertyTypes = PropertyType::orderBy('id', 'desc')->get();
+        $properties      = Property::with('location', 'propertyType', 'images', 'developer')->searchable(['title'])->orderBy('id', 'desc')->paginate(getPaginate());
+        $propertyTypes   = PropertyType::orderBy('id', 'desc')->get();
         $propertiesCount = Property::count();
-        $locations     = Location::orderBy('id', 'desc')->get();
-        $developers    = Developer::orderBy('id', 'desc')->get();
+        $locations       = Location::orderBy('id', 'desc')->get();
+        $developers      = Developer::orderBy('id', 'desc')->get();
         return view('admin.property.index', compact('properties', 'propertiesCount', 'propertyTypes', 'locations', 'developers'));
     }
     public function active()
@@ -59,6 +59,13 @@ class PropertyController extends Controller
             'description'         => 'required|string',
             'images'              => 'nullable|array',
             'images.*'            => ['image', new FileTypeValidate(['jpg', 'jpeg', 'png'])],
+            'security'            => 'nullable',
+            'cctv'                => 'nullable',
+            'fire_alarm'          => 'nullable',
+            'boys_quarter'        => 'nullable',
+            'co'                  => 'nullable',
+            'electricity'         => 'nullable',
+            'size'                => 'nullable',
         ]);
 
         if ($id) {
@@ -77,6 +84,13 @@ class PropertyController extends Controller
         $property->bedrooms            = $request->bedrooms;
         $property->bathrooms           = $request->bathrooms;
         $property->address             = $request->address;
+        $property->security            = $request->security;
+        $property->cctv                = $request->cctv;
+        $property->fire_alarm          = $request->fire_alarm;
+        $property->boys_quarter        = $request->boys_quarter;
+        $property->co                  = $request->co;
+        $property->electricity         = $request->electricity;
+        $property->size                = $request->size;
         $property->latitude            = $request->latitude;
         $property->longitude           = $request->longitude;
         $property->construction_status = $request->construction_status;

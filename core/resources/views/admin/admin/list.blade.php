@@ -87,8 +87,46 @@
         </div>
 
 
+        <div class="row mt-5">
+            <div class="col-lg-4">
+                <div class="role__card card">
+                    <span class="role__card__icon">
+                        <svg width="15" height="19" viewBox="0 0 15 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14.1663 10.0004C14.1663 14.167 11.2497 16.2504 7.78301 17.4587C7.60148 17.5202 7.40429 17.5173 7.22467 17.4504C3.74967 16.2504 0.833008 14.167 0.833008 10.0004V4.16702C0.833008 3.94601 0.920805 3.73405 1.07709 3.57777C1.23337 3.42149 1.44533 3.33369 1.66634 3.33369C3.33301 3.33369 5.41634 2.33369 6.86634 1.06702C7.04289 0.916187 7.26747 0.833313 7.49967 0.833313C7.73188 0.833313 7.95646 0.916187 8.13301 1.06702C9.59134 2.34202 11.6663 3.33369 13.333 3.33369C13.554 3.33369 13.766 3.42149 13.9223 3.57777C14.0785 3.73405 14.1663 3.94601 14.1663 4.16702V10.0004Z" stroke="#9810FA" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <h3 class="role__card__title">@lang('Super Admin')</h3>
+                    </span>
+                    <p class="role__card__desc">@lang('Full system access including user management, property approvals, analytics, and settings.')</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="role__card card">
+                    <span class="role__card__icon">
+                        <svg width="15" height="19" viewBox="0 0 15 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14.1663 10.0004C14.1663 14.167 11.2497 16.2504 7.78301 17.4587C7.60148 17.5202 7.40429 17.5173 7.22467 17.4504C3.74967 16.2504 0.833008 14.167 0.833008 10.0004V4.16702C0.833008 3.94601 0.920805 3.73405 1.07709 3.57777C1.23337 3.42149 1.44533 3.33369 1.66634 3.33369C3.33301 3.33369 5.41634 2.33369 6.86634 1.06702C7.04289 0.916187 7.26747 0.833313 7.49967 0.833313C7.73188 0.833313 7.95646 0.916187 8.13301 1.06702C9.59134 2.34202 11.6663 3.33369 13.333 3.33369C13.554 3.33369 13.766 3.42149 13.9223 3.57777C14.0785 3.73405 14.1663 3.94601 14.1663 4.16702V10.0004Z" stroke="#155DFC" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <h3 class="role__card__title">@lang('Moderator')</h3>
+                    </span>
+                    <p class="role__card__desc">@lang('Can approve/reject realtors and properties, manage notifications, view analytics.')</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="role__card card">
+                    <span class="role__card__icon">
+                        <svg width="15" height="19" viewBox="0 0 15 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14.1663 10.0004C14.1663 14.167 11.2497 16.2504 7.78301 17.4587C7.60148 17.5202 7.40429 17.5173 7.22467 17.4504C3.74967 16.2504 0.833008 14.167 0.833008 10.0004V4.16702C0.833008 3.94601 0.920805 3.73405 1.07709 3.57777C1.23337 3.42149 1.44533 3.33369 1.66634 3.33369C3.33301 3.33369 5.41634 2.33369 6.86634 1.06702C7.04289 0.916187 7.26747 0.833313 7.49967 0.833313C7.73188 0.833313 7.95646 0.916187 8.13301 1.06702C9.59134 2.34202 11.6663 3.33369 13.333 3.33369C13.554 3.33369 13.766 3.42149 13.9223 3.57777C14.0785 3.73405 14.1663 3.94601 14.1663 4.16702V10.0004Z" stroke="#00A63E" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <h3 class="role__card__title">@lang('Support Agent')</h3>
+                    </span>
+                    <p class="role__card__desc">@lang('Can manage support tickets, view user details, and send notifications.')
+                    </p>
+                </div>
+            </div>
+        </div>
+
+
         <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="addAdminModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
 
                     <div class="modal-header">
@@ -104,38 +142,28 @@
 
                                 <div class="col-md-6">
                                     <label class="form--label required">@lang('Name')</label>
-                                    <input type="text" class="form--control form-control admin-name" name="name" required>
-
-                                    {{-- <input type="text" class="form--control form-control" name="name" value="{{ old('name') }}" required> --}}
+                                    <input type="text" class="form--control form-control admin-name" name="name" value="{{ old('name') }}" required>
                                 </div>
 
                                 <div class="col-md-6">
                                     <label class="form--label required">@lang('Email')</label>
-                                    <input type="email" class="form--control form-control admin-email" name="email" required>
-                                    {{-- <input type="email" class="form--control form-control" name="email" value="{{ old('email') }}" required> --}}
+                                    <input type="email" class="form--control form-control admin-email" name="email" value="{{ old('email') }}" required>
                                 </div>
 
                                 <div class="col-md-6 password-field">
                                     <label class="form--label required">@lang('Password')</label>
-                                    <input type="password" class="form--control form-control admin-password" name="password" minlength="6">
+                                    <input type="password" class="form--control form-control admin-password" name="password" minlength="6" required>
                                 </div>
-
-
-                                {{-- <div class="col-md-6">
-                                    <label class="form--label required">@lang('Password')</label>
-                                    <input type="password" class="form--control form-control" name="password" minlength="6" required>
-                                </div> --}}
 
                                 <div class="col-6">
                                     <label class="form--label required">@lang('Role')</label>
-                                    {{-- <select name="roles[]" class="form-select select2" multiple required> --}}
-                                        <select name="roles[]" class="form-select select2 admin-role" multiple required>
-                                            @foreach ($roles as $role)
-                                                <option value="{{ $role->id }}">
-                                                    {{ __($role->name) }}
-                                                </option>
-                                            @endforeach
-                                        </select>
+                                    <select name="roles[]" class="form-select select2 admin-role" multiple required>
+                                        @foreach ($roles as $role)
+                                            <option value="{{ $role->id }}">
+                                                {{ __($role->name) }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
 
                             </div>
@@ -158,8 +186,6 @@
 
         <x-confirmation-modal />
 @endsection
-
-
 
     @push('breadcrumb-plugins')
         <div class="row d-flex align-items-center justify-content-between">

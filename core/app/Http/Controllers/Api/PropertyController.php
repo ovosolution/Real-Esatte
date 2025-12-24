@@ -18,7 +18,7 @@ class PropertyController extends Controller
 
     public function details($id)
     {
-        $property = Property::with('images')->find($id);
+        $property = Property::with('images', 'developer')->find($id);
 
         return apiResponse("property", "success", ['property details'], [
             'property'  => $property,

@@ -74,6 +74,20 @@ class Notify
 	public $pushImage;
 
     /**
+    * Notification recipients count
+    *
+    * @var int
+    */
+    public $recipients = 0;
+
+    /**
+    * Scheduled time
+    *
+    * @var string|null
+    */
+    public $scheduledAt;
+
+    /**
     * Assign value to sendVia and setting property
     *
     * @param null $sendVia
@@ -112,7 +126,9 @@ class Notify
 			$notify->createLog = $this->createLog;
 			$notify->userColumn = $this->userColumn;
 			$notify->pushImage = $this->pushImage;
-			$notify->send();
+            $notify->recipients = $this->recipients;
+
+            $notify->send();
 		}
 	}
 

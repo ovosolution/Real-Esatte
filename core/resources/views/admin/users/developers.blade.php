@@ -161,8 +161,6 @@
     </div>
 </div>
 
-
-
 @push('breadcrumb-plugins')
 <div class="row d-flex align-items-center justify-content-between">
     <div class="col-lg-auto">
@@ -176,7 +174,6 @@
     </div>
 </div>
 @endpush
-
 
 @push('script')
 <script>
