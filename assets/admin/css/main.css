@@ -7291,6 +7291,12 @@ label.required:after {
   background-repeat: no-repeat;
 }
 
+.form--switch {
+  .form-check-input:checked[type="checkbox"] {
+    background-image: none !important;
+  }
+}
+
 .property-title {
   font-size: 24px;
   font-weight: 400;
