@@ -81,13 +81,12 @@ class CronController extends Controller
             $scopeName = $metaData->being_sent_to;
 
             $users = User::$scopeName()->active()->get();
+            $count = $users->count();
             foreach ($users as $user) {
-
                 notify($user, 'DEFAULT', [
                     'subject' => $metaData->subject,
                     'message' => $metaData->message,
-                ], [$metaData->via],);
-
+                ], [$metaData->via], true, $schedule->file, $count, null, $scopeName);
             }
 
             $schedule->status  = 1;

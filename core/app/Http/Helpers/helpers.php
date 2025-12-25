@@ -227,7 +227,7 @@ function getImage($image, $size = null, $isAvatar = false)
     return asset('assets/images/default.png');
 }
 
-function notify($user, $templateName, $shortCodes = null, $sendVia = null, $createLog = true, $pushImage = null, $recipientsCount = 0, $scheduledAt = null)
+function notify($user, $templateName, $shortCodes = null, $sendVia = null, $createLog = true, $pushImage = null, $recipientsCount = 0, $scheduledAt = null, $audience = null)
 {
     $globalShortCodes = [
         'site_name'       => gs('site_name'),
@@ -249,6 +249,7 @@ function notify($user, $templateName, $shortCodes = null, $sendVia = null, $crea
     $notify->pushImage    = $pushImage;
     $notify->recipients   = $recipientsCount;
     $notify->userColumn   = isset($user->id) ? $user->getForeignKey() : 'user_id';
+    $notify->audience     = $audience;
     $notify->send();
 }
 
@@ -267,6 +268,28 @@ function getOrderBy($orderBy = null)
     }
     return $orderBy;
 }
+
+function shortAmount($number, $decimal = null)
+{
+    if ($decimal === null) {
+        $decimal = gs('allow_precision');
+    }
+
+    if ($number >= 1_000_000_000) {
+        return number_format($number / 1_000_000_000, $decimal) . 'B';
+    }
+
+    if ($number >= 1_000_000) {
+        return number_format($number / 1_000_000, $decimal) . 'M';
+    }
+
+    if ($number >= 1_000) {
+        return number_format($number / 1_000, $decimal) . 'K';
+    }
+
+    return number_format($number, $decimal);
+}
+
 
 function paginateLinks($data, $view = null)
 {
@@ -625,6 +648,19 @@ function exportData($baseQuery, $exportType, $modelName, $printPageSize = "A4 po
         $notify[] = ['error', $ex->getMessage()];
         return back()->withNotify($notify);
     }
+}
+
+function strPluralize($count, $singular, $plural = null)
+{
+    if ($count == 1) {
+        return $singular;
+    }
+
+    if ($plural) {
+        return $plural;
+    }
+
+    return $singular . 's';
 }
 
 function planDuration(int $days): string

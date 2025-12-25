@@ -88,6 +88,13 @@ class Notify
     public $scheduledAt;
 
     /**
+    * Notification audience
+    *
+    * @var string|null
+    */
+    public $audience;
+
+    /**
     * Assign value to sendVia and setting property
     *
     * @param null $sendVia
@@ -127,6 +134,7 @@ class Notify
 			$notify->userColumn = $this->userColumn;
 			$notify->pushImage = $this->pushImage;
             $notify->recipients = $this->recipients;
+            $notify->audience = $this->audience;
 
             $notify->send();
 		}

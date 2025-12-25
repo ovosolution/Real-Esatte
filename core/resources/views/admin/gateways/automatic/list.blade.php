@@ -87,7 +87,7 @@
             </div>
         @endforelse
     </div>
-    
+
     <x-confirmation-modal />
 @endsection
 

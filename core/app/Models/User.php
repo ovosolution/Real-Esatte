@@ -140,6 +140,11 @@ class User extends Authenticatable
         return $query->where('status', Status::REJECTED);
     }
 
+    public function scopeSubscribed($query)
+    {
+        return $query->where('plan_id', '!=', 0)->where('end_date', '>', now());
+    }
+
     public function scopeBanned($query)
     {
         return $query->where('status', Status::USER_BAN);
