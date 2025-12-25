@@ -21,8 +21,8 @@ class PropertyController extends Controller
         $property = Property::with('images', 'developer')->find($id);
 
         return apiResponse("property", "success", ['property details'], [
-            'property'  => $property,
-            'imagePath' => getFilePath('property'),
+            'property'   => $property,
+            'image_path' => getFilePath('property'),
         ]);
     }
 

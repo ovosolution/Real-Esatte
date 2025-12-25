@@ -5,11 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Constants\Status;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Gateway\PaymentController as GatewayPaymentController;
+use App\Models\AdminNotification;
 use App\Models\Deposit;
 use App\Models\GatewayCurrency;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Models\AdminNotification;
 
 class PaymentController extends Controller
 {
@@ -22,7 +22,7 @@ class PaymentController extends Controller
 
         return apiResponse("deposit_methods", "success", $notify, [
             'methods'    => $gatewayCurrency,
-            'image_path' => getFilePath('gateway')
+            'image_path' => getFilePath('gateway'),
         ]);
     }
 
@@ -38,7 +38,6 @@ class PaymentController extends Controller
             return apiResponse("validation_error", "error", $validator->errors()->all());
         }
 
-
         $user = auth()->user();
         $gate = GatewayCurrency::whereHas('method', function ($gate) {
             $gate->where('status', Status::ENABLE);
@@ -53,31 +52,48 @@ class PaymentController extends Controller
             return apiResponse("cross_limit", "error", $notify);
         }
 
-        $charge      = $gate->fixed_charge + ($request->amount * $gate->percent_charge / 100);
-        $payable     = $request->amount + $charge;
+        $data = $this->insertDepositData($gate, $request->amount);
+
+        $notify[] = 'Deposit inserted';
+        return apiResponse("deposit_inserted", "success", $notify, [
+            'deposit'      => $data,
+            'redirect_url' => route('deposit.app.confirm', encrypt($data->id)),
+        ]);
+    }
+
+    public function insertDepositData($gate, $amount, $planId = null)
+    {
+        $charge      = $gate->fixed_charge + ($amount * $gate->percent_charge / 100);
+        $payable     = $amount + $charge;
         $finalAmount = $payable * $gate->rate;
+
+        // if ($planId) {
+        //     $successUrl = route('');
+        // } else {
+        //     $successUrl = route('user.deposit.history');
+        // }
+
+        $successUrl            = route('user.deposit.history');
 
         $data                  = new Deposit();
         $data->from_api        = 1;
-        $data->user_id         = $user->id;
+        $data->user_id         = auth()->user()->id;
+        $data->plan_id         = $planId;
         $data->method_code     = $gate->method_code;
         $data->method_currency = strtoupper($gate->currency);
-        $data->amount          = $request->amount;
+        $data->amount          = $amount;
         $data->charge          = $charge;
         $data->rate            = $gate->rate;
         $data->final_amount    = $finalAmount;
         $data->btc_amount      = 0;
         $data->btc_wallet      = "";
-        $data->success_url     = urlPath('user.deposit.history');
-        $data->failed_url      = urlPath('user.deposit.history');
         $data->trx             = getTrx();
+        $data->success_url     = $successUrl;
+        $data->failed_url      = urlPath('user.deposit.history');
+
         $data->save();
 
-        $notify[] = 'Deposit inserted';
-        return apiResponse("deposit_inserted", "success", $notify, [
-            'deposit'      => $data,
-            'redirect_url' => route('deposit.app.confirm', encrypt($data->id))
-        ]);
+        return $data;
     }
 
     public function appPaymentConfirm(Request $request)
@@ -92,7 +108,7 @@ class PaymentController extends Controller
             'currency'       => 'required|string',
             'purchase_token' => 'required',
             'package_name'   => 'required',
-            'plan_id'        => 'required'
+            'plan_id'        => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -130,7 +146,6 @@ class PaymentController extends Controller
             $adminNotification->click_url = '#';
             $adminNotification->save();
 
-
             $notify[] = 'Something went wrong';
             return apiResponse("invalid_purchase", "error", $notify);
         }
@@ -143,7 +158,6 @@ class PaymentController extends Controller
         //the amount should be your product amount
         $amount = 10;
         $rate   = $request->amount / $amount;
-
 
         $data                  = new Deposit();
         $data->user_id         = $user->id;

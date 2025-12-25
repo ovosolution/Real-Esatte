@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AdminActivity;
 use App\Models\AdminNotification;
 use App\Models\Deposit;
+use App\Models\Property;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\UserLogin;
@@ -53,12 +54,62 @@ class AdminController extends Controller
         $pageTitle = 'Dashboard';
         $admin     = auth('admin')->user();
 
+        $activeUsers         = User::active()->count();
+        $pendingUsers        = User::pending()->count();
+        $activeListings      = Property::active()->count();
+        $activeSubscriptions = User::subscribed()->count();
+
+        $days = collect(range(6, 0))->map(function ($day) {
+            return Carbon::now()->subDays($day)->format('Y-m-d');
+        });
+
+        $weeklyProperties = Property::selectRaw('DATE(created_at) as date, COUNT(*) as total')
+            ->where('created_at', '>=', Carbon::now()->subDays(6)->startOfDay())
+            ->groupBy('date')
+            ->pluck('total', 'date');
+
+        $weeklyUsers = User::selectRaw('DATE(created_at) as date, COUNT(*) as total')
+            ->where('created_at', '>=', Carbon::now()->subDays(6)->startOfDay())
+            ->groupBy('date')
+            ->pluck('total', 'date');
+
+        $propertyData = $days->map(fn($day) => $weeklyProperties[$day] ?? 0);
+        $userData     = $days->map(fn($day) => $weeklyUsers[$day] ?? 0);
+
+        $weekLabels = $days->map(fn($day) => Carbon::parse($day)->format('D'));
+
+        $locationStats = Property::selectRaw('locations.name as name, COUNT(properties.id) as total')
+            ->join('locations', 'locations.id', '=', 'properties.location_id')
+            ->groupBy('locations.name')
+            ->orderBy('total', 'desc')
+            ->get();
+
+        $locationLabels = $locationStats->pluck('name');
+        $locationCounts = $locationStats->pluck('total');
+
         $userLogin = UserLogin::selectRaw('browser, COUNT(*) as total')
             ->groupBy('browser')
             ->orderBy('total', 'desc')
             ->get();
 
-        return view('admin.dashboard', compact('pageTitle', 'admin', 'widget', 'userLogin'));
+        $pendingUsersReview = User::pending()->orderBy('created_at', 'desc')->take(5)->get();
+
+        $locationDistribution = Property::selectRaw('locations.name as name, COUNT(properties.id) as total')
+            ->join('locations', 'locations.id', '=', 'properties.location_id')
+            ->groupBy('locations.name')
+            ->orderBy('total', 'desc')
+            ->get();
+
+        $maxLocationCount = $locationDistribution->max('total');
+
+        $locationDistribution = $locationDistribution->map(function ($item) use ($maxLocationCount) {
+            $item->percentage = $maxLocationCount > 0
+            ? round(($item->total / $maxLocationCount) * 100)
+            : 0;
+            return $item;
+        });
+
+        return view('admin.dashboard', compact('pageTitle', 'admin', 'widget', 'userLogin', 'activeUsers', 'pendingUsers', 'activeListings', 'locationDistribution', 'activeSubscriptions', 'weekLabels', 'propertyData', 'userData', 'locationLabels', 'locationCounts', 'pendingUsersReview'));
     }
 
     public function profile()
@@ -74,7 +125,6 @@ class AdminController extends Controller
         $admin     = auth('admin')->user();
         return view('admin.password', compact('pageTitle', 'admin'));
     }
-
 
     public function depositAndWithdrawReport(Request $request)
     {
@@ -275,15 +325,106 @@ class AdminController extends Controller
 
     public function analytics()
     {
-        $pageTitle = 'Analytics';
-        return view('admin.analytics', compact('pageTitle'));
+        $pageTitle    = 'Analytics';
+        $totalRevenue = Deposit::successful()->sum('amount');
+        $todayRevenue = Deposit::successful()
+            ->whereDate('created_at', today())
+            ->sum('amount');
+
+        $yesterdayRevenue = Deposit::successful()
+            ->whereDate('created_at', today()->subDay())
+            ->sum('amount');
+
+        if ($yesterdayRevenue > 0) {
+            $percentageChange = (($todayRevenue - $yesterdayRevenue) / $yesterdayRevenue) * 100;
+        } else {
+            $percentageChange = 0;
+        }
+
+        $totalUsers = User::active()->count();
+
+        $todayUsers = User::active()
+            ->whereDate('created_at', today())
+            ->count();
+
+        $yesterdayUsers = User::active()
+            ->whereDate('created_at', today()->subDay())
+            ->count();
+
+        if ($yesterdayUsers > 0) {
+            $percentageChangeUser = (($todayUsers - $yesterdayUsers) / $yesterdayUsers) * 100;
+        } else {
+            $percentageChangeUser = 0;
+        }
+
+        $totalListings = Property::active()->count();
+
+        $todayListings = Property::active()
+            ->whereDate('created_at', today())
+            ->count();
+
+        $yesterdayListings = Property::active()
+            ->whereDate('created_at', today()->subDay())
+            ->count();
+
+        if ($yesterdayListings > 0) {
+            $percentageChangeListing = (($todayListings - $yesterdayListings) / $yesterdayListings) * 100;
+        } else {
+            $percentageChangeListing = 0;
+        }
+
+        $totalSubscriptions = User::subscribed()->count();
+
+        $todaySubscriptions = User::subscribed()
+            ->whereDate('start_date', today())
+            ->count();
+
+        $yesterdaySubscriptions = User::subscribed()
+            ->whereDate('start_date', today()->subDay())
+            ->count();
+
+        if ($yesterdaySubscriptions > 0) {
+            $percentageChangeSubscription = (($todaySubscriptions - $yesterdaySubscriptions) / $yesterdaySubscriptions) * 100;
+        } else {
+            $percentageChangeSubscription = 0;
+        }
+
+        $months = collect(range(6, 0))->map(function ($i) {
+            return now()->subMonths($i)->format('Y-m');
+        });
+
+        $monthLabels = $months->map(fn($m) =>
+            Carbon::createFromFormat('Y-m', $m)->format('M')
+        );
+
+        $listingStats = Property::selectRaw("DATE_FORMAT(created_at, '%Y-%m') as month, COUNT(*) as total")
+            ->where('created_at', '>=', now()->subMonths(6)->startOfMonth())
+            ->groupBy('month')
+            ->pluck('total', 'month');
+
+        $userStats = User::selectRaw("DATE_FORMAT(created_at, '%Y-%m') as month, COUNT(*) as total")
+            ->where('created_at', '>=', now()->subMonths(6)->startOfMonth())
+            ->groupBy('month')
+            ->pluck('total', 'month');
+
+        $subscriptionStats = User::subscribed()
+            ->selectRaw("DATE_FORMAT(start_date, '%Y-%m') as month, COUNT(*) as total")
+            ->where('start_date', '>=', now()->subMonths(6)->startOfMonth())
+            ->groupBy('month')
+            ->pluck('total', 'month');
+
+        $listingData      = $months->map(fn($m) => $listingStats[$m] ?? 0);
+        $userData         = $months->map(fn($m) => $userStats[$m] ?? 0);
+        $subscriptionData = $months->map(fn($m) => $subscriptionStats[$m] ?? 0);
+
+        return view('admin.analytics', compact('pageTitle', 'totalRevenue', 'todayRevenue', 'percentageChange', 'totalUsers', 'totalListings', 'percentageChangeUser', 'percentageChangeListing', 'totalSubscriptions', 'percentageChangeSubscription', 'monthLabels', 'listingData', 'userData', 'subscriptionData'));
     }
 
     public function activities()
     {
-        $pageTitle = 'Admin Activities';
-        $activities = AdminActivity::with('admin')->orderBy('id','desc')->paginate(getPaginate());
-        return view('admin.activity_logs', compact('pageTitle','activities'));
+        $pageTitle  = 'Admin Activities';
+        $activities = AdminActivity::with('admin')->orderBy('id', 'desc')->paginate(getPaginate());
+        return view('admin.activity_logs', compact('pageTitle', 'activities'));
     }
 
 }

@@ -3,78 +3,77 @@
     @php
         $firebasConfig = gs('firebase_config');
     @endphp
-    <div class="row responsive-row">
-        <div class="col-12">
-            <div class="alert alert--info d-flex" role="alert">
-                <div class="alert__icon">
-                    <i class="las la-info"></i>
+    <div class="dashboard-body">
+        <div class="dashboard-body__card">
+            <div class="row gy-4">
+                <div class="col-lg-12">
+
+                    @include('admin.property.system')
+                    <div class="alert alert--info d-flex" role="alert">
+                        <div class="alert__icon">
+                            <i class="las la-info"></i>
+                        </div>
+                        <div class="alert__content">
+                            <p>@lang('To send push notifications via Firebase, your system must have an SSL certificate in place for secure communication. Ensure your server is SSL-certified to enable seamless and secure delivery of notifications.')</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="alert__content">
-                    <p>@lang('To send push notifications via Firebase, your system must have an SSL certificate in place for secure communication. Ensure your server is SSL-certified to enable seamless and secure delivery of notifications.')</p>
+                <div class="col-md-12">
+                    <x-admin.ui.card>
+                        <x-admin.ui.card.body>
+                            <form method="POST">
+                                @csrf
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>@lang('API Key') </label>
+                                            <input type="text" class="form-control" placeholder="@lang('API Key')" name="apiKey" value="{{ @$firebasConfig->apiKey }}" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>@lang('Auth Domain') </label>
+                                            <input type="text" class="form-control" placeholder="@lang('Auth Domain')" name="authDomain" value="{{ @$firebasConfig->authDomain }}" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>@lang('Project Id') </label>
+                                            <input type="text" class="form-control" placeholder="@lang('Project Id')" name="projectId" value="{{ @$firebasConfig->projectId }}" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>@lang('Storage Bucket') </label>
+                                            <input type="text" class="form-control" placeholder="@lang('Storage Bucket')" name="storageBucket" value="{{ @$firebasConfig->storageBucket }}" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>@lang('Messaging Sender Id') </label>
+                                            <input type="text" class="form-control" placeholder="@lang('Messaging Sender Id')" name="messagingSenderId" value="{{ @$firebasConfig->messagingSenderId }}" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>@lang('App Id') </label>
+                                            <input type="text" class="form-control" placeholder="@lang('App Id')" name="appId" value="{{ @$firebasConfig->appId }}" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label>@lang('Measurement Id') </label>
+                                            <input type="text" class="form-control" placeholder="@lang('Measurement Id')" name="measurementId" value="{{ @$firebasConfig->measurementId }}" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <x-admin.ui.btn.submit />
+                            </form>
+                        </x-admin.ui.card.body>
+                    </x-admin.ui.card>
+
                 </div>
             </div>
-        </div>
-        <div class="col-md-12">
-            <x-admin.ui.card>
-                <x-admin.ui.card.body>
-                    <form method="POST">
-                        @csrf
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>@lang('API Key') </label>
-                                    <input type="text" class="form-control" placeholder="@lang('API Key')"
-                                        name="apiKey" value="{{ @$firebasConfig->apiKey }}" required>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>@lang('Auth Domain') </label>
-                                    <input type="text" class="form-control" placeholder="@lang('Auth Domain')"
-                                        name="authDomain" value="{{ @$firebasConfig->authDomain }}" required>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>@lang('Project Id') </label>
-                                    <input type="text" class="form-control" placeholder="@lang('Project Id')"
-                                        name="projectId" value="{{ @$firebasConfig->projectId }}" required>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>@lang('Storage Bucket') </label>
-                                    <input type="text" class="form-control" placeholder="@lang('Storage Bucket')"
-                                        name="storageBucket" value="{{ @$firebasConfig->storageBucket }}" required>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>@lang('Messaging Sender Id') </label>
-                                    <input type="text" class="form-control" placeholder="@lang('Messaging Sender Id')"
-                                        name="messagingSenderId" value="{{ @$firebasConfig->messagingSenderId }}" required>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>@lang('App Id') </label>
-                                    <input type="text" class="form-control" placeholder="@lang('App Id')"
-                                        name="appId" value="{{ @$firebasConfig->appId }}" required>
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label>@lang('Measurement Id') </label>
-                                    <input type="text" class="form-control" placeholder="@lang('Measurement Id')"
-                                        name="measurementId" value="{{ @$firebasConfig->measurementId }}" required>
-                                </div>
-                            </div>
-                        </div>
-                        <x-admin.ui.btn.submit />
-                    </form>
-                </x-admin.ui.card.body>
-            </x-admin.ui.card>
-
         </div>
     </div>
 
@@ -88,12 +87,10 @@
         <x-admin.ui.modal.body>
             <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="steps-tab" data-bs-toggle="tab" data-bs-target="#steps"
-                        type="button" role="tab" aria-controls="steps" aria-selected="true">@lang('Steps')</button>
+                    <button class="nav-link active" id="steps-tab" data-bs-toggle="tab" data-bs-target="#steps" type="button" role="tab" aria-controls="steps" aria-selected="true">@lang('Steps')</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="configs-tab" data-bs-toggle="tab" data-bs-target="#configs" type="button"
-                        role="tab" aria-controls="configs" aria-selected="false">@lang('Configs')</button>
+                    <button class="nav-link" id="configs-tab" data-bs-toggle="tab" data-bs-target="#configs" type="button" role="tab" aria-controls="configs" aria-selected="false">@lang('Configs')</button>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -178,10 +175,8 @@
                         </li>
                     </ul>
                 </div>
-                <div class="tab-pane fade text-center py-4" id="configs" role="tabpanel"
-                    aria-labelledby="configs-tab">
-                    <img src="{{ getImage('assets/images/firebase/' . 'configs.png') }}" alt="Firebase Config"
-                        class="border rounded border--success border-3 p-3">
+                <div class="tab-pane fade text-center py-4" id="configs" role="tabpanel" aria-labelledby="configs-tab">
+                    <img src="{{ getImage('assets/images/firebase/' . 'configs.png') }}" alt="Firebase Config" class="border rounded border--success border-3 p-3">
                 </div>
             </div>
         </x-admin.ui.modal.body>
@@ -195,8 +190,7 @@
             </button>
         </x-admin.ui.modal.header>
         <x-admin.ui.modal.body>
-            <form method="POST" action="{{ route('admin.setting.notification.push.upload') }}"
-                enctype="multipart/form-data">
+            <form method="POST" action="{{ route('admin.setting.notification.push.upload') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group">
                     <label class="mt-2">@lang('File')</label>
@@ -212,17 +206,39 @@
 @endsection
 
 @push('breadcrumb-plugins')
-    <div class=" d-flex gap-2 flex-wrap">
-        <button type="button" data-bs-target="#pushNotifyModal" data-bs-toggle="modal" class="btn btn--info flex-fill">
-            <i class="las la-question"></i> @lang('Help')
-        </button>
-        <button class="btn btn--primary updateBtn flex-fill " data-bs-toggle="modal" data-bs-target="#pushConfigJson"
-            type="button"><i class="las la-upload"></i> @lang('Upload Config File')
-        </button>
-        <a href="{{ route('admin.setting.notification.push.download') }}"
-            class="btn btn--info updateBtn  flex-fill  @if (!$fileExists) disabled @endif"
-            @disabled(!$fileExists)>
-            <i class="las la-download"></i> @lang('Download File')
-        </a>
+    <div class="row d-flex align-items-center justify-content-between">
+        <div class="col-lg-auto">
+            <div class="dashboard-body__heading__wrap">
+                <span class="breadcrumb-icon navigation-bar"><i class="fa-solid fa-bars"></i></span>
+                <div class="dashboard-body__heading">
+                    <h3 class="dashboard-body__title">@lang('System Setup')</h3>
+                    <p class="dashboard-body__desc">@lang('Add and manage system settings')</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-auto">
+            <button type="button" data-bs-target="#pushNotifyModal" data-bs-toggle="modal" class="btn btn--info flex-fill">
+                <i class="las la-question"></i> @lang('Help')
+            </button>
+            <button class="btn btn--primary updateBtn flex-fill " data-bs-toggle="modal" data-bs-target="#pushConfigJson" type="button"><i class="las la-upload"></i> @lang('Upload Config File')
+            </button>
+            <a href="{{ route('admin.setting.notification.push.download') }}" class="btn btn--info updateBtn  flex-fill  @if (!$fileExists) disabled @endif" @disabled(!$fileExists)>
+                <i class="las la-download"></i> @lang('Download File')
+            </a>
+        </div>
     </div>
 @endpush
+
+{{-- @push('breadcrumb-plugins')
+<div class=" d-flex gap-2 flex-wrap">
+    <button type="button" data-bs-target="#pushNotifyModal" data-bs-toggle="modal" class="btn btn--info flex-fill">
+        <i class="las la-question"></i> @lang('Help')
+    </button>
+    <button class="btn btn--primary updateBtn flex-fill " data-bs-toggle="modal" data-bs-target="#pushConfigJson" type="button"><i class="las la-upload"></i> @lang('Upload Config File')
+    </button>
+    <a href="{{ route('admin.setting.notification.push.download') }}" class="btn btn--info updateBtn  flex-fill  @if (!$fileExists) disabled @endif" @disabled(!$fileExists)>
+        <i class="las la-download"></i> @lang('Download File')
+    </a>
+</div>
+@endpush --}}

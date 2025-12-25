@@ -184,18 +184,19 @@ class UserNotificationSender
      */
     private function sendNotifications($users, $request, $imageUrl, $isSingleNotification = false, $count = 0, $scheduledAt = null)
     {
+        $audience = $request->being_sent_to ?? 'Single User';
         if (!$isSingleNotification) {
             foreach ($users as $user) {
                 notify($user, 'DEFAULT', [
                     'subject' => $request->subject,
                     'message' => $request->message,
-                ], [$request->via], true, $imageUrl, $count, $scheduledAt);
+                ], [$request->via], true, $imageUrl, $count, $scheduledAt, $audience);
             }
         } else {
             notify($users, 'DEFAULT', [
                 'subject' => $request->subject,
                 'message' => $request->message,
-            ], [$request->via], true, $imageUrl, $count, $scheduledAt);
+            ], [$request->via], true, $imageUrl, $count, $scheduledAt, $audience);
         }
     }
 

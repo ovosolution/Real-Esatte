@@ -39,10 +39,10 @@ class Deposit extends Model
      */
     protected $hidden = ['detail'];
 
-    
+
 
     /**
-     * specified column for export with column manipulation 
+     * specified column for export with column manipulation
      *
      * @var array
      */
@@ -92,6 +92,10 @@ class Deposit extends Model
     public function gateway()
     {
         return $this->belongsTo(Gateway::class, 'method_code', 'code');
+    }
+    public function plan()
+    {
+        return $this->belongsTo(Plan::class);
     }
 
     public function methodName()

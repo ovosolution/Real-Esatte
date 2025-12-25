@@ -122,7 +122,7 @@
                 @endif
 
                 @if ($admin->can("system configuration"))
-                    <li class="@if (request()->routeIs('admin.property.type.index', 'admin.location.index')) active @endif">
+                    <li class="@if (request()->routeIs('admin.property.type.index', 'admin.location.index', 'admin.cron.index')) active @endif">
                         <a href="{{ route('admin.property.type.index') }}">
                             <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20" x="0" y="0" viewBox="0 0 64 64" style="enable-background:new 0 0 20 20" xml:space="preserve" class="">
                                 <g>
@@ -131,7 +131,6 @@
                                     <path d="M49 55c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm0-10c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4z" fill="currentColor" opacity="1" data-original="currentColor" class=""></path>
                                 </g>
                             </svg>
-
                             @lang('System Setup')
                         </a>
                     </li>

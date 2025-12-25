@@ -108,6 +108,12 @@ Route::namespace('Api')->name('api.')->group(function () {
                     Route::get('saved-properties', 'savedProperties');
                 });
 
+                Route::controller('PlanPurchaseController')->group(function () {
+                    Route::get('plans', 'plans');
+                    Route::get('plan/{id}', 'planDetails');
+                    Route::post('plan/purchase/{id}', 'storePurchaseInfo');
+                });
+
                 Route::controller('TicketController')->prefix('ticket')->group(function () {
                     Route::get('/', 'supportTicket');
                     Route::post('create', 'storeSupportTicket');
