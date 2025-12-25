@@ -112,7 +112,7 @@
                         </div>
                         <div class="col-md-6 status-wrapper d-none">
                             <label class="form--label required">@lang('Status')</label>
-                            <div class="form-check form-switch">
+                            <div class="form--switch d-flex">
                                 <input type="hidden" name="status" value="0">
                                 <input class="form-check-input" type="checkbox" name="status" value="1" role="switch" id="flexSwitchCheckDefault">
                                 <label class="form-check-label" for="flexSwitchCheckDefault">@lang('Enable or disable property type')</label>
